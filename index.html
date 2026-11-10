@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="color-scheme" content="dark" />
-<meta name="theme-color" content="#0c0c0e" />
+<meta name="theme-color" content="#0e1319" />
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -13,29 +13,35 @@
 <title>Clubhouse Player Door</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Public+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@200;300;400;500;600;700&family=Cinzel:wght@700;900&family=Public+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    /* MIDNIGHT BRASS — the player-facing theme (Anthony's pick,
-       variant A): near-black charcoal, brass and gold accents.
-       (The old green felt is retired; the status colors — gold,
-       green, purple, slate rings — are the league's honor language
-       and stay exactly as approved, as do the HOST plaque's brass
-       colors.) */
-    --felt-950:#0c0c0e;
-    --felt-900:#101013;
-    --felt-800:#17171b;
-    --felt-700:#1d1d21;
-    --panel:#121215;
-    --panel-2:#232329;
-    --line:rgba(201,164,92,.35);
-    --line-soft:rgba(255,255,255,.08);
-    --brass:#c9a45c;
-    --brass-bright:#ecd28d;
-    --brass-dim:#8a6d33;
-    --cream:#f2ecd9;
-    --cream-2:#c2c0b4;
-    --muted:#98958a;
+    /* THE UNIFIED CLUBHOUSE THEME (Nov 10, 2026) — the same
+       slate-and-brass language as the host app and the CP monogram
+       lockup above: deep dark slate surfaces, warm brass thin-line
+       accents, thin letterspaced Archivo type, and a faint warm
+       glow rising from the bottom of panels and cards (see .panel).
+       This refines the Door's earlier Midnight Brass pass into the
+       one product-wide look — same values as the host app's theme:
+       bg #0e1319, surface #171e27, brass #c8a24a / #e6cb84 / #8a7434.
+       No green felt anywhere. (The status colors — gold, green,
+       purple, slate rings — are the league's honor language and
+       stay exactly as approved, as do the HOST/GUEST plaques, which
+       keep their settled engraved faces and colors.) */
+    --felt-950:#0e1319;
+    --felt-900:#111922;
+    --felt-800:#171e27;
+    --felt-700:#1d2733;
+    --panel:#131b24;
+    --panel-2:#1b2531;
+    --line:rgba(200,162,74,.30);
+    --line-soft:rgba(148,165,184,.16);
+    --brass:#c8a24a;
+    --brass-bright:#e6cb84;
+    --brass-dim:#8a7434;
+    --cream:#f0ead9;
+    --cream-2:#c3cedb;
+    --muted:#94a5b8;
     --gold:#e7bd55;
     --green:#3ecf6e;
     --purple:#a678e8;
@@ -47,9 +53,9 @@
   body{
     margin:0;
     background:
-      radial-gradient(110% 55% at 50% -10%, rgba(201,164,92,.14), transparent 60%),
-      radial-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
-      linear-gradient(180deg, #1d1d21, #0c0c0e 70%);
+      radial-gradient(110% 55% at 50% -10%, rgba(200,162,74,.10), transparent 60%),
+      radial-gradient(rgba(148,165,184,.05) 1px, transparent 1px),
+      linear-gradient(180deg, #141c26, #0e1319 70%);
     background-size:auto, 7px 7px, auto;
     background-attachment:fixed;
     color:var(--cream);
@@ -61,29 +67,43 @@
 
   /* ---------- header ---------- */
   header{padding:26px 0 4px;text-align:center}
-  .suit-row{display:flex;justify-content:center;gap:14px;color:var(--brass);margin-bottom:10px}
-  .suit-row svg{width:17px;height:17px;opacity:.9}
-  h1{font-family:"Cinzel",serif;font-size:clamp(25px,7vw,36px);line-height:1.1;margin:0;font-weight:800;letter-spacing:.02em}
-  h1 .accent{color:var(--brass-bright)}
-  .door-tag{margin:8px 0 0;font-size:12px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--brass)}
+  /* The CP monogram lockup — the same crisp vector artwork the
+     host app carries: interwoven C and P in thin brass line work,
+     a small club suit at the bottom of the monogram, CLUBHOUSE
+     above and POKER ROOM below in thin letterspaced Archivo. It
+     replaces the old suit row + serif wordmark (and, in the host
+     app, Anthony's original supplied sign artwork). The woven
+     effect is the host's: each letter is knocked out of the one
+     beneath it with a slate halo pass before its brass stroke. */
+  .monogram{width:104px;height:auto;display:block;margin:0 auto}
+  .monogram-mark{width:52px;height:auto;display:block;margin:0 auto 10px}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+  .door-tag{margin:10px 0 0;font-size:11.5px;font-weight:600;letter-spacing:.3em;text-indent:.3em;text-transform:uppercase;color:var(--brass)}
 
   /* ---------- panels ---------- */
   .panel{
-    margin-top:18px;background:linear-gradient(180deg, var(--panel-2), var(--panel));
+    margin-top:18px;
+    /* The host app's glow treatment, verbatim: a faint warm glow
+       rising from the bottom of the panel, layered over the slate
+       surface gradient, with the matching inset shadows. */
+    background:
+      radial-gradient(135% 62% at 50% 118%, rgba(200,162,74,.16), rgba(200,162,74,.05) 42%, transparent 68%),
+      linear-gradient(180deg, var(--panel-2), var(--panel));
+    box-shadow:inset 0 1px 0 rgba(200,162,74,.10), inset 0 -28px 44px -30px rgba(200,162,74,.22);
     border:1px solid var(--line);border-radius:18px;padding:20px 18px;
   }
-  .panel h2{font-family:"Cinzel",serif;font-size:clamp(20px,5.4vw,25px);margin:0 0 6px;line-height:1.15}
+  .panel h2{font-family:"Archivo","Arial Narrow",sans-serif;font-size:clamp(20px,5.4vw,25px);margin:0 0 6px;line-height:1.15;font-weight:400;letter-spacing:.05em}
   .panel .sub{color:var(--cream-2);font-size:14.5px;line-height:1.55;margin:0}
   .block-label{
     display:flex;align-items:center;gap:10px;margin:22px 2px 10px;
-    font-size:11.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);
+    font-size:11.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--brass);
   }
   .block-label::after{content:"";flex:1;height:1px;background:var(--line-soft)}
   .block-label:first-child{margin-top:0}
 
   /* ---------- form ---------- */
   form{margin-top:16px}
-  label{display:block;font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--brass);margin:14px 0 6px}
+  label{display:block;font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--brass);margin:14px 0 6px}
   label:first-of-type{margin-top:0}
   input{
     width:100%;font:inherit;font-size:16.5px;color:var(--cream);
@@ -91,7 +111,7 @@
     padding:13px 14px;outline:none;
   }
   input:focus{border-color:var(--brass-bright);box-shadow:0 0 0 3px rgba(236,210,141,.22)}
-  input::placeholder{color:#7a776c}
+  input::placeholder{color:#71808f}
   .fineprint{font-size:12.5px;color:var(--muted);line-height:1.55;margin:12px 0 0}
   .privacy-promise{
     font-size:13.5px;color:var(--cream-2);line-height:1.6;margin:14px 0 0;
@@ -123,9 +143,9 @@
   .photo-pick{display:flex;gap:14px;align-items:center;margin-top:4px}
   .photo-preview{
     width:72px;height:72px;flex:0 0 auto;border-radius:50%;overflow:hidden;
-    border:1px solid var(--line);background:radial-gradient(circle at 35% 30%, #3a3a41, #1d1d21 70%);
+    border:1px solid var(--line);background:radial-gradient(circle at 35% 30%, #2b3745, #141c26 70%);
     display:grid;place-items:center;
-    font-family:"Cinzel",serif;font-weight:700;font-size:22px;color:var(--cream);
+    font-family:"Archivo","Arial Narrow",sans-serif;font-weight:700;font-size:22px;color:var(--cream);
   }
   .photo-preview img{width:100%;height:100%;object-fit:cover;display:block}
   .photo-pick-main{flex:1;min-width:0}
@@ -151,13 +171,13 @@
     background:linear-gradient(180deg, var(--panel-2), var(--panel));
     border:1px solid var(--line);border-radius:18px;padding:20px 18px;text-align:center;
   }
-  .photo-modal-card h3{font-family:"Cinzel",serif;font-size:20px;margin:0 0 4px}
+  .photo-modal-card h3{font-family:"Archivo","Arial Narrow",sans-serif;font-size:20px;font-weight:400;letter-spacing:.04em;margin:0 0 4px}
   .photo-modal-sub{color:var(--cream-2);font-size:13.5px;line-height:1.5;margin:0 0 14px}
   .crop-viewport{
     position:relative;width:min(272px,74vw);aspect-ratio:1;margin:0 auto;
     border-radius:50%;overflow:hidden;touch-action:none;cursor:grab;
-    border:2px solid var(--brass);box-shadow:0 0 0 4px rgba(201,164,92,.18), 0 10px 24px rgba(0,0,0,.45);
-    background:#1d1d21;
+    border:2px solid var(--brass);box-shadow:0 0 0 4px rgba(200,162,74,.18), 0 10px 24px rgba(0,0,0,.45);
+    background:#141c26;
   }
   .crop-viewport:active{cursor:grabbing}
   .crop-viewport img{
@@ -180,9 +200,9 @@
     border:1px solid rgba(255,255,255,.14);
   }
   .ava .disc{
-    background:radial-gradient(circle at 35% 30%, #3a3a41, #1d1d21 70%);
+    background:radial-gradient(circle at 35% 30%, #2b3745, #141c26 70%);
     display:grid;place-items:center;
-    font-family:"Cinzel",serif;font-weight:700;font-size:32px;color:var(--cream);letter-spacing:.03em;
+    font-family:"Archivo","Arial Narrow",sans-serif;font-weight:700;font-size:32px;color:var(--cream);letter-spacing:.03em;
   }
   .ava img.face{object-fit:cover;width:calc(100% - 12px);height:calc(100% - 12px)}
   .ava .ring{position:absolute;inset:0;border-radius:50%}
@@ -255,7 +275,7 @@
   .bounty-count{
     position:absolute;top:-5px;right:-8px;min-width:19px;height:19px;padding:0 5px;
     display:grid;place-items:center;border-radius:999px;
-    background:#17130a;color:var(--brass-bright);border:1.5px solid var(--brass);
+    background:#10161e;color:var(--brass-bright);border:1.5px solid var(--brass);
     font-size:11px;font-weight:800;line-height:1;box-shadow:0 2px 6px rgba(0,0,0,.55);
   }
   .ava.sm .bounty-medal{width:24px;height:24px;left:-4px;bottom:-4px;border-width:1.5px}
@@ -343,12 +363,12 @@
      sits where tonight's date sat, and the start time takes the
      caption line. No tap target, no check-in affordance. */
   .night-cluster.is-next .nc-check{
-    border-color:var(--brass);color:var(--brass-bright);background:rgba(201,164,92,.12);
+    border-color:var(--brass);color:var(--brass-bright);background:rgba(200,162,74,.12);
   }
   .night-cluster.is-next .nc-state{
     font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:none;color:var(--brass-bright);
   }
-  .me-name{font-family:"Cinzel",serif;font-size:clamp(24px,6.5vw,30px);font-weight:800;margin:14px 0 2px;line-height:1.15}
+  .me-name{font-family:"Archivo","Arial Narrow",sans-serif;font-size:clamp(24px,6.5vw,30px);font-weight:400;letter-spacing:.03em;margin:14px 0 2px;line-height:1.15}
   .me-status{font-size:14px;font-weight:700;margin:0}
   .me-status .sep{color:var(--muted);font-weight:500}
   .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px}
@@ -357,7 +377,7 @@
     background:rgba(0,0,0,.28);border:1px solid var(--line-soft);border-radius:14px;
     padding:13px 6px 11px;text-align:center;
   }
-  .stat .num{font-family:"Cinzel",serif;font-weight:800;font-size:24px;line-height:1;color:var(--cream)}
+  .stat .num{font-family:"Archivo","Arial Narrow",sans-serif;font-weight:800;font-size:24px;line-height:1;color:var(--cream)}
   .stat .num.pts{color:var(--brass-bright)}
   .stat .lbl{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:5px}
   /* House credit rides in the same stat row as a fourth tile —
@@ -391,17 +411,17 @@
   .notice strong{color:var(--cream)}
   .notice.gold{border-color:rgba(231,189,85,.55);background:rgba(120,90,10,.18)}
   .notice.green{border-color:rgba(62,207,110,.55);background:rgba(20,90,45,.22)}
-  .notice .game-name{font-family:"Cinzel",serif;font-weight:700;color:var(--cream);font-size:16px}
+  .notice .game-name{font-family:"Archivo","Arial Narrow",sans-serif;font-weight:700;color:var(--cream);font-size:16px}
   /* ---------- house credit (private — personal page only) ---------- */
   .credit-panel{
     margin-top:18px;border:1px solid var(--line);border-radius:14px;
-    padding:16px 15px;background:linear-gradient(180deg, rgba(201,164,92,.10), rgba(0,0,0,.28));
+    padding:16px 15px;background:linear-gradient(180deg, rgba(200,162,74,.10), rgba(0,0,0,.28));
   }
   .credit-top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
-  .credit-kicker{font-size:10.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);margin:0}
-  .credit-title{font-family:"Cinzel",serif;font-size:19px;font-weight:800;line-height:1.2;margin:5px 0 0}
+  .credit-kicker{font-size:10.5px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--brass);margin:0}
+  .credit-title{font-family:"Archivo","Arial Narrow",sans-serif;font-size:19px;font-weight:400;letter-spacing:.03em;line-height:1.2;margin:5px 0 0}
   .credit-balance{text-align:right;flex:0 0 auto}
-  .credit-balance .amt{font-family:"Cinzel",serif;font-weight:800;font-size:30px;line-height:1;color:var(--brass-bright)}
+  .credit-balance .amt{font-family:"Archivo","Arial Narrow",sans-serif;font-weight:800;font-size:30px;line-height:1;color:var(--brass-bright)}
   .credit-balance .lbl{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:5px}
   .credit-copy{font-size:14px;line-height:1.6;color:var(--cream-2);margin:12px 0 0}
   .credit-copy strong{color:var(--cream)}
@@ -440,14 +460,14 @@
     .zelle-qr-slot{width:184px;height:184px}
     .zelle-qr-caption{max-width:230px}
   }
-  .zelle-title{font-family:"Cinzel",serif;font-size:16.5px;font-weight:800;line-height:1.25;margin:0}
+  .zelle-title{font-family:"Archivo","Arial Narrow",sans-serif;font-size:16.5px;font-weight:500;letter-spacing:.03em;line-height:1.25;margin:0}
   .zelle-copy{font-size:13.5px;line-height:1.6;color:var(--cream-2);margin:8px 0 0}
   .zelle-copy strong{color:var(--cream)}
   .zelle-handle{
     display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;
     background:rgba(0,0,0,.32);border:1px solid var(--line-soft);border-radius:10px;padding:10px 12px;
   }
-  .zelle-number{font-family:"Cinzel",serif;font-weight:800;font-size:20px;letter-spacing:.03em;color:var(--brass-bright);line-height:1.15}
+  .zelle-number{font-family:"Archivo","Arial Narrow",sans-serif;font-weight:800;font-size:20px;letter-spacing:.03em;color:var(--brass-bright);line-height:1.15}
   .zelle-copy-btn{
     appearance:none;cursor:pointer;font:inherit;font-weight:700;font-size:13px;margin-left:auto;
     color:#231a08;background:linear-gradient(160deg, var(--brass-bright), var(--brass) 60%, var(--brass-dim));
@@ -469,7 +489,7 @@
   .credit-row-main{flex:1;min-width:0}
   .credit-row-kind{font-weight:700;font-size:14px}
   .credit-row-meta{font-size:12px;color:var(--muted);margin-top:2px}
-  .credit-row-amt{font-family:"Cinzel",serif;font-weight:800;font-size:16px;flex:0 0 auto;text-align:right}
+  .credit-row-amt{font-family:"Archivo","Arial Narrow",sans-serif;font-weight:800;font-size:16px;flex:0 0 auto;text-align:right}
   .credit-row-amt.pos{color:var(--green)}
   .credit-row-amt.neg{color:var(--cream)}
   .credit-row-bal{font-size:11.5px;color:var(--muted);text-align:right;margin-top:2px}
@@ -486,7 +506,7 @@
     border:1px solid rgba(231,189,85,.6);background:rgba(120,90,10,.16);
   }
   .bookmark-title{
-    font-family:"Cinzel",serif;font-weight:800;font-size:21px;line-height:1.3;letter-spacing:.01em;
+    font-family:"Archivo","Arial Narrow",sans-serif;font-weight:500;font-size:21px;line-height:1.3;letter-spacing:.02em;
     margin:0 10px 8px;color:var(--cream);
   }
   .bookmark-copy{font-size:17px;line-height:1.4;color:var(--cream);margin:0;font-weight:600}
@@ -510,7 +530,7 @@
   .hist-game{font-weight:700;font-size:15px;line-height:1.3}
   .hist-meta{font-size:12.5px;color:var(--muted);margin-top:2px}
   .hist-right{text-align:right;flex:0 0 auto}
-  .hist-place{font-family:"Cinzel",serif;font-weight:800;font-size:16px}
+  .hist-place{font-family:"Archivo","Arial Narrow",sans-serif;font-weight:800;font-size:16px}
   .hist-place.won{color:var(--gold)}
   .hist-pts{font-size:12px;color:var(--brass-bright);font-weight:700;margin-top:2px}
   /* dropped weeks (mulligans): dimmed and struck, so a player can see
@@ -534,12 +554,12 @@
     display:flex;gap:12px;align-items:center;padding:10px 2px;border-top:1px solid var(--line-soft);
   }
   .stand-row:first-of-type{border-top:none}
-  .stand-rank{font-family:"Cinzel",serif;font-weight:800;font-size:16px;color:var(--brass);width:26px;text-align:center;flex:0 0 auto}
+  .stand-rank{font-family:"Archivo","Arial Narrow",sans-serif;font-weight:800;font-size:16px;color:var(--brass);width:26px;text-align:center;flex:0 0 auto}
   .stand-who{flex:1;min-width:0}
   .stand-name{font-weight:700;font-size:15.5px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .stand-sub{font-size:12px;color:var(--muted);margin-top:1px}
   .stand-pts{text-align:right;flex:0 0 auto}
-  .stand-pts .num{font-family:"Cinzel",serif;font-weight:800;font-size:19px;color:var(--brass-bright);line-height:1}
+  .stand-pts .num{font-family:"Archivo","Arial Narrow",sans-serif;font-weight:800;font-size:19px;color:var(--brass-bright);line-height:1}
   .stand-pts .lbl{font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:3px}
   .stand-context{font-size:13px;color:var(--muted);line-height:1.55;margin:0 2px 8px}
   .stand-context strong{color:var(--cream-2)}
@@ -566,9 +586,9 @@
     box-shadow:inset 0 1px 0 rgba(255,255,255,.85), inset 0 0 0 1px rgba(90,64,12,.30), 0 1px 3px rgba(0,0,0,.5);
   }
 
-  /* ---------- open profile (The Card, Midnight Brass) ---------- */
+  /* ---------- open profile (The Card) ---------- */
   .stand-row{cursor:pointer;border-radius:10px}
-  .stand-row:hover{background:rgba(201,164,92,.06)}
+  .stand-row:hover{background:rgba(200,162,74,.06)}
   .stand-row:focus-visible{outline:2px solid var(--brass-bright);outline-offset:2px}
   .stand-chev{color:var(--brass);font-size:22px;line-height:1;flex:0 0 auto}
   .profile-toprow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px}
@@ -586,7 +606,7 @@
   }
   .pcard-head{display:flex;gap:14px;align-items:center}
   .pcard-who{flex:1;min-width:0}
-  .pcard-name{font-family:"Cinzel",serif;font-size:clamp(22px,6vw,28px);font-weight:800;margin:0;line-height:1.12;overflow-wrap:break-word}
+  .pcard-name{font-family:"Archivo","Arial Narrow",sans-serif;font-size:clamp(22px,6vw,28px);font-weight:400;letter-spacing:.03em;margin:0;line-height:1.12;overflow-wrap:break-word}
   .pcard-rankline{color:var(--brass-bright);font-weight:600;font-size:14px;margin:4px 0 8px;line-height:1.4}
   .p-badges{display:flex;flex-wrap:wrap;gap:6px}
   .p-badge{
@@ -604,7 +624,7 @@
   }
   .hero-band .cell{padding:11px 3px 9px;text-align:center;border-right:1px solid var(--line-soft);min-width:0}
   .hero-band .cell:last-child{border-right:none}
-  .hero-band .n{font-family:"Cinzel",serif;font-weight:800;font-size:clamp(16px,4.8vw,23px);line-height:1.1;white-space:nowrap;color:var(--cream)}
+  .hero-band .n{font-family:"Archivo","Arial Narrow",sans-serif;font-weight:800;font-size:clamp(16px,4.8vw,23px);line-height:1.1;white-space:nowrap;color:var(--cream)}
   .hero-band .n.rank{color:var(--brass-bright)}
   .hero-band .n img{width:20px;height:20px;border-radius:50%;object-fit:cover;vertical-align:-4px;margin-right:3px;border:1px solid var(--brass-dim)}
   .hero-band .l{font-size:9.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-top:4px;line-height:1.3}
@@ -614,12 +634,12 @@
     background:rgba(0,0,0,.28);border:1px solid var(--line-soft);border-top:2px solid var(--brass-dim);
     border-radius:10px;padding:9px 3px 8px;text-align:center;min-width:0;
   }
-  .p-stat-grid .n{font-family:"Cinzel",serif;font-weight:800;font-size:clamp(14px,4.4vw,20px);line-height:1.1;white-space:nowrap}
+  .p-stat-grid .n{font-family:"Archivo","Arial Narrow",sans-serif;font-weight:800;font-size:clamp(14px,4.4vw,20px);line-height:1.1;white-space:nowrap}
   .p-stat-grid .n.hot{color:var(--brass-bright)}
   .p-stat-grid .l{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:4px;line-height:1.3}
   .p-mettle{display:grid;grid-template-columns:1fr 1fr;gap:7px}
   .p-mettle .cell{background:rgba(0,0,0,.28);border:1px solid var(--line-soft);border-radius:10px;padding:10px 12px;min-width:0}
-  .p-mettle .n{font-family:"Cinzel",serif;font-weight:800;font-size:22px;line-height:1.1}
+  .p-mettle .n{font-family:"Archivo","Arial Narrow",sans-serif;font-weight:800;font-size:22px;line-height:1.1}
   .p-mettle .n.pos{color:var(--green)}
   .p-mettle .n.neg{color:var(--danger)}
   .p-mettle .who{font-size:15px;font-weight:600;line-height:1.3;padding-top:2px;overflow-wrap:break-word}
@@ -630,7 +650,7 @@
     background:rgba(0,0,0,.28);border:1px solid var(--line);border-radius:12px;
     padding:11px 12px;font-size:13px;color:var(--cream-2);line-height:1.4;
   }
-  .p-season strong{color:var(--cream);font-family:"Cinzel",serif;font-size:15px}
+  .p-season strong{color:var(--cream);font-family:"Archivo","Arial Narrow",sans-serif;font-size:15px}
   .p-season .small{font-size:11.5px;color:var(--muted)}
   .p-season .q{color:var(--green);font-weight:700}
   .p-season .form{display:flex;align-items:center;gap:5px;flex-basis:100%;margin-top:2px}
@@ -639,9 +659,9 @@
   .form-chips .fc{
     min-width:32px;text-align:center;border-radius:7px;padding:5px 4px 4px;
     background:rgba(255,255,255,.05);border:1px solid var(--line-soft);
-    font-family:"Cinzel",serif;font-weight:700;font-size:15px;line-height:1;
+    font-family:"Archivo","Arial Narrow",sans-serif;font-weight:700;font-size:15px;line-height:1;
   }
-  .form-chips .fc.win{background:rgba(201,164,92,.18);border-color:var(--brass);color:var(--brass-bright)}
+  .form-chips .fc.win{background:rgba(200,162,74,.18);border-color:var(--brass);color:var(--brass-bright)}
   .htable-wrap{width:100%}
   table.htable{width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed}
   .htable th:nth-child(1){width:13%}
@@ -664,18 +684,18 @@
   .htable td:nth-child(2){white-space:normal}
   .htable td .gname{font-weight:600;font-size:12px;line-height:1.3;overflow-wrap:break-word}
   .htable td .gdate{color:var(--cream-2);white-space:nowrap}
-  .htable td.fin{font-family:"Cinzel",serif;font-weight:700}
+  .htable td.fin{font-family:"Archivo","Arial Narrow",sans-serif;font-weight:700}
   .htable td.fin.win{color:var(--brass-bright)}
   .htable tr.dropped td{opacity:.6}
   .htable tr.dropped td.pts{text-decoration:line-through;text-decoration-thickness:1.5px;opacity:1}
   .htable tfoot td{
     border-bottom:none;border-top:1.5px solid var(--line);
-    background:rgba(201,164,92,.10);font-weight:700;padding:8px 2px;
+    background:rgba(200,162,74,.10);font-weight:700;padding:8px 2px;
   }
-  .htable tfoot tr.career td{background:rgba(201,164,92,.18)}
+  .htable tfoot tr.career td{background:rgba(200,162,74,.18)}
   .htable tfoot td .small{display:block;font-weight:500;font-size:9.5px;color:var(--muted)}
   .htable tfoot td.lbl{
-    font-family:"Cinzel",serif;letter-spacing:.03em;text-transform:uppercase;
+    font-family:"Archivo","Arial Narrow",sans-serif;letter-spacing:.03em;text-transform:uppercase;
     font-size:11px;color:var(--brass-bright);white-space:normal;text-align:left;
   }
   @media (max-width:380px){
@@ -686,7 +706,7 @@
 
   /* ---------- states ---------- */
   .state-box{text-align:center;padding:10px 4px 4px}
-  .state-box .big{font-family:"Cinzel",serif;font-size:19px;font-weight:700;margin:0 0 6px}
+  .state-box .big{font-family:"Archivo","Arial Narrow",sans-serif;font-size:19px;font-weight:400;letter-spacing:.03em;margin:0 0 6px}
   .state-box p{color:var(--cream-2);font-size:14px;line-height:1.55;margin:0}
   .spinner{
     width:30px;height:30px;margin:14px auto;border-radius:50%;
@@ -701,15 +721,15 @@
   footer{margin-top:26px;text-align:center;color:var(--muted);font-size:12.5px;line-height:1.6}
 
   /* ---------- league page (the TV-display look) ----------
-     The same character the room sees on the TV: near-black with
-     the faintest warm hue rising from the bottom of the screen,
-     thin letterspaced type, soft dark glass cards. Midnight Brass
-     only — no steel, no felt. */
+     The same character the room sees on the TV: deep slate with
+     the host app's warm glow rising from the bottom of the panel,
+     thin letterspaced type, soft dark glass cards. Slate and
+     brass only — no steel, no felt. */
   .league-panel{
     position:relative;overflow:hidden;
     background:
-      radial-gradient(120% 60% at 50% 112%, rgba(201,164,92,.20), rgba(201,164,92,.05) 45%, transparent 70%),
-      linear-gradient(180deg, #101013, #0a0a0c 60%);
+      radial-gradient(135% 62% at 50% 118%, rgba(200,162,74,.16), rgba(200,162,74,.05) 42%, transparent 68%),
+      linear-gradient(180deg, #171e27, #0e1319 60%);
   }
   .league-hero{text-align:center;padding:8px 0 2px}
   .league-kicker{
@@ -717,7 +737,7 @@
     color:var(--brass);text-indent:.34em;
   }
   .league-title{
-    font-family:"Cinzel",serif;font-weight:700;font-size:clamp(30px,8vw,40px);
+    font-family:"Archivo","Arial Narrow",sans-serif;font-weight:300;font-size:clamp(30px,8vw,40px);
     letter-spacing:.14em;text-indent:.14em;margin:8px 0 0;line-height:1.1;color:var(--cream);
   }
   .league-sub{font-weight:300;font-size:14.5px;letter-spacing:.04em;line-height:1.6;color:var(--cream-2);margin:10px auto 0;max-width:44ch}
@@ -725,8 +745,8 @@
   .glass-card{
     margin-top:14px;border-radius:16px;padding:16px;
     background:linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.015));
-    border:1px solid rgba(201,164,92,.22);
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.05), 0 10px 24px rgba(0,0,0,.35);
+    border:1px solid rgba(200,162,74,.22);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.05), inset 0 -18px 30px -22px rgba(200,162,74,.28), 0 10px 24px rgba(0,0,0,.35);
   }
   .glass-card .gc-kicker{font-size:10.5px;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:var(--brass);margin:0}
   .glass-card .gc-big{font-weight:300;font-size:21px;letter-spacing:.03em;line-height:1.35;color:var(--cream);margin:7px 0 0}
@@ -735,7 +755,7 @@
   .live-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);margin-right:7px;box-shadow:0 0 10px rgba(62,207,110,.8);vertical-align:2px}
   .league-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
   .league-grid .glass-card{margin-top:0;padding:14px 13px}
-  .league-grid .gc-num{font-family:"Cinzel",serif;font-weight:700;font-size:clamp(19px,5.6vw,25px);line-height:1.15;color:var(--cream);margin-top:6px}
+  .league-grid .gc-num{font-family:"Archivo","Arial Narrow",sans-serif;font-weight:700;font-size:clamp(19px,5.6vw,25px);line-height:1.15;color:var(--cream);margin-top:6px}
   .league-grid .gc-num.brass{color:var(--brass-bright)}
   .league-grid .gc-lbl{font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:5px;line-height:1.45}
   .league-grid .gc-note{font-size:12px;font-weight:300;color:var(--cream-2);line-height:1.5;margin-top:5px}
@@ -747,8 +767,8 @@
      rest of the League page, with a firmer brass edge. */
   .fund-rule-note{
     margin-top:12px;border-radius:14px;padding:0;overflow:hidden;
-    background:linear-gradient(180deg, rgba(201,164,92,.10), rgba(255,255,255,.015));
-    border:1px solid rgba(201,164,92,.45);
+    background:linear-gradient(180deg, rgba(200,162,74,.10), rgba(255,255,255,.015));
+    border:1px solid rgba(200,162,74,.45);
     box-shadow:inset 0 1px 0 rgba(255,255,255,.05), 0 6px 16px rgba(0,0,0,.28);
   }
   .fund-toggle{
@@ -809,15 +829,15 @@
   .league-row{
     margin-top:10px;border-radius:14px;padding:13px 13px 11px;cursor:pointer;
     background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.012));
-    border:1px solid rgba(255,255,255,.09);
-    box-shadow:0 6px 16px rgba(0,0,0,.28);
+    border:1px solid rgba(148,165,184,.16);
+    box-shadow:inset 0 -16px 26px -22px rgba(200,162,74,.25), 0 6px 16px rgba(0,0,0,.28);
   }
-  .league-row.is-leader{border-color:rgba(231,189,85,.55);background:linear-gradient(180deg, rgba(201,164,92,.12), rgba(255,255,255,.015))}
-  .league-row.is-me{border-color:rgba(201,164,92,.5)}
+  .league-row.is-leader{border-color:rgba(231,189,85,.55);background:linear-gradient(180deg, rgba(200,162,74,.12), rgba(255,255,255,.015))}
+  .league-row.is-me{border-color:rgba(200,162,74,.5)}
   .league-row:active{transform:scale(.995)}
   .league-row:focus-visible{outline:2px solid var(--brass-bright);outline-offset:2px}
   .lr-top{display:flex;gap:11px;align-items:center}
-  .lr-rank{font-family:"Cinzel",serif;font-weight:700;font-size:17px;color:var(--brass);width:24px;text-align:center;flex:0 0 auto}
+  .lr-rank{font-family:"Archivo","Arial Narrow",sans-serif;font-weight:700;font-size:17px;color:var(--brass);width:24px;text-align:center;flex:0 0 auto}
   .lr-who{flex:1;min-width:0}
   .lr-name{font-weight:600;font-size:16px;letter-spacing:.02em;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .lr-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
@@ -829,7 +849,7 @@
   .tag.green{color:#9fe3b1;border-color:rgba(62,207,110,.4)}
   .tag .dot{width:7px;height:7px}
   .lr-pts{text-align:right;flex:0 0 auto}
-  .lr-pts .num{font-family:"Cinzel",serif;font-weight:800;font-size:22px;line-height:1;color:var(--brass-bright)}
+  .lr-pts .num{font-family:"Archivo","Arial Narrow",sans-serif;font-weight:800;font-size:22px;line-height:1;color:var(--brass-bright)}
   .lr-pts .lbl{font-size:9px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:4px}
   .lr-stats{
     display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:11px;
@@ -841,11 +861,11 @@
   .lr-stats .l{font-size:8.5px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-top:3px;line-height:1.3}
   .recent-night{margin-top:12px}
   .recent-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
-  .recent-game{font-family:"Cinzel",serif;font-weight:700;font-size:16.5px;line-height:1.25;color:var(--cream)}
+  .recent-game{font-family:"Archivo","Arial Narrow",sans-serif;font-weight:500;letter-spacing:.02em;font-size:16.5px;line-height:1.25;color:var(--cream)}
   .recent-date{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);white-space:nowrap}
   .recent-row{display:flex;gap:10px;align-items:baseline;padding:8px 1px;border-top:1px solid var(--line-soft);cursor:pointer}
   .recent-row:first-of-type{border-top:none;margin-top:6px}
-  .recent-place{font-family:"Cinzel",serif;font-weight:700;font-size:13.5px;color:var(--brass);width:34px;flex:0 0 auto}
+  .recent-place{font-family:"Archivo","Arial Narrow",sans-serif;font-weight:700;font-size:13.5px;color:var(--brass);width:34px;flex:0 0 auto}
   .recent-row.won .recent-place{color:var(--gold)}
   .recent-name{flex:1;min-width:0;font-weight:600;font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .recent-meta{font-size:12.5px;font-weight:300;color:var(--cream-2);white-space:nowrap}
@@ -860,16 +880,16 @@
   .upcoming-card{
     border-radius:14px;padding:13px 14px 12px;
     background:linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.015));
-    border:1px solid rgba(201,164,92,.22);
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.05), 0 6px 16px rgba(0,0,0,.28);
+    border:1px solid rgba(200,162,74,.22);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.05), inset 0 -16px 26px -22px rgba(200,162,74,.25), 0 6px 16px rgba(0,0,0,.28);
   }
   .upcoming-card.is-next{border-color:rgba(231,189,85,.55)}
   .up-top{display:flex;gap:12px;align-items:baseline;justify-content:space-between}
   .up-when{min-width:0}
-  .up-date{font-family:"Cinzel",serif;font-weight:700;font-size:16.5px;line-height:1.25;color:var(--cream)}
+  .up-date{font-family:"Archivo","Arial Narrow",sans-serif;font-weight:700;font-size:16.5px;line-height:1.25;color:var(--cream)}
   .up-weekday{font-size:10.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--brass);margin-bottom:3px}
   .up-time{
-    flex:0 0 auto;font-family:"Cinzel",serif;font-weight:800;font-size:17px;line-height:1.2;
+    flex:0 0 auto;font-family:"Archivo","Arial Narrow",sans-serif;font-weight:800;font-size:17px;line-height:1.2;
     color:var(--brass-bright);white-space:nowrap;text-align:right;
   }
   .up-time .up-next-tag{
@@ -887,13 +907,25 @@
 <div class="wrap">
 
   <header>
-    <div class="suit-row" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C9 7 4 10 4 15a5 5 0 0 0 7 4.7c-.3 1.5-1 2.6-2 3.3h6c-1-.7-1.7-1.8-2-3.3A5 5 0 0 0 20 15c0-5-5-8-8-13z"/></svg>
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.9-9.7-9.2C.7 8.6 2.7 5 6.2 5c2 0 3.4 1.1 5.8 3.4C14.4 6.1 15.8 5 17.8 5c3.5 0 5.5 3.6 3.9 6.8C19.5 16.1 12 21 12 21z" transform="scale(.92) translate(1,1)"/></svg>
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7 7 .8-5.2 4.8L18.3 22 12 18.3 5.7 22l1.5-7.4L2 9.8 9 9z" transform="scale(.9) translate(1.3,1)"/></svg>
-      <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="8" cy="9" r="5"/><circle cx="16" cy="9" r="5"/><circle cx="12" cy="15" r="5"/></svg>
-    </div>
-    <h1>Clubhouse <span class="accent">Poker Room</span></h1>
+    <h1 class="sr-only">Clubhouse Poker Room</h1>
+    <!-- The CP monogram lockup — the same vector artwork the host
+         app carries (interwoven C and P in thin brass line work, a
+         small club suit at the bottom of the monogram, CLUBHOUSE
+         above, POKER ROOM below, thin letterspaced type). -->
+    <svg class="monogram" viewBox="0 0 240 296" role="img" aria-label="Clubhouse Poker Room monogram">
+      <text x="120" y="36" text-anchor="middle" font-size="20" letter-spacing="7" fill="#ece1c6" font-family="Archivo, 'Arial Narrow', sans-serif" font-weight="300">CLUBHOUSE</text>
+      <line x1="52" x2="188" y1="52" y2="52" stroke="#c8a24a" stroke-width="0.75" opacity="0.65"/>
+      <text x="86" y="176" text-anchor="middle" font-size="118" fill="none" stroke="#0e1319" stroke-width="6" font-family="Archivo, 'Arial Narrow', sans-serif" font-weight="200" aria-hidden="true">C</text>
+      <text x="86" y="176" text-anchor="middle" font-size="118" fill="none" stroke="#e6cb84" stroke-width="1.5" font-family="Archivo, 'Arial Narrow', sans-serif" font-weight="200" aria-hidden="true">C</text>
+      <text x="140" y="176" text-anchor="middle" font-size="118" fill="none" stroke="#0e1319" stroke-width="6" font-family="Archivo, 'Arial Narrow', sans-serif" font-weight="200" aria-hidden="true">P</text>
+      <text x="140" y="176" text-anchor="middle" font-size="118" fill="none" stroke="#e6cb84" stroke-width="1.5" font-family="Archivo, 'Arial Narrow', sans-serif" font-weight="200" aria-hidden="true">P</text>
+      <g transform="translate(120 204) scale(0.85)" fill="#c8a24a" aria-hidden="true">
+        <circle cx="0" cy="-7" r="8.5"/><circle cx="-8" cy="4" r="8.5"/><circle cx="8" cy="4" r="8.5"/>
+        <path d="M0 2 L-5.5 16 L5.5 16 Z"/>
+      </g>
+      <line x1="52" x2="188" y1="238" y2="238" stroke="#c8a24a" stroke-width="0.75" opacity="0.65"/>
+      <text x="120" y="268" text-anchor="middle" font-size="16.5" letter-spacing="6.5" fill="#ece1c6" font-family="Archivo, 'Arial Narrow', sans-serif" font-weight="300">POKER ROOM</text>
+    </svg>
     <p class="door-tag">Player Door</p>
   </header>
 
@@ -1124,6 +1156,16 @@
       <span class="profile-kind">The League</span>
     </div>
     <div class="league-hero">
+      <svg class="monogram-mark" viewBox="30 52 180 168" aria-hidden="true">
+        <text x="86" y="168" text-anchor="middle" font-size="118" fill="none" stroke="#0e1319" stroke-width="6" font-family="Archivo, 'Arial Narrow', sans-serif" font-weight="200">C</text>
+        <text x="86" y="168" text-anchor="middle" font-size="118" fill="none" stroke="#e6cb84" stroke-width="1.5" font-family="Archivo, 'Arial Narrow', sans-serif" font-weight="200">C</text>
+        <text x="140" y="168" text-anchor="middle" font-size="118" fill="none" stroke="#0e1319" stroke-width="6" font-family="Archivo, 'Arial Narrow', sans-serif" font-weight="200">P</text>
+        <text x="140" y="168" text-anchor="middle" font-size="118" fill="none" stroke="#e6cb84" stroke-width="1.5" font-family="Archivo, 'Arial Narrow', sans-serif" font-weight="200">P</text>
+        <g transform="translate(120 196) scale(0.8)" fill="#c8a24a">
+          <circle cx="0" cy="-7" r="8.5"/><circle cx="-8" cy="4" r="8.5"/><circle cx="8" cy="4" r="8.5"/>
+          <path d="M0 2 L-5.5 16 L5.5 16 Z"/>
+        </g>
+      </svg>
       <p class="league-kicker">Clubhouse Poker Room</p>
       <h2 class="league-title">THE LEAGUE</h2>
       <p class="league-sub" id="leagueSeasonLine">Standings, the season, and tonight — the same board the room watches on the TV.</p>
@@ -1544,7 +1586,7 @@
     var canvas = document.createElement("canvas");
     canvas.width = PHOTO_PX; canvas.height = PHOTO_PX;
     var ctx = canvas.getContext("2d");
-    ctx.fillStyle = "#1d1d21"; ctx.fillRect(0, 0, PHOTO_PX, PHOTO_PX);
+    ctx.fillStyle = "#141c26"; ctx.fillRect(0, 0, PHOTO_PX, PHOTO_PX);
     ctx.drawImage(crop.img, crop.x * k, crop.y * k, crop.iw * s * k, crop.ih * s * k);
     return canvas.toDataURL("image/jpeg", 0.82);
   }
