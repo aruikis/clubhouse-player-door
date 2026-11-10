@@ -265,19 +265,20 @@
      corner (where it sat mirrored on the wrong side, sprawled across
      his photo) and tucks against the HOST plaque instead — 38% of the
      avatar, positioned so the center of the chip's lower-left quadrant
-     touches the plaque's top-right corner.
-     Large (104px avatar, 40px chip = 38%): the plaque's top edge sits
-     8px above the avatar's bottom edge and its right edge ~24px right
-     of center; the quadrant center is 10px in from the chip's left and
-     10px up from its bottom, so left:calc(50% + 14px), bottom:-2px
-     lands that center exactly on the corner.
-     Small (46px avatar, 18px chip = 38%): the plaque's top edge is 5px
-     up, its right edge ~16px right of center, and the quadrant center
-     is 4.5px in/up, so left:calc(50% + 12px), bottom:0 meets it. The
-     plaque (z-index 4) stays on top where the two touch, and the count
-     pill shrinks to suit the smaller chip. */
+     touches the plaque's top-right corner. The plaque (z-index 4)
+     stays on top where the two touch, and the count pill shrinks to
+     suit the smaller chip.
+     Large (104px avatar, 40px chip = 38%): left:calc(50% + 14px),
+     bottom:-2px lands the quadrant center exactly on the plaque's
+     top-right corner — Anthony likes how this one sits behind the
+     badge, so the large view is unchanged.
+     Small standings avatar ONLY (46px): the medallion sat too far
+     right, nearly bleeding into the games-played column beside the
+     avatar, so it is nudged ~4px left (left:calc(50% + 8px), was
+     +12px) and shrunk slightly to 16px (was 18px), still tucked
+     behind the HOST plaque. */
   .ava.is-host .bounty-medal{left:calc(50% + 14px);bottom:-2px}
-  .ava.sm.is-host .bounty-medal{width:18px;height:18px;left:calc(50% + 12px);bottom:0;border-width:1.5px}
+  .ava.sm.is-host .bounty-medal{width:16px;height:16px;left:calc(50% + 8px);bottom:0;border-width:1.5px}
   .ava.sm.is-host .bounty-count{top:-4px;right:-6px;min-width:12px;height:12px;padding:0 2px;font-size:8px;border-width:1px}
   .bounty-line{
     display:flex;align-items:center;justify-content:center;gap:9px;flex-wrap:wrap;
