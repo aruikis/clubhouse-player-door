@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="Clubhouse" />
 <link rel="icon" href="data:," />
-<title>Clubhouse Player Door</title>
+<title>Clubhouse Player Portal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@200;300;400;500;600;700&family=Cinzel:wght@700;900&family=Public+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -67,16 +67,22 @@
 
   /* ---------- header ---------- */
   header{padding:26px 0 4px;text-align:center}
-  /* The CP monogram lockup — the same crisp vector artwork the
-     host app carries: interwoven C and P in thin brass line work,
-     a small club suit at the bottom of the monogram, CLUBHOUSE
-     above and POKER ROOM below in thin letterspaced Archivo. It
-     replaces the old suit row + serif wordmark (and, in the host
-     app, Anthony's original supplied sign artwork). The woven
-     effect is the host's: each letter is knocked out of the one
-     beneath it with a slate halo pass before its brass stroke. */
-  .monogram{width:104px;height:auto;display:block;margin:0 auto}
-  .monogram-mark{width:52px;height:auto;display:block;margin:0 auto 10px}
+  /* The CP monogram lockup — a faithful vector recreation of
+     Concept 3 ("The Monogram Hearth") from the logo concept sheet
+     Anthony picked: ONE interlocked monogram, not two separate
+     letters — a solid warm peach-brass C whose arc encloses the P,
+     the P's hollow double-line stem standing at the center, its
+     bowl curving out through the C's opening with a thin echo arc
+     on its right side and a matching echo line inside the C, the
+     small club suit INSIDE the monogram under the stem's fork,
+     pointed leaf tips on the C's terminals, CLUBHOUSE above in
+     thin letterspaced type, and below the monogram a long rule
+     with diamond finials, POKER ROOM, and a tapering row of dots.
+     (An earlier pass misdrew this as two thin-outline Archivo
+     letters side by side with the club underneath — that was not
+     the example Anthony approved, and it is corrected here.) */
+  .monogram{width:124px;height:auto;display:block;margin:0 auto}
+  .monogram-mark{width:58px;height:auto;display:block;margin:0 auto 10px}
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
   .door-tag{margin:10px 0 0;font-size:11.5px;font-weight:600;letter-spacing:.3em;text-indent:.3em;text-transform:uppercase;color:var(--brass)}
 
@@ -371,39 +377,32 @@
   .me-name{font-family:"Archivo","Arial Narrow",sans-serif;font-size:clamp(24px,6.5vw,30px);font-weight:400;letter-spacing:.03em;margin:14px 0 2px;line-height:1.15}
   .me-status{font-size:14px;font-weight:700;margin:0}
   .me-status .sep{color:var(--muted);font-weight:500}
-  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px;align-items:stretch}
   @media (max-width:520px){ .stats{grid-template-columns:repeat(2,1fr)} }
   .stat{
     background:rgba(0,0,0,.28);border:1px solid var(--line-soft);border-radius:14px;
     padding:13px 6px 11px;text-align:center;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    min-height:76px;height:100%;width:100%;
   }
   .stat .num{font-family:"Archivo","Arial Narrow",sans-serif;font-weight:800;font-size:24px;line-height:1;color:var(--cream)}
   .stat .num.pts{color:var(--brass-bright)}
-  .stat .lbl{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:5px}
+  .stat .lbl{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:5px;line-height:1.35}
   /* House credit rides in the same stat row as a fourth tile —
-     same face as League pts / Games played / Games won, but it is
-     a button: tapping it opens the explainer window below. It
-     lives ONLY in this personal-page grid, so no other player
-     ever sees it. */
+     EXACTLY the same face, size, padding and centred layout as
+     League pts / Games played / Games won. It is a button only
+     so it can collapse / reopen the bank panel below, which is
+     OPEN by default — the bank must be visible on the profile
+     without a tap, not hidden behind this tile. It lives ONLY
+     in this personal-page grid, so no other player ever sees it. */
   button.stat{
-    font:inherit;color:inherit;cursor:pointer;width:100%;
+    font:inherit;color:inherit;cursor:pointer;
     -webkit-appearance:none;appearance:none;
+    background:rgba(0,0,0,.28);border:1px solid var(--line-soft);border-radius:14px;
   }
   button.stat .num, button.stat .lbl{display:block}
   button.stat:active{transform:scale(.99)}
   button.stat:focus-visible{outline:2px solid var(--brass-bright);outline-offset:2px}
-  .stat .tap-hint{
-    display:flex;align-items:center;justify-content:center;gap:5px;
-    font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-    color:var(--brass);margin-top:6px;
-  }
-  .stat .tap-chev{
-    width:7px;height:7px;flex:0 0 auto;
-    border-right:2px solid var(--brass-bright);border-bottom:2px solid var(--brass-bright);
-    transform:rotate(45deg) translate(-1px,-1px);transition:transform .18s ease;
-  }
-  button.stat.open .tap-chev{transform:rotate(-135deg) translate(-1px,-1px)}
-  @media (prefers-reduced-motion: reduce){ .stat .tap-chev{transition:none} }
   .notice{
     margin-top:16px;border-radius:14px;padding:14px 15px;font-size:14.5px;line-height:1.55;
     border:1px solid var(--line);background:rgba(0,0,0,.25);color:var(--cream-2);
@@ -418,6 +417,12 @@
     padding:16px 15px;background:linear-gradient(180deg, rgba(200,162,74,.10), rgba(0,0,0,.28));
   }
   .credit-top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+  .credit-top > div:first-child{min-width:0}
+  @media (max-width:380px){
+    .credit-top{gap:10px}
+    .credit-balance .amt{font-size:26px}
+    .credit-title{font-size:17px}
+  }
   .credit-kicker{font-size:10.5px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--brass);margin:0}
   .credit-title{font-family:"Archivo","Arial Narrow",sans-serif;font-size:19px;font-weight:400;letter-spacing:.03em;line-height:1.2;margin:5px 0 0}
   .credit-balance{text-align:right;flex:0 0 auto}
@@ -479,9 +484,11 @@
   .zelle-steps{margin-top:6px}
   .zelle-steps li{padding:6px 0}
   .zelle-note{font-size:12.5px;line-height:1.55;color:var(--muted);margin:10px 0 0}
-  /* The explainer window itself: hidden until the House credit
-     stat tile is tapped. It is a custom in-page panel in the Door
-     style — never a native dropdown/select. */
+  /* The bank window itself: OPEN by default directly under the
+     stat row, so the balance, Zelle details and ledger are seen
+     on the profile without a tap. The House credit tile above
+     can collapse / reopen it. It is a custom in-page panel in
+     the Door style — never a native dropdown/select. */
   .credit-empty{font-size:13.5px;line-height:1.55;color:var(--muted);margin:12px 0 0;border-top:1px solid var(--line-soft);padding-top:11px}
   .credit-hist{margin-top:8px}
   .credit-row{display:flex;gap:12px;align-items:baseline;padding:9px 2px;border-top:1px solid var(--line-soft)}
@@ -908,25 +915,49 @@
 
   <header>
     <h1 class="sr-only">Clubhouse Poker Room</h1>
-    <!-- The CP monogram lockup — the same vector artwork the host
-         app carries (interwoven C and P in thin brass line work, a
-         small club suit at the bottom of the monogram, CLUBHOUSE
-         above, POKER ROOM below, thin letterspaced type). -->
-    <svg class="monogram" viewBox="0 0 240 296" role="img" aria-label="Clubhouse Poker Room monogram">
-      <text x="120" y="36" text-anchor="middle" font-size="20" letter-spacing="7" fill="#ece1c6" font-family="Archivo, 'Arial Narrow', sans-serif" font-weight="300">CLUBHOUSE</text>
-      <line x1="52" x2="188" y1="52" y2="52" stroke="#c8a24a" stroke-width="0.75" opacity="0.65"/>
-      <text x="86" y="176" text-anchor="middle" font-size="118" fill="none" stroke="#0e1319" stroke-width="6" font-family="Archivo, 'Arial Narrow', sans-serif" font-weight="200" aria-hidden="true">C</text>
-      <text x="86" y="176" text-anchor="middle" font-size="118" fill="none" stroke="#e6cb84" stroke-width="1.5" font-family="Archivo, 'Arial Narrow', sans-serif" font-weight="200" aria-hidden="true">C</text>
-      <text x="140" y="176" text-anchor="middle" font-size="118" fill="none" stroke="#0e1319" stroke-width="6" font-family="Archivo, 'Arial Narrow', sans-serif" font-weight="200" aria-hidden="true">P</text>
-      <text x="140" y="176" text-anchor="middle" font-size="118" fill="none" stroke="#e6cb84" stroke-width="1.5" font-family="Archivo, 'Arial Narrow', sans-serif" font-weight="200" aria-hidden="true">P</text>
-      <g transform="translate(120 204) scale(0.85)" fill="#c8a24a" aria-hidden="true">
-        <circle cx="0" cy="-7" r="8.5"/><circle cx="-8" cy="4" r="8.5"/><circle cx="8" cy="4" r="8.5"/>
-        <path d="M0 2 L-5.5 16 L5.5 16 Z"/>
+    <!-- The CP monogram lockup — Concept 3 ("The Monogram Hearth")
+         from the approved logo concept sheet, recreated as vector:
+         one interlocked monogram (the C encloses the P; the P's
+         hollow stem stands at the center and its bowl curves out
+         through the C's opening), the club suit inside the
+         monogram under the stem's fork, CLUBHOUSE above, and
+         below it the finialed rule, POKER ROOM, and the tapering
+         dot row — all in the concept's warm peach-brass. -->
+    <svg class="monogram" viewBox="0 0 240 308" role="img" aria-label="Clubhouse Poker Room monogram">
+      <defs>
+        <linearGradient id="cpGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#f4d3a5"/>
+          <stop offset="0.55" stop-color="#eec493"/>
+          <stop offset="1" stop-color="#dfa968"/>
+        </linearGradient>
+      </defs>
+      <text x="120" y="34" text-anchor="middle" font-size="20" letter-spacing="7" fill="#ecc9a0" font-family="Archivo, 'Arial Narrow', sans-serif" font-weight="300">CLUBHOUSE</text>
+      <g transform="translate(14.4 48) scale(0.88)" aria-hidden="true">
+        <path d="M147 39 A70 70 0 1 0 147 149" fill="none" stroke="url(#cpGrad)" stroke-width="11"/>
+        <path d="M93.5 34.4 A60.5 60.5 0 0 0 43.5 94 A60.5 60.5 0 0 0 83.3 150.9" fill="none" stroke="url(#cpGrad)" stroke-width="2" opacity="0.85"/>
+        <polygon points="146,33.5 147,44.5 166,44" fill="url(#cpGrad)"/>
+        <polygon points="146,143.5 147,154.5 166,144" fill="url(#cpGrad)"/>
+        <path d="M112 58 H140 A28 28 0 0 1 140 114 H128" fill="none" stroke="url(#cpGrad)" stroke-width="10.5"/>
+        <path d="M161 59 A34.5 34.5 0 0 1 161 113" fill="none" stroke="url(#cpGrad)" stroke-width="2" opacity="0.85"/>
+        <path d="M112 54 V126 H126 V54" fill="none" stroke="url(#cpGrad)" stroke-width="3"/>
+        <path d="M112 126 L106 137 M126 126 L132 137" stroke="url(#cpGrad)" stroke-width="3" fill="none"/>
+        <g transform="translate(119 145) scale(0.6)" fill="url(#cpGrad)">
+          <circle cx="0" cy="-7" r="8.5"/><circle cx="-8" cy="4" r="8.5"/><circle cx="8" cy="4" r="8.5"/>
+          <path d="M0 2 L-5.5 16 L5.5 16 Z"/>
+        </g>
       </g>
-      <line x1="52" x2="188" y1="238" y2="238" stroke="#c8a24a" stroke-width="0.75" opacity="0.65"/>
-      <text x="120" y="268" text-anchor="middle" font-size="16.5" letter-spacing="6.5" fill="#ece1c6" font-family="Archivo, 'Arial Narrow', sans-serif" font-weight="300">POKER ROOM</text>
+      <line x1="28" x2="212" y1="244" y2="244" stroke="#eec493" stroke-width="0.9" opacity="0.8"/>
+      <polygon points="22,239.5 26.5,244 22,248.5 17.5,244" fill="#eec493" aria-hidden="true"/>
+      <polygon points="218,239.5 222.5,244 218,248.5 213.5,244" fill="#eec493" aria-hidden="true"/>
+      <text x="120" y="274" text-anchor="middle" font-size="16.5" letter-spacing="6.5" fill="#ecc9a0" font-family="Archivo, 'Arial Narrow', sans-serif" font-weight="300">POKER ROOM</text>
+      <g fill="#eec493" opacity="0.75" aria-hidden="true">
+        <circle cx="120" cy="292" r="2.3"/><circle cx="106" cy="292" r="1.9"/><circle cx="134" cy="292" r="1.9"/>
+        <circle cx="92" cy="292" r="1.5"/><circle cx="148" cy="292" r="1.5"/>
+        <circle cx="79" cy="292" r="1.15"/><circle cx="161" cy="292" r="1.15"/>
+        <circle cx="67" cy="292" r="0.85"/><circle cx="173" cy="292" r="0.85"/>
+      </g>
     </svg>
-    <p class="door-tag">Player Door</p>
+    <p class="door-tag">Player Portal</p>
   </header>
 
   <!-- loading -->
@@ -1037,29 +1068,42 @@
       <div class="stat"><div class="num" id="mePlayed">0</div><div class="lbl">Games played</div></div>
       <div class="stat"><div class="num" id="meWon">0</div><div class="lbl">Games won</div></div>
       <!-- HOUSE CREDIT TILE — the fourth stat tile, identical in
-           size and face to the other three, just clickable. It
-           shows ONLY the label and the balance ("House credit ·
-           $0"); tapping it opens the explainer window below.
+           size, face and layout to the other three (number over
+           label, nothing extra). It shows the balance and the
+           "House credit" label; tapping it collapses / reopens
+           the bank panel below, which is OPEN by default so the
+           bank is visible on the profile without any tap.
            PRIVATE: this tile exists only in this personal-page
            grid — it is never rendered on the public profile card,
            in the standings, or on the League page, so no other
            player can ever see it. Only the player (on their own
            token page) and the host ever see a credit balance. -->
-      <button type="button" class="stat" id="creditToggle" aria-expanded="false" aria-controls="creditPanel">
+      <button type="button" class="stat" id="creditToggle" aria-expanded="true" aria-controls="creditPanel">
         <span class="num pts" id="meCreditBalance">$0</span>
         <span class="lbl">House credit</span>
-        <span class="tap-hint">Details <span class="tap-chev" aria-hidden="true"></span></span>
       </button>
     </div>
-    <!-- HOUSE CREDIT EXPLAINER — the window the tile opens. Private
-         money, so it lives ONLY here on the player's own page. It
-         is never rendered in the standings, on the public profile
-         card, or on the League page, and league_public_profile
-         never returns it. The host records every movement; the
-         player cannot add credit to themselves from this page. -->
-    <div class="credit-panel" id="creditPanel" hidden>
-      <p class="credit-kicker">House credit</p>
-      <p class="credit-title">Your money, banked with the host</p>
+    <!-- HOUSE CREDIT / BANK PANEL — open by default directly under
+         the stat row: balance (top right, completing the header
+         row the panel's styles always described), how it works,
+         the Zelle banking block, and the credit ledger / history.
+         Private money, so it lives ONLY here on the player's own
+         page. It is never rendered in the standings, on the
+         public profile card, or on the League page, and
+         league_public_profile never returns it. The host records
+         every movement; the player cannot add credit to
+         themselves from this page. -->
+    <div class="credit-panel" id="creditPanel">
+      <div class="credit-top">
+        <div>
+          <p class="credit-kicker">House credit — your bank</p>
+          <p class="credit-title">Your money, banked with the host</p>
+        </div>
+        <div class="credit-balance">
+          <div class="amt" id="meCreditBalancePanel">$0</div>
+          <div class="lbl">Current balance</div>
+        </div>
+      </div>
       <div id="creditBody">
       <p class="credit-copy" id="meCreditCopy">Deposit cash with <strong>Anthony</strong> and it becomes credit in your name — no more carrying cash back and forth to the table, and no digging for bills at every buy-in.</p>
       <ol class="credit-steps">
@@ -1156,12 +1200,23 @@
       <span class="profile-kind">The League</span>
     </div>
     <div class="league-hero">
-      <svg class="monogram-mark" viewBox="30 52 180 168" aria-hidden="true">
-        <text x="86" y="168" text-anchor="middle" font-size="118" fill="none" stroke="#0e1319" stroke-width="6" font-family="Archivo, 'Arial Narrow', sans-serif" font-weight="200">C</text>
-        <text x="86" y="168" text-anchor="middle" font-size="118" fill="none" stroke="#e6cb84" stroke-width="1.5" font-family="Archivo, 'Arial Narrow', sans-serif" font-weight="200">C</text>
-        <text x="140" y="168" text-anchor="middle" font-size="118" fill="none" stroke="#0e1319" stroke-width="6" font-family="Archivo, 'Arial Narrow', sans-serif" font-weight="200">P</text>
-        <text x="140" y="168" text-anchor="middle" font-size="118" fill="none" stroke="#e6cb84" stroke-width="1.5" font-family="Archivo, 'Arial Narrow', sans-serif" font-weight="200">P</text>
-        <g transform="translate(120 196) scale(0.8)" fill="#c8a24a">
+      <svg class="monogram-mark" viewBox="0 0 240 200" aria-hidden="true">
+        <defs>
+          <linearGradient id="cpGradMark" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#f4d3a5"/>
+            <stop offset="0.55" stop-color="#eec493"/>
+            <stop offset="1" stop-color="#dfa968"/>
+          </linearGradient>
+        </defs>
+        <path d="M147 39 A70 70 0 1 0 147 149" fill="none" stroke="url(#cpGradMark)" stroke-width="11"/>
+        <path d="M93.5 34.4 A60.5 60.5 0 0 0 43.5 94 A60.5 60.5 0 0 0 83.3 150.9" fill="none" stroke="url(#cpGradMark)" stroke-width="2" opacity="0.85"/>
+        <polygon points="146,33.5 147,44.5 166,44" fill="url(#cpGradMark)"/>
+        <polygon points="146,143.5 147,154.5 166,144" fill="url(#cpGradMark)"/>
+        <path d="M112 58 H140 A28 28 0 0 1 140 114 H128" fill="none" stroke="url(#cpGradMark)" stroke-width="10.5"/>
+        <path d="M161 59 A34.5 34.5 0 0 1 161 113" fill="none" stroke="url(#cpGradMark)" stroke-width="2" opacity="0.85"/>
+        <path d="M112 54 V126 H126 V54" fill="none" stroke="url(#cpGradMark)" stroke-width="3"/>
+        <path d="M112 126 L106 137 M126 126 L132 137" stroke="url(#cpGradMark)" stroke-width="3" fill="none"/>
+        <g transform="translate(119 145) scale(0.6)" fill="url(#cpGradMark)">
           <circle cx="0" cy="-7" r="8.5"/><circle cx="-8" cy="4" r="8.5"/><circle cx="8" cy="4" r="8.5"/>
           <path d="M0 2 L-5.5 16 L5.5 16 Z"/>
         </g>
@@ -1207,7 +1262,7 @@
           <span class="fund-chev" aria-hidden="true"></span>
         </button>
         <div class="fund-body" id="fundFeeLeagueBody" hidden>
-          <p class="fund-rule-copy">Every sit &amp; go takes a flat <strong class="brass">$5 off the top of the purse</strong> — not per player, and never a percentage. So a 10-player, $20 game builds a $200 purse, the house takes its $5, and <strong>$195 goes straight into the prizes</strong>. That $5 is the Clubhouse's only rake, and it exists for one reason: it covers the real costs of running the room — <strong>texting and communication fees (Twilio)</strong> for invites, game-night updates, and check-in and recovery codes, <strong>server and hosting costs</strong> for the league book, this Player Door, and the TV game display, and <strong>Jarvis</strong> — Anthony's assistant, who helps run the Clubhouse behind the scenes and is part of what it costs to keep the room going. It's a flat fee to keep the Clubhouse running — not a profit cut, and it never grows with the pot.</p>
+          <p class="fund-rule-copy">Every sit &amp; go takes a flat <strong class="brass">$5 off the top of the purse</strong> — not per player, and never a percentage. So a 10-player, $20 game builds a $200 purse, the house takes its $5, and <strong>$195 goes straight into the prizes</strong>. That $5 is the Clubhouse's only rake, and it exists for one reason: it covers the real costs of running the room — <strong>texting and communication fees (Twilio)</strong> for invites, game-night updates, and check-in and recovery codes, <strong>server and hosting costs</strong> for the league book, this Player Portal, and the TV game display, and <strong>Jarvis</strong> — Anthony's assistant, who helps run the Clubhouse behind the scenes and is part of what it costs to keep the room going. It's a flat fee to keep the Clubhouse running — not a profit cut, and it never grows with the pot.</p>
         </div>
       </div>
     </div>
@@ -1221,8 +1276,25 @@
     <div id="leagueBody"><p class="empty-note">Loading the league…</p></div>
     <div class="block-label league-label">Recent nights</div>
     <div id="leagueRecent"><p class="empty-note">Loading recent results…</p></div>
-    <div class="block-label league-label">What the rings mean</div>
-    <div class="legend" id="leagueLegend"></div>
+    <!-- WHAT THE RINGS MEAN — collapsible, same treatment as the
+         House Rules & Fees notes above (host's direction): closed
+         by default behind a tappable header that keeps the gist on
+         screen; tapping opens the full legend underneath. The
+         legend's content is unchanged — renderLegend still fills
+         #leagueLegend exactly as before, it just lives inside the
+         collapsible body now. -->
+    <div class="fund-rule-note" data-rings-note>
+      <button type="button" class="fund-toggle" aria-expanded="false" aria-controls="leagueLegendWrap">
+        <span class="fund-head">
+          <span class="fund-rule-kicker">What the rings mean</span>
+          <span class="fund-gist">The <strong>rings, badges &amp; bounty chip</strong> on each player's photo</span>
+        </span>
+        <span class="fund-chev" aria-hidden="true"></span>
+      </button>
+      <div class="fund-body" id="leagueLegendWrap" hidden>
+        <div class="legend" id="leagueLegend"></div>
+      </div>
+    </div>
   </section>
 
   <!-- photo position editor (shared by sign-up and Change photo) -->
@@ -1702,12 +1774,14 @@
   };
   function renderCredit(){
     var balEl = $("meCreditBalance");
+    var balPanelEl = $("meCreditBalancePanel");
     var histEl = $("meCreditHistory");
     var copyEl = $("meCreditCopy");
     if (!balEl || !histEl) return;
     var hasField = me && me.credit_balance != null && isFinite(Number(me.credit_balance));
     var bal = hasField ? Math.round(Number(me.credit_balance)) : 0;
     balEl.textContent = "$" + fmtNum(bal);
+    if (balPanelEl) balPanelEl.textContent = "$" + fmtNum(bal);
     if (copyEl) {
       copyEl.innerHTML = bal > 0
         ? "You have <strong>$" + fmtNum(bal) + " on credit</strong> with Anthony. Your buy-ins can come straight out of it — just say \u201ccredit\u201d at the table instead of reaching for cash."
@@ -3396,14 +3470,21 @@
   });
 
   /* House credit expand/collapse: the stat tile always shows —
-     label + balance, nothing more. The explainer window
-     (#creditPanel, with the how-it-works copy and the ledger in
-     #creditBody) stays hidden until the tile is tapped open, and
-     tapping again closes it. renderCredit only ever writes the
-     amount/copy/ledger, so the open state survives the per-minute
-     refresh untouched. Both tile and window exist only on this
-     personal page — no public surface renders either. */
-  var creditOpen = false;
+     label + balance, nothing more, in exactly the same face as
+     the other three tiles. The bank panel (#creditPanel, with
+     the balance header, how-it-works copy, Zelle block and the
+     ledger in #creditBody) is OPEN by default — the bank shows
+     on the profile without a tap, which is the fix for it
+     looking missing / broken as a lone far-right tile. Tapping
+     the tile collapses it, tapping again reopens it.
+     renderCredit only ever writes the amount/copy/ledger, so
+     the open state survives the per-minute refresh untouched.
+     Both tile and panel exist only on this personal page — no
+     public surface renders either. */
+  var creditOpen = true;
+  $("creditPanel").hidden = false;
+  $("creditToggle").classList.add("open");
+  $("creditToggle").setAttribute("aria-expanded", "true");
   $("creditToggle").addEventListener("click", function(){
     creditOpen = !creditOpen;
     $("creditPanel").hidden = !creditOpen;
@@ -3411,13 +3492,15 @@
     $("creditToggle").setAttribute("aria-expanded", creditOpen ? "true" : "false");
   });
 
-  /* Explainer notes (championship fund + house fee): collapsible,
-     closed by default, identical on the League page and in the
-     standings panel. The header always shows the title + one-line
-     gist; tapping toggles the full note body. State is per-note
-     and in-memory only — every page load starts closed, and the
-     per-minute refresh never touches these nodes. */
-  Array.prototype.forEach.call(document.querySelectorAll("[data-fund-note]"), function(note){
+  /* Explainer notes (championship fund + house fee) and the
+     "What the rings mean" legend: collapsible, closed by default,
+     identical treatment on the League page. The header always
+     shows the title + one-line gist; tapping toggles the full
+     body underneath. State is per-note and in-memory only — every
+     page load starts closed, and the per-minute refresh never
+     touches these nodes (renderLegend only rewrites the legend's
+     inner chips, never its hidden/open state). */
+  Array.prototype.forEach.call(document.querySelectorAll("[data-fund-note], [data-rings-note]"), function(note){
     var toggle = note.querySelector(".fund-toggle");
     var bodyId = toggle ? toggle.getAttribute("aria-controls") : null;
     var body = bodyId ? document.getElementById(bodyId) : null;
@@ -3527,7 +3610,7 @@
 })();
 </script>
 <script>
-/* Clubhouse Player Door — service worker registration (GitHub Pages
+/* Clubhouse Player Portal — service worker registration (GitHub Pages
    hosting). Guarded: if anything about it fails, the page works
    exactly as before. The worker caches only this page's own shell
    and never touches the league book's live data. */

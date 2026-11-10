@@ -1,17 +1,17 @@
 "use strict";
 /*
- * Clubhouse Player Door — service worker.
+ * Clubhouse Player Portal — service worker.
  *
  * Its job is installability plus a resilient shell, nothing more:
  *  - It caches ONLY this site's own same-origin shell files
  *    (the page, the manifest, the icons) under a versioned cache.
  *  - Cross-origin traffic — above all the Supabase league book's
  *    API/RPC calls — is passed straight through and NEVER cached.
- *    The Door always works live against the league book.
+ *    The Portal always works live against the league book.
  *  - Navigations are network-first, so a fresh deploy wins; the
  *    cached shell is only a fallback when the network is gone.
  */
-var CACHE_NAME = "clubhouse-door-shell-v11";
+var CACHE_NAME = "clubhouse-door-shell-v12";
 var SHELL_FILES = [
   "./",
   "./index.html",
