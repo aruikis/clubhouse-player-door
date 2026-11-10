@@ -11,7 +11,7 @@
  *  - Navigations are network-first, so a fresh deploy wins; the
  *    cached shell is only a fallback when the network is gone.
  */
-var CACHE_NAME = "clubhouse-door-shell-v7";
+var CACHE_NAME = "clubhouse-door-shell-v8";
 var SHELL_FILES = [
   "./",
   "./index.html",

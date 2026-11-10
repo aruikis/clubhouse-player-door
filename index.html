@@ -739,19 +739,43 @@
   .league-grid .gc-num.brass{color:var(--brass-bright)}
   .league-grid .gc-lbl{font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:5px;line-height:1.45}
   .league-grid .gc-note{font-size:12px;font-weight:300;color:var(--cream-2);line-height:1.5;margin-top:5px}
-  /* Championship fund rule — plain language, right under the
-     season grid (and its Championship fund card) so no player is
-     ever surprised by the $20. Same soft dark glass as the rest
-     of the League page, with a firmer brass edge to set the rule
-     apart from the stat cards. */
+  /* Explainer notes — collapsible, CLOSED by default, on both the
+     League page and the standings panel. The data leads; each note
+     is a slim tappable row whose header keeps the one-line gist on
+     screen so the transparency survives at a glance. Tapping opens
+     the full note text underneath. Same soft dark glass as the
+     rest of the League page, with a firmer brass edge. */
   .fund-rule-note{
-    margin-top:12px;border-radius:14px;padding:14px 15px;
+    margin-top:12px;border-radius:14px;padding:0;overflow:hidden;
     background:linear-gradient(180deg, rgba(201,164,92,.10), rgba(255,255,255,.015));
     border:1px solid rgba(201,164,92,.45);
     box-shadow:inset 0 1px 0 rgba(255,255,255,.05), 0 6px 16px rgba(0,0,0,.28);
   }
-  .fund-rule-kicker{font-size:10.5px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--brass);margin:0}
-  .fund-rule-copy{font-size:13.5px;font-weight:300;letter-spacing:.02em;line-height:1.65;color:var(--cream-2);margin:7px 0 0}
+  .fund-toggle{
+    appearance:none;-webkit-appearance:none;background:none;border:none;cursor:pointer;
+    width:100%;display:flex;align-items:center;gap:12px;text-align:left;
+    padding:13px 15px;font:inherit;color:inherit;
+  }
+  .fund-toggle:active{transform:scale(.995)}
+  .fund-toggle:focus-visible{outline:2px solid var(--brass-bright);outline-offset:-2px;border-radius:14px}
+  .fund-head{flex:1;min-width:0;display:block}
+  .fund-rule-kicker{display:block;font-size:10.5px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--brass);margin:0}
+  .fund-gist{display:block;font-size:13.5px;font-weight:400;letter-spacing:.02em;line-height:1.45;color:var(--cream-2);margin-top:4px}
+  .fund-gist strong{font-weight:600;color:var(--brass-bright)}
+  .fund-chev{
+    flex:0 0 auto;width:26px;height:26px;border-radius:50%;
+    border:1px solid var(--line);display:grid;place-items:center;
+    background:rgba(0,0,0,.25);
+  }
+  .fund-chev::before{
+    content:"";width:7px;height:7px;
+    border-right:2px solid var(--brass-bright);border-bottom:2px solid var(--brass-bright);
+    transform:rotate(45deg) translate(-1px,-1px);transition:transform .18s ease;
+  }
+  .fund-toggle[aria-expanded="true"] .fund-chev::before{transform:rotate(-135deg) translate(-1px,-1px)}
+  @media (prefers-reduced-motion: reduce){ .fund-chev::before{transition:none} }
+  .fund-body{padding:0 15px 14px}
+  .fund-rule-copy{font-size:13.5px;font-weight:300;letter-spacing:.02em;line-height:1.65;color:var(--cream-2);margin:0}
   .fund-rule-copy strong{font-weight:600;color:var(--cream)}
   .fund-rule-copy strong.brass{color:var(--brass-bright)}
   .leader-card{display:flex;gap:14px;align-items:center;cursor:pointer}
@@ -1083,15 +1107,8 @@
     <div id="leagueTonight"></div>
     <div class="block-label league-label">Upcoming games</div>
     <div id="leagueUpcoming"><p class="empty-note">Checking the calendar…</p></div>
-    <div class="league-grid" id="leagueSeasonGrid"></div>
-    <div class="fund-rule-note">
-      <p class="fund-rule-kicker">How the championship fund works</p>
-      <p class="fund-rule-copy">On a $100 league night, <strong class="brass">$20 of every league player's buy-in</strong> goes into the championship pot. That pot pays the points leader's <strong>free championship buy-in</strong> and boosts the championship prizes. The $20 is part of the price of a league night — and it is <strong>not refunded</strong> if a player doesn't reach the five nights needed to qualify. No surprises: that's the deal before the first hand is dealt.</p>
-    </div>
-    <div class="fund-rule-note">
-      <p class="fund-rule-kicker">Sit &amp; go house fee — full transparency</p>
-      <p class="fund-rule-copy">Every sit &amp; go takes a flat <strong class="brass">$5 off the top of the purse</strong> — not per player, and never a percentage. So a 10-player, $20 game builds a $200 purse, the house takes its $5, and <strong>$195 goes straight into the prizes</strong>. That $5 is the Clubhouse's only rake, and it exists for one reason: it covers the real costs of running the room — <strong>texting and communication fees (Twilio)</strong> for invites, game-night updates, and check-in and recovery codes, <strong>server and hosting costs</strong> for the league book, this Player Door, and the TV game display, and <strong>Jarvis</strong> — Anthony's assistant, who helps run the Clubhouse behind the scenes and is part of what it costs to keep the room going. It's a flat fee to keep the Clubhouse running — not a profit cut, and it never grows with the pot.</p>
-    </div>
+    <div class="block-label league-label">Season at a glance</div>
+    <div class="league-grid" id="leagueSeasonGrid" style="margin-top:0"></div>
     <div id="leagueLeader"></div>
     <div class="block-label league-label">Standings — tap a player for their card</div>
     <div id="leagueBody"><p class="empty-note">Loading the league…</p></div>
@@ -1099,6 +1116,31 @@
     <div id="leagueRecent"><p class="empty-note">Loading recent results…</p></div>
     <div class="block-label league-label">What the rings mean</div>
     <div class="legend" id="leagueLegend"></div>
+    <div class="block-label league-label">House rules &amp; fees</div>
+    <div class="fund-rule-note" data-fund-note>
+      <button type="button" class="fund-toggle" aria-expanded="false" aria-controls="fundChampBody">
+        <span class="fund-head">
+          <span class="fund-rule-kicker">How the championship fund works</span>
+          <span class="fund-gist"><strong>$20 of each $100 league buy-in</strong> builds the championship pot</span>
+        </span>
+        <span class="fund-chev" aria-hidden="true"></span>
+      </button>
+      <div class="fund-body" id="fundChampBody" hidden>
+        <p class="fund-rule-copy">On a $100 league night, <strong class="brass">$20 of every league player's buy-in</strong> goes into the championship pot. That pot pays the points leader's <strong>free championship buy-in</strong> and boosts the championship prizes. The $20 is part of the price of a league night — and it is <strong>not refunded</strong> if a player doesn't reach the five nights needed to qualify. No surprises: that's the deal before the first hand is dealt.</p>
+      </div>
+    </div>
+    <div class="fund-rule-note" data-fund-note>
+      <button type="button" class="fund-toggle" aria-expanded="false" aria-controls="fundFeeLeagueBody">
+        <span class="fund-head">
+          <span class="fund-rule-kicker">Sit &amp; go house fee — full transparency</span>
+          <span class="fund-gist"><strong>Flat $5 per sit &amp; go</strong> — covers the room's running costs</span>
+        </span>
+        <span class="fund-chev" aria-hidden="true"></span>
+      </button>
+      <div class="fund-body" id="fundFeeLeagueBody" hidden>
+        <p class="fund-rule-copy">Every sit &amp; go takes a flat <strong class="brass">$5 off the top of the purse</strong> — not per player, and never a percentage. So a 10-player, $20 game builds a $200 purse, the house takes its $5, and <strong>$195 goes straight into the prizes</strong>. That $5 is the Clubhouse's only rake, and it exists for one reason: it covers the real costs of running the room — <strong>texting and communication fees (Twilio)</strong> for invites, game-night updates, and check-in and recovery codes, <strong>server and hosting costs</strong> for the league book, this Player Door, and the TV game display, and <strong>Jarvis</strong> — Anthony's assistant, who helps run the Clubhouse behind the scenes and is part of what it costs to keep the room going. It's a flat fee to keep the Clubhouse running — not a profit cut, and it never grows with the pot.</p>
+      </div>
+    </div>
   </section>
 
   <!-- standings (public) -->
@@ -1106,9 +1148,17 @@
     <div class="block-label" id="standingsLabel">League standings</div>
     <p class="stand-context" id="standingsContext" hidden></p>
     <p class="champ-line" id="champLine" hidden>Season points leader earns the free buy-in to the championship game.</p>
-    <div class="fund-rule-note" style="margin:0 0 14px">
-      <p class="fund-rule-kicker">Sit &amp; go house fee — full transparency</p>
-      <p class="fund-rule-copy">Every sit &amp; go takes a flat <strong class="brass">$5 off the top of the purse</strong> — not per player, and never a percentage. A 10-player, $20 game builds a $200 purse, the house takes its $5, and <strong>$195 goes straight into the prizes</strong>. That $5 is the Clubhouse's only rake: it covers the real costs of running the room — <strong>texting and communication fees (Twilio)</strong> for invites, game-night updates, and check-in and recovery codes, <strong>server and hosting costs</strong> for the league book, this Player Door, and the TV game display, and <strong>Jarvis</strong> — Anthony's assistant, who helps run the Clubhouse behind the scenes and is part of what it costs to keep the room going. A flat fee to keep the Clubhouse running — not a profit cut, and it never grows with the pot.</p>
+    <div class="fund-rule-note" data-fund-note style="margin:0 0 14px">
+      <button type="button" class="fund-toggle" aria-expanded="false" aria-controls="fundFeeStandingsBody">
+        <span class="fund-head">
+          <span class="fund-rule-kicker">Sit &amp; go house fee — full transparency</span>
+          <span class="fund-gist"><strong>Flat $5 per sit &amp; go</strong> — covers the room's running costs</span>
+        </span>
+        <span class="fund-chev" aria-hidden="true"></span>
+      </button>
+      <div class="fund-body" id="fundFeeStandingsBody" hidden>
+        <p class="fund-rule-copy">Every sit &amp; go takes a flat <strong class="brass">$5 off the top of the purse</strong> — not per player, and never a percentage. A 10-player, $20 game builds a $200 purse, the house takes its $5, and <strong>$195 goes straight into the prizes</strong>. That $5 is the Clubhouse's only rake: it covers the real costs of running the room — <strong>texting and communication fees (Twilio)</strong> for invites, game-night updates, and check-in and recovery codes, <strong>server and hosting costs</strong> for the league book, this Player Door, and the TV game display, and <strong>Jarvis</strong> — Anthony's assistant, who helps run the Clubhouse behind the scenes and is part of what it costs to keep the room going. A flat fee to keep the Clubhouse running — not a profit cut, and it never grows with the pot.</p>
+      </div>
     </div>
     <div id="standingsBody">
       <p class="empty-note">Loading the standings…</p>
@@ -3332,6 +3382,24 @@
     $("creditPanel").hidden = !creditOpen;
     $("creditToggle").classList.toggle("open", creditOpen);
     $("creditToggle").setAttribute("aria-expanded", creditOpen ? "true" : "false");
+  });
+
+  /* Explainer notes (championship fund + house fee): collapsible,
+     closed by default, identical on the League page and in the
+     standings panel. The header always shows the title + one-line
+     gist; tapping toggles the full note body. State is per-note
+     and in-memory only — every page load starts closed, and the
+     per-minute refresh never touches these nodes. */
+  Array.prototype.forEach.call(document.querySelectorAll("[data-fund-note]"), function(note){
+    var toggle = note.querySelector(".fund-toggle");
+    var bodyId = toggle ? toggle.getAttribute("aria-controls") : null;
+    var body = bodyId ? document.getElementById(bodyId) : null;
+    if (!toggle || !body) return;
+    toggle.addEventListener("click", function(){
+      var open = toggle.getAttribute("aria-expanded") === "true";
+      toggle.setAttribute("aria-expanded", open ? "false" : "true");
+      body.hidden = open;
+    });
   });
 
   /* Zelle copy button — copies the Clubhouse Zelle email (ready to
