@@ -997,7 +997,7 @@
       <input id="regPhone" name="phone" type="tel" autocomplete="tel" placeholder="(815) 555-0123" maxlength="24" />
       <label for="regEmail">Email (optional)</label>
       <input id="regEmail" name="email" type="email" autocomplete="email" placeholder="you@example.com" maxlength="80" />
-      <p class="privacy-promise"><strong>Host-only, always — and no spam, ever.</strong> Your phone number and email are only ever seen by the host — to get a hold of you if he needs you. They will never be displayed or available to anybody else. Other players see only your name and your stats.<br><br><strong>About texts:</strong> If you get a text, it comes directly from Clubhouse Poker Room — game-night updates, check-in details, and a recovery code if you ever get a new phone. You will not be spammed, sold, or added to any list. Every text is monitored by the host, so nothing inappropriate or off-topic will ever come to your phone.</p>
+      <p class="privacy-promise"><strong>Host-only, always — and no spam, ever.</strong> Your phone number and email are only ever seen by the host — to get a hold of you if he needs you. They will never be displayed or available to anybody else. Other players see only your name and your stats.<br><br><strong>Getting back in on a new phone:</strong> This page remembers you on the phone you sign up with. If you get a new phone, your account and sign-in will need to be reset by the league host — please reach out to Anthony and he'll get the new phone set up for you. You will not be spammed, sold, or added to any list.</p>
       <label>Photo (optional)</label>
       <div class="photo-pick">
         <div class="photo-preview" id="regPhotoPreview" aria-hidden="true">?</div>
@@ -1017,33 +1017,7 @@
       <button type="submit" class="btn" id="regSubmit">Save my player profile</button>
     </form>
     <div class="not-you">
-      <button type="button" class="link-btn" id="recoverToggle">New phone? Recover my profile</button>
-    </div>
-    <div id="recoverZone" hidden>
-      <div class="block-label" style="margin-top:18px">Recover your profile</div>
-      <p class="sub" style="font-size:15.5px;color:var(--cream)">Got a new phone? Your number is your key — we'll text it a code.</p>
-      <p class="sub" id="recOffNotice" hidden><strong>Text recovery isn't switched on yet</strong> — see Anthony at the door and he'll get this phone set up for you.</p>
-      <form id="recoverForm" novalidate>
-        <div id="recStep1">
-          <label for="recPhone">Phone number you signed up with</label>
-          <input id="recPhone" type="tel" autocomplete="tel" placeholder="(815) 555-0123" maxlength="24" />
-          <div class="form-error" id="recError" role="alert"></div>
-          <button type="submit" class="btn" id="recSubmit">Text me a code</button>
-        </div>
-        <div id="recStep2" hidden>
-          <label id="recCodeLabel">Enter the 4-digit code we texted you</label>
-          <div class="pin-boxes" role="group" aria-labelledby="recCodeLabel">
-            <input id="recCode1" class="pin-box code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="1" aria-label="Code digit 1" />
-            <input id="recCode2" class="pin-box code" type="text" inputmode="numeric" autocomplete="off" maxlength="1" aria-label="Code digit 2" />
-            <input id="recCode3" class="pin-box code" type="text" inputmode="numeric" autocomplete="off" maxlength="1" aria-label="Code digit 3" />
-            <input id="recCode4" class="pin-box code" type="text" inputmode="numeric" autocomplete="off" maxlength="1" aria-label="Code digit 4" />
-          </div>
-          <p class="photo-hint">Codes expire after 10 minutes. Didn't get it? Wait a bit and ask for a fresh one.</p>
-          <div class="form-error" id="recError2" role="alert"></div>
-          <button type="button" class="btn" id="recVerify">Verify and restore my profile</button>
-          <button type="button" class="link-btn" id="recBack">Use a different number</button>
-        </div>
-      </form>
+      <p class="sub" id="hostResetNotice" style="font-size:15.5px;color:var(--cream)"><strong>New phone?</strong> This page remembers you on the phone you signed up with. If you get a new phone, your account and sign-in will need to be reset by the league host — please reach out to Anthony, and he'll get the new phone set up for you. Your profile, badges, and stats stay in the book the whole time — nothing is lost.</p>
     </div>
     <a class="profile-link" href="#/league">League standings — the full League page ›</a>
   </section>
@@ -2447,148 +2421,6 @@
         fail(r);
       })
       .catch(netFail);
-  });
-
-  /* -------- new-phone recovery (code texted to your number) --------
-     Two-factor by delivery: the player enters the number they
-     signed up with, the book texts a FRESH 4-digit code to that
-     number, and entering it hands this phone the player's own
-     device_token. Security comes from delivery + limits, not digit
-     count: codes live 10 minutes, allow 5 tries, and a new code
-     voids the old. Until the host configures an SMS provider, the
-     status function says so and this screen shows the honest
-     "isn't switched on yet" notice instead of pretending to text. */
-  var recSmsChecked = false;
-  $("recoverToggle").addEventListener("click", function(){
-    var z = $("recoverZone");
-    z.hidden = !z.hidden;
-    if (z.hidden) return;
-    try { $("recPhone").focus(); } catch (e) {}
-    if (recSmsChecked) return;
-    recSmsChecked = true;
-    sb("rpc/league_recovery_status", { method: "POST", body: {} })
-      .then(function(r){
-        if (r.ok && r.data && r.data.sms_configured) return; // on: the form below does its work
-        if (isSetupMissing(r)) return; // older book: the form's own errors will say setup is pending
-        $("recOffNotice").hidden = false;
-        $("recSubmit").disabled = true;
-      })
-      .catch(function(){ /* offline: leave the form; its submit will surface the connection error */ });
-  });
-  /* Four digit boxes: typing advances, backspace steps back, and a
-     pasted code fills the row. */
-  var recBoxes = [$("recCode1"), $("recCode2"), $("recCode3"), $("recCode4")];
-  function recCodeValue(){
-    return recBoxes.map(function(b){ return b.value.replace(/\D/g, "").slice(0, 1); }).join("");
-  }
-  recBoxes.forEach(function(box, i){
-    box.addEventListener("input", function(){
-      box.value = box.value.replace(/\D/g, "").slice(0, 1);
-      if (box.value && i < 3) { try { recBoxes[i + 1].focus(); } catch (e) {} }
-    });
-    box.addEventListener("keydown", function(e){
-      if (e.key === "Backspace" && !box.value && i > 0) {
-        e.preventDefault();
-        recBoxes[i - 1].value = "";
-        try { recBoxes[i - 1].focus(); } catch (err2) {}
-      }
-    });
-    box.addEventListener("paste", function(e){
-      var text = "";
-      try { text = (e.clipboardData || window.clipboardData).getData("text") || ""; } catch (err3) {}
-      var digits = text.replace(/\D/g, "").slice(0, 4);
-      if (!digits) return;
-      e.preventDefault();
-      for (var k = 0; k < 4; k++) recBoxes[k].value = digits.charAt(k) || "";
-      try { recBoxes[Math.min(digits.length, 3)].focus(); } catch (err4) {}
-    });
-  });
-  function recShowError(el, msg){
-    el.textContent = msg;
-    el.classList.add("show");
-  }
-  /* Step 1: ask for the text. The answer is worded the same whether
-     or not the number is in the book — nothing to learn from it. */
-  $("recoverForm").addEventListener("submit", function(ev){
-    ev.preventDefault();
-    var err = $("recError");
-    err.classList.remove("show");
-    var phone = $("recPhone").value.trim();
-    if (phone.replace(/\D/g, "").length < 7) {
-      recShowError(err, "Add the phone number you signed up with — that's where the code goes.");
-      return;
-    }
-    var btn = $("recSubmit");
-    btn.disabled = true; btn.textContent = "Texting…";
-    function fail(msg){
-      btn.disabled = false; btn.textContent = "Text me a code";
-      recShowError(err, msg);
-    }
-    sb("rpc/league_recovery_start", { method: "POST", body: { p_phone: phone } })
-      .then(function(r){
-        if (r.ok && r.data && r.data.ok) {
-          btn.disabled = false; btn.textContent = "Text me a code";
-          $("recStep1").hidden = true;
-          $("recStep2").hidden = false;
-          try { recBoxes[0].focus(); } catch (e) {}
-          return;
-        }
-        if (isSetupMissing(r)) { fail("Recovery isn't switched on yet — Anthony needs to finish the Clubhouse setup first."); return; }
-        var reason = r.data && r.data.reason;
-        if (reason === "sms_off") { $("recOffNotice").hidden = false; fail("Text recovery isn't switched on yet — see Anthony at the door and he'll get this phone set up for you."); return; }
-        if (reason === "throttled") { fail("Too many codes asked for just now — give it a little while, then try again."); return; }
-        fail("That didn't go through — try once more.");
-      })
-      .catch(function(){
-        fail("Couldn't reach the Clubhouse — check your connection and try again.");
-      });
-  });
-  $("recBack").addEventListener("click", function(){
-    $("recStep2").hidden = true;
-    $("recStep1").hidden = false;
-    $("recError2").classList.remove("show");
-  });
-  /* Step 2: the code. Success stores the player's own token exactly
-     like a returning player's phone; their approval status comes
-     back untouched — pending stays pending. Every failure is the
-     same generic line. */
-  $("recVerify").addEventListener("click", function(){
-    var err = $("recError2");
-    err.classList.remove("show");
-    var phone = $("recPhone").value.trim();
-    var code = recCodeValue();
-    if (code.length !== 4) {
-      recShowError(err, "Enter all 4 digits of the code we texted you.");
-      return;
-    }
-    var btn = $("recVerify");
-    btn.disabled = true; btn.textContent = "Checking…";
-    function fail(msg){
-      btn.disabled = false; btn.textContent = "Verify and restore my profile";
-      recShowError(err, msg);
-    }
-    sb("rpc/league_recovery_verify", { method: "POST", body: { p_phone: phone, p_code: code } })
-      .then(function(r){
-        if (r.ok && r.data && r.data.ok && r.data.device_token) {
-          setToken(r.data.device_token);
-          btn.disabled = false; btn.textContent = "Verify and restore my profile";
-          showOnly("loadingPanel");
-          loadMe(r.data.device_token).then(function(res){
-            if (res === "ok") { showOnly("mePanel"); renderMe(); return; }
-            if (res === "setup") { setupMissing = true; showOnly("setupPanel"); return; }
-            showOnly("offlinePanel");
-          });
-          loadStandings();
-          return;
-        }
-        if (isSetupMissing(r)) { fail("Recovery isn't switched on yet — Anthony needs to finish the Clubhouse setup first."); return; }
-        var reason = r.data && r.data.reason;
-        if (reason === "throttled") { fail("That code has had too many tries — head back and ask for a fresh code."); return; }
-        fail("That phone number and code don't match — check both and try again.");
-      })
-      .catch(function(){
-        fail("Couldn't reach the Clubhouse — check your connection and try again.");
-      });
   });
 
   /* -------- sign-up photo picker -------- */
