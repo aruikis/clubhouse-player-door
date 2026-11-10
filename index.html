@@ -778,6 +778,29 @@
   .fund-rule-copy{font-size:13.5px;font-weight:300;letter-spacing:.02em;line-height:1.65;color:var(--cream-2);margin:0}
   .fund-rule-copy strong{font-weight:600;color:var(--cream)}
   .fund-rule-copy strong.brass{color:var(--brass-bright)}
+  /* House rules & fees — now the FIRST block on the League page,
+     directly under the hero and above Tonight, so it is the first
+     thing a player sees there. The two notes keep their collapsible
+     behaviour; the section as a whole can be dismissed for good on
+     this device via the Hide control (persisted per-device — see
+     the script at the bottom). */
+  .house-rules-section{margin-top:18px}
+  .house-rules-head{display:flex;align-items:flex-start;gap:12px}
+  .house-rules-head .block-label{flex:1;min-width:0;margin-top:2px}
+  .hide-rules-btn{
+    appearance:none;-webkit-appearance:none;cursor:pointer;font:inherit;flex:0 0 auto;
+    font-size:12px;font-weight:700;letter-spacing:.04em;line-height:1.3;
+    color:var(--brass-bright);background:rgba(0,0,0,.30);
+    border:1px solid var(--line);border-radius:999px;padding:8px 13px;
+  }
+  .hide-rules-btn:active{transform:scale(.98)}
+  .hide-rules-btn:focus-visible{outline:2px solid var(--brass-bright);outline-offset:2px}
+  .house-rules-intro{font-size:13px;font-weight:300;letter-spacing:.02em;line-height:1.55;color:var(--cream-2);margin:8px 2px 0}
+  .house-rules-section .fund-rule-note:first-of-type{margin-top:10px}
+  @media (max-width:380px){
+    .house-rules-head{flex-wrap:wrap}
+    .hide-rules-btn{margin-left:2px}
+  }
   .leader-card{display:flex;gap:14px;align-items:center;cursor:pointer}
   .leader-card:active{transform:scale(.995)}
   .leader-who{flex:1;min-width:0}
@@ -1105,6 +1128,47 @@
       <h2 class="league-title">THE LEAGUE</h2>
       <p class="league-sub" id="leagueSeasonLine">Standings, the season, and tonight — the same board the room watches on the TV.</p>
     </div>
+    <!-- HOUSE RULES & FEES — the first thing a player sees on the
+         League page, above Tonight's game (host's direction). The
+         two notes stay expandable exactly as before: collapsed by
+         default, one-line gist on each header, full wording
+         unchanged. The "Hide this for good" button dismisses the
+         WHOLE section permanently on this device — the dismissal
+         is stored in the Door's per-device local storage (with the
+         same cookie fallback the bookmark ask uses), so it stays
+         hidden across future visits and games, with no way back
+         short of clearing the device's stored site data. -->
+    <div class="house-rules-section" id="houseRulesSection">
+      <div class="house-rules-head">
+        <div class="block-label league-label">House rules &amp; fees</div>
+        <button type="button" class="hide-rules-btn" id="hideHouseRulesBtn">Hide this for good</button>
+      </div>
+      <p class="house-rules-intro">Read these once — tap either note to open it. Done reading? Hide this section for good and it won't show on this device again.</p>
+      <div class="fund-rule-note" data-fund-note>
+        <button type="button" class="fund-toggle" aria-expanded="false" aria-controls="fundChampBody">
+          <span class="fund-head">
+            <span class="fund-rule-kicker">How the championship fund works</span>
+            <span class="fund-gist"><strong>$20 of each $100 league buy-in</strong> builds the championship pot</span>
+          </span>
+          <span class="fund-chev" aria-hidden="true"></span>
+        </button>
+        <div class="fund-body" id="fundChampBody" hidden>
+          <p class="fund-rule-copy">On a $100 league night, <strong class="brass">$20 of every league player's buy-in</strong> goes into the championship pot. That pot pays the points leader's <strong>free championship buy-in</strong> and boosts the championship prizes. The $20 is part of the price of a league night — and it is <strong>not refunded</strong> if a player doesn't reach the five nights needed to qualify. No surprises: that's the deal before the first hand is dealt.</p>
+        </div>
+      </div>
+      <div class="fund-rule-note" data-fund-note>
+        <button type="button" class="fund-toggle" aria-expanded="false" aria-controls="fundFeeLeagueBody">
+          <span class="fund-head">
+            <span class="fund-rule-kicker">Sit &amp; go house fee — full transparency</span>
+            <span class="fund-gist"><strong>Flat $5 per sit &amp; go</strong> — covers the room's running costs</span>
+          </span>
+          <span class="fund-chev" aria-hidden="true"></span>
+        </button>
+        <div class="fund-body" id="fundFeeLeagueBody" hidden>
+          <p class="fund-rule-copy">Every sit &amp; go takes a flat <strong class="brass">$5 off the top of the purse</strong> — not per player, and never a percentage. So a 10-player, $20 game builds a $200 purse, the house takes its $5, and <strong>$195 goes straight into the prizes</strong>. That $5 is the Clubhouse's only rake, and it exists for one reason: it covers the real costs of running the room — <strong>texting and communication fees (Twilio)</strong> for invites, game-night updates, and check-in and recovery codes, <strong>server and hosting costs</strong> for the league book, this Player Door, and the TV game display, and <strong>Jarvis</strong> — Anthony's assistant, who helps run the Clubhouse behind the scenes and is part of what it costs to keep the room going. It's a flat fee to keep the Clubhouse running — not a profit cut, and it never grows with the pot.</p>
+        </div>
+      </div>
+    </div>
     <div id="leagueTonight"></div>
     <div class="block-label league-label">Upcoming games</div>
     <div id="leagueUpcoming"><p class="empty-note">Checking the calendar…</p></div>
@@ -1117,31 +1181,6 @@
     <div id="leagueRecent"><p class="empty-note">Loading recent results…</p></div>
     <div class="block-label league-label">What the rings mean</div>
     <div class="legend" id="leagueLegend"></div>
-    <div class="block-label league-label">House rules &amp; fees</div>
-    <div class="fund-rule-note" data-fund-note>
-      <button type="button" class="fund-toggle" aria-expanded="false" aria-controls="fundChampBody">
-        <span class="fund-head">
-          <span class="fund-rule-kicker">How the championship fund works</span>
-          <span class="fund-gist"><strong>$20 of each $100 league buy-in</strong> builds the championship pot</span>
-        </span>
-        <span class="fund-chev" aria-hidden="true"></span>
-      </button>
-      <div class="fund-body" id="fundChampBody" hidden>
-        <p class="fund-rule-copy">On a $100 league night, <strong class="brass">$20 of every league player's buy-in</strong> goes into the championship pot. That pot pays the points leader's <strong>free championship buy-in</strong> and boosts the championship prizes. The $20 is part of the price of a league night — and it is <strong>not refunded</strong> if a player doesn't reach the five nights needed to qualify. No surprises: that's the deal before the first hand is dealt.</p>
-      </div>
-    </div>
-    <div class="fund-rule-note" data-fund-note>
-      <button type="button" class="fund-toggle" aria-expanded="false" aria-controls="fundFeeLeagueBody">
-        <span class="fund-head">
-          <span class="fund-rule-kicker">Sit &amp; go house fee — full transparency</span>
-          <span class="fund-gist"><strong>Flat $5 per sit &amp; go</strong> — covers the room's running costs</span>
-        </span>
-        <span class="fund-chev" aria-hidden="true"></span>
-      </button>
-      <div class="fund-body" id="fundFeeLeagueBody" hidden>
-        <p class="fund-rule-copy">Every sit &amp; go takes a flat <strong class="brass">$5 off the top of the purse</strong> — not per player, and never a percentage. So a 10-player, $20 game builds a $200 purse, the house takes its $5, and <strong>$195 goes straight into the prizes</strong>. That $5 is the Clubhouse's only rake, and it exists for one reason: it covers the real costs of running the room — <strong>texting and communication fees (Twilio)</strong> for invites, game-night updates, and check-in and recovery codes, <strong>server and hosting costs</strong> for the league book, this Player Door, and the TV game display, and <strong>Jarvis</strong> — Anthony's assistant, who helps run the Clubhouse behind the scenes and is part of what it costs to keep the room going. It's a flat fee to keep the Clubhouse running — not a profit cut, and it never grows with the pot.</p>
-      </div>
-    </div>
   </section>
 
   <!-- photo position editor (shared by sign-up and Change photo) -->
@@ -3347,6 +3386,31 @@
       body.hidden = open;
     });
   });
+
+  /* House rules & fees — hide for good. The section now leads the
+     League page; a player who has read the notes can dismiss the
+     whole section with "Hide this for good". The dismissal rides
+     the same per-device store as the door token and the bookmark
+     markers (localStorage + the bm cookie fallback), keyed
+     separately so it never interferes with either. It is checked
+     once at load — the League panel itself starts hidden, so the
+     section is already gone before the page can ever be shown —
+     and nothing in the per-minute refresh or renderLeague ever
+     touches this node, so a hidden section stays hidden for the
+     life of the device's stored data, across visits and games. */
+  var HOUSE_RULES_HIDDEN_KEY = "clubhouse_house_rules_hidden";
+  function applyHouseRulesVisibility(){
+    var section = $("houseRulesSection");
+    if (section) section.hidden = bmFlag(HOUSE_RULES_HIDDEN_KEY);
+  }
+  applyHouseRulesVisibility();
+  var hideRulesBtn = $("hideHouseRulesBtn");
+  if (hideRulesBtn) {
+    hideRulesBtn.addEventListener("click", function(){
+      bmSetFlag(HOUSE_RULES_HIDDEN_KEY);
+      applyHouseRulesVisibility();
+    });
+  }
 
   /* Zelle copy button — copies the Clubhouse Zelle email (ready to
      paste into a bank app's Zelle search). The
