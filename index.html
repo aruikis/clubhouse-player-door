@@ -1018,6 +1018,7 @@
     </form>
     <div class="not-you">
       <p class="sub" id="hostResetNotice" style="font-size:15.5px;color:var(--cream)"><strong>New phone?</strong> This page remembers you on the phone you signed up with. If you get a new phone, your account and sign-in will need to be reset by the league host — please reach out to Anthony, and he'll get the new phone set up for you. Your profile, badges, and stats stay in the book the whole time — nothing is lost.</p>
+      <div class="form-error" id="resetFailNote" role="alert"></div>
     </div>
     <a class="profile-link" href="#/league">League standings — the full League page ›</a>
   </section>
@@ -1030,6 +1031,7 @@
       <p class="me-name" id="meName"></p>
       <p class="me-status" id="meStatus"></p>
     </div>
+    <p class="photo-note" id="resetDoneNote" role="status" hidden style="text-align:center"></p>
     <div class="photo-actions">
       <button type="button" class="photo-btn" id="changePhotoBtn">Add a photo</button>
       <button type="button" class="link-btn" id="removePhotoBtn" hidden>Remove photo</button>
@@ -1366,6 +1368,13 @@
                         -> checks the code's salted hash (10-minute
                         life, 5 tries), returns ONLY that player's
                         own device_token on an exact match
+       rpc league_access_reset_redeem(token)
+                        -> the host-issued reset path (Nov 10, 2026):
+                        a #reset= link's one-time token, hash-matched,
+                        unused and unexpired, burns the reset and
+                        ROTATES the player's device_token, returning
+                        the fresh token; the phone that opened the
+                        link becomes the remembered one
        rpc league_game_tonight() / league_season_info()
                         -> tonight's game + season settings, display
                         fields only (anon has NO direct table access:
@@ -2290,8 +2299,71 @@
       .catch(function(){ return "offline"; });
   }
 
+  /* ———— host-issued access reset (a #reset= link) ————
+     With texting gone, Anthony IS the recovery path: his host app
+     issues a one-time reset link per player and hands it over
+     himself. Opening it lands here with the token in the fragment.
+     The fragment is scrubbed from the address bar BEFORE anything
+     else happens, and the token is never logged or shown — it
+     goes straight to league_access_reset_redeem, which burns the
+     reset and rotates the player's device_token. The fresh token
+     comes back, this phone stores it like any returning phone,
+     and the player lands on their own page. Any failure — unknown,
+     used, expired, or the book not set up for it yet — gets one
+     plain message pointing back to Anthony for a fresh link. */
+  function takeResetToken(){
+    var h = String(window.location.hash || "");
+    if (h.indexOf("#reset=") !== 0) return null;
+    var raw = h.slice("#reset=".length).split("&")[0];
+    var tok = raw;
+    try { tok = decodeURIComponent(raw); } catch (e) {}
+    tok = String(tok || "").trim();
+    try { window.history.replaceState(null, "", window.location.pathname + window.location.search); } catch (e) {}
+    return tok || null;
+  }
+  function resetFailed(){
+    showOnly("welcomePanel");
+    var n = $("resetFailNote");
+    if (n) {
+      n.textContent = "That reset link didn't work — it may have expired or already been used. Reach out to Anthony, the league host, and he'll get you a fresh one.";
+      n.classList.add("show");
+    }
+  }
+  function redeemReset(resetTok){
+    loadSeasonInfo().then(applySeasonInfo);
+    loadUpcomingGames();
+    loadGameState();
+    loadStandings();
+    sb("rpc/league_access_reset_redeem", { method: "POST", body: { p_token: resetTok } })
+      .then(function(r){
+        if (r.ok && r.data && r.data.ok && r.data.device_token) {
+          setToken(r.data.device_token);
+          loadMe(r.data.device_token).then(function(res){
+            if (res === "ok") {
+              showOnly("mePanel");
+              renderMe();
+              loadGameState().then(function(){ if (me) { renderStatusCluster(); renderCheckin(); } });
+              var n = $("resetDoneNote");
+              if (n) {
+                n.textContent = "You're back in — Anthony, your host, reset this phone's access, and this phone is now the one the Clubhouse remembers.";
+                n.hidden = false;
+              }
+              return;
+            }
+            if (res === "offline") { showOnly("offlinePanel"); return; }
+            resetFailed();
+          });
+          return;
+        }
+        resetFailed();
+      })
+      .catch(function(){ showOnly("offlinePanel"); });
+  }
+
   function init(){
     showOnly("loadingPanel");
+    var resetTok = takeResetToken();
+    if (resetTok) { redeemReset(resetTok); return; }
     var token = getToken();
     loadSeasonInfo().then(applySeasonInfo); // fund + season shape for the board header
     loadUpcomingGames(); // the calendar + the cluster's next-game state
