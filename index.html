@@ -807,6 +807,24 @@
     box-shadow:inset 0 1px 0 rgba(255,255,255,.9), inset 0 0 0 1px rgba(38,48,58,.30), 0 1px 3px rgba(0,0,0,.5), 0 0 0 1px rgba(20,26,32,.4);
   }
   .mini-cohost>span{transform:translate(.08em,.09em)}
+  /* Legend-size SIT-IN plaque (added Nov 11): the third metal of
+     the plaque family, in the legend at the SAME size, font and
+     rendering as the HOST and CO-HOST legend plaques beside it —
+     identical height, padding, Cinzel weight, tracking and shadow
+     construction — differing only in the copper face (the avatar
+     SIT-IN plaque's copper, with its near-white beveled rim) and
+     its dark copper-brown engraved lettering. It is deliberately
+     NOT stepped down the way the on-photo plaque is: in the legend
+     all three plaques stand as equals. */
+  .mini-sitin{
+    display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;
+    height:12px;padding:0 6px;font-family:"Cinzel",serif;font-size:6.5px;font-weight:900;
+    letter-spacing:.2em;line-height:1;color:#3a1e07;
+    background:linear-gradient(165deg,#ffd9ae,#eda763 55%,#c97a35 78%,#a55a22);
+    border:1px solid #f2f5f7;border-radius:2px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.85), inset 0 0 0 1px rgba(58,30,7,.30), 0 1px 3px rgba(0,0,0,.5), 0 0 0 1px rgba(58,30,7,.35);
+  }
+  .mini-sitin>span{transform:translate(.1em,.09em)}
 
   /* ---------- open profile (The Card) ---------- */
   .stand-row{cursor:pointer;border-radius:10px}
@@ -981,6 +999,23 @@
   .league-grid .gc-num.brass{color:var(--brass-bright)}
   .league-grid .gc-lbl{font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:5px;line-height:1.45}
   .league-grid .gc-note{font-size:12px;font-weight:300;color:var(--cream-2);line-height:1.5;margin-top:5px}
+  /* Season at a glance — its own glass box on the League page
+     (Anthony, Nov 11): the same slate-and-brass glass-card as the
+     page's other boxes, with the section title as a collapsible
+     header. Open by default on a device's first view; a player who
+     collapses it has that remembered per device (see the script at
+     the bottom). The four stat cards inside keep their own glass
+     treatment, unchanged. */
+  .season-glance{padding:14px 16px 16px}
+  .season-glance-toggle{
+    appearance:none;-webkit-appearance:none;background:none;border:none;cursor:pointer;
+    width:100%;display:flex;align-items:center;gap:12px;text-align:left;
+    padding:2px 0;font:inherit;color:inherit;
+  }
+  .season-glance-toggle:active{transform:scale(.995)}
+  .season-glance-toggle:focus-visible{outline:2px solid var(--brass-bright);outline-offset:2px;border-radius:8px}
+  .season-glance-title{flex:1;min-width:0;font-size:11.5px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--brass)}
+  .season-glance .league-grid{margin-top:12px}
   /* Explainer notes — collapsible, CLOSED by default, on both the
      League page and the standings panel. The data leads; each note
      is a slim tappable row whose header keeps the one-line gist on
@@ -1015,33 +1050,25 @@
     transform:rotate(45deg) translate(-1px,-1px);transition:transform .18s ease;
   }
   .fund-toggle[aria-expanded="true"] .fund-chev::before{transform:rotate(-135deg) translate(-1px,-1px)}
+  .season-glance-toggle[aria-expanded="true"] .fund-chev::before{transform:rotate(-135deg) translate(-1px,-1px)}
   @media (prefers-reduced-motion: reduce){ .fund-chev::before{transition:none} }
   .fund-body{padding:0 15px 14px}
   .fund-rule-copy{font-size:13.5px;font-weight:300;letter-spacing:.02em;line-height:1.65;color:var(--cream-2);margin:0}
   .fund-rule-copy strong{font-weight:600;color:var(--cream)}
   .fund-rule-copy strong.brass{color:var(--brass-bright)}
-  /* House rules & fees — now the FIRST block on the League page,
-     directly under the hero and above Tonight, so it is the first
-     thing a player sees there. The two notes keep their collapsible
-     behaviour; the section as a whole can be dismissed for good on
-     this device via the Hide control (persisted per-device — see
-     the script at the bottom). */
+  /* House rules & fees — lives in Club Info (moved off the League
+     page, Nov 11). The two notes keep their collapsible behaviour.
+     There is deliberately NO hide/dismiss control: Club Info is a
+     reference section and the section always shows (Anthony,
+     Nov 11 — the old hide-forever control was removed so nobody
+     can hide it permanently or by accident). */
   .house-rules-section{margin-top:18px}
   .house-rules-head{display:flex;align-items:flex-start;gap:12px}
   .house-rules-head .block-label{flex:1;min-width:0;margin-top:2px}
-  .hide-rules-btn{
-    appearance:none;-webkit-appearance:none;cursor:pointer;font:inherit;flex:0 0 auto;
-    font-size:12px;font-weight:700;letter-spacing:.04em;line-height:1.3;
-    color:var(--brass-bright);background:rgba(0,0,0,.30);
-    border:1px solid var(--line);border-radius:999px;padding:8px 13px;
-  }
-  .hide-rules-btn:active{transform:scale(.98)}
-  .hide-rules-btn:focus-visible{outline:2px solid var(--brass-bright);outline-offset:2px}
   .house-rules-intro{font-size:13px;font-weight:300;letter-spacing:.02em;line-height:1.55;color:var(--cream-2);margin:8px 2px 0}
   .house-rules-section .fund-rule-note:first-of-type{margin-top:10px}
   @media (max-width:380px){
     .house-rules-head{flex-wrap:wrap}
-    .hide-rules-btn{margin-left:2px}
   }
   .leader-card{display:flex;gap:14px;align-items:center;cursor:pointer}
   .leader-card:active{transform:scale(.995)}
@@ -1553,8 +1580,22 @@
     <div id="leagueTonight"></div>
     <div class="block-label league-label">Upcoming games</div>
     <div id="leagueUpcoming"><p class="empty-note">Checking the calendar…</p></div>
-    <div class="block-label league-label">Season at a glance</div>
-    <div class="league-grid" id="leagueSeasonGrid" style="margin-top:0"></div>
+    <!-- SEASON AT A GLANCE — its own collapsible glass box above
+         the standings (Anthony, Nov 11): the same slate-and-brass
+         glass-card treatment as the page's other boxes. Open by
+         default on a device's first view; if a player collapses
+         it, that is remembered per device. The four stat cards
+         still render into #leagueSeasonGrid exactly as before —
+         only the wrapper changed. -->
+    <div class="glass-card season-glance" id="seasonGlanceBox">
+      <button type="button" class="season-glance-toggle" id="seasonGlanceToggle" aria-expanded="true" aria-controls="seasonGlanceBody">
+        <span class="season-glance-title">Season at a glance</span>
+        <span class="fund-chev" aria-hidden="true"></span>
+      </button>
+      <div id="seasonGlanceBody">
+        <div class="league-grid" id="leagueSeasonGrid"></div>
+      </div>
+    </div>
     <div id="leagueLeader"></div>
     <div class="block-label league-label">Standings — tap a player for their card</div>
     <div id="leagueBody"><p class="empty-note">Loading the league…</p></div>
@@ -1574,18 +1615,16 @@
          page into Club Info (host's direction, Nov 11). The
          two notes stay expandable exactly as before: collapsed by
          default, one-line gist on each header, full wording
-         unchanged. The "Hide this for good" button dismisses the
-         WHOLE section permanently on this device — the dismissal
-         is stored in the Door's per-device local storage (with the
-         same cookie fallback the bookmark ask uses), so it stays
-         hidden across future visits and games, with no way back
-         short of clearing the device's stored site data. -->
+         unchanged. There is no hide/dismiss control anymore
+         (removed at the host's direction, Nov 11): Club Info is a
+         reference section, so this section always shows — and any
+         device that hid it under the old control gets it back
+         (the script clears the old dismissal flag at load). -->
     <div class="house-rules-section" id="houseRulesSection">
       <div class="house-rules-head">
         <div class="block-label league-label">House rules &amp; fees</div>
-        <button type="button" class="hide-rules-btn" id="hideHouseRulesBtn">Hide this for good</button>
       </div>
-      <p class="house-rules-intro">Read these once — tap either note to open it. Done reading? Hide this section for good and it won't show on this device again.</p>
+      <p class="house-rules-intro">Read these once — tap either note to open it. They stay right here in Club Info whenever you want to check them again.</p>
       <div class="fund-rule-note" data-fund-note>
         <button type="button" class="fund-toggle" aria-expanded="false" aria-controls="fundChampBody">
           <span class="fund-head">
@@ -2200,7 +2239,6 @@
     if (setupMissing) return;
     infoOpen = true;
     showOnly("infoPanel");
-    if (typeof applyHouseRulesVisibility === "function") applyHouseRulesVisibility();
     if (!fromHash) { try { history.pushState(null, "", "#/info"); } catch (e) {} }
     window.scrollTo(0, 0);
   }
@@ -2787,6 +2825,7 @@
       '<span class="item"><span class="dot" style="background:var(--slate)"></span>Slate ring — away tonight</span>' +
       '<span class="item"><span class="mini-host"><span>HOST</span></span>Host — runs the room</span>' +
       '<span class="item"><span class="mini-cohost"><span>CO-HOST</span></span>Co-host — helps run the room</span>' +
+      '<span class="item"><span class="mini-sitin"><span>SIT-IN</span></span>Sit-in — playing tonight only; no league points, not in the standings</span>' +
       '<span class="item"><span class="mini-chip champion"><svg viewBox="0 0 24 24">' + ICONS.crown + '</svg></span>Crown — season champion</span>' +
       '<span class="item"><span class="mini-chip flame"><svg viewBox="0 0 24 24">' + ICONS.flame + '</svg></span>Flame — won the last game</span>' +
       '<span class="item"><span class="mini-chip veteran"><svg viewBox="0 0 24 24">' + ICONS.star + '</svg></span>Star — veteran regular</span>' +
@@ -4403,31 +4442,40 @@
     });
   });
 
-  /* House rules & fees — hide for good. The section now lives in
-     Club Info (moved off the League page, Nov 11) under the SAME
-     dismissal key, so a player who already hid it on this device
-     doesn't get it re-imposed by the move. A player who has read
-     the notes can dismiss the
-     whole section with "Hide this for good". The dismissal rides
-     the same per-device store as the door token and the bookmark
-     markers (localStorage + the bm cookie fallback), keyed
-     separately so it never interferes with either. It is checked
-     once at load — the League panel itself starts hidden, so the
-     section is already gone before the page can ever be shown —
-     and nothing in the per-minute refresh or renderLeague ever
-     touches this node, so a hidden section stays hidden for the
-     life of the device's stored data, across visits and games. */
-  var HOUSE_RULES_HIDDEN_KEY = "clubhouse_house_rules_hidden";
-  function applyHouseRulesVisibility(){
-    var section = $("houseRulesSection");
-    if (section) section.hidden = bmFlag(HOUSE_RULES_HIDDEN_KEY);
+  /* House rules & fees — no permanent dismissal (Anthony, Nov 11).
+     The old hide-forever control is gone entirely: Club
+     Info is a reference section, and nobody should be able to hide
+     it permanently or by accident. Nothing reads the old dismissal
+     flag anymore, so the section always shows; the flag is cleared
+     here once so a device that hid the section under the old
+     control gets it back, cleanly, with no trace left behind. */
+  bmClear("clubhouse_house_rules_hidden");
+
+  /* Season at a glance — collapsible box on the League page
+     (Anthony, Nov 11). Open by default: a device with no stored
+     preference sees the box open on its first view. Collapsing it
+     stores the choice per device (same localStorage + cookie
+     fallback store as the other Door preferences); re-opening
+     clears it, so the box returns to the open default. Only this
+     toggle touches the box's hidden state — renders and the
+     per-minute refresh rewrite the stat cards inside it, never
+     its open/collapsed state. */
+  var SEASON_GLANCE_COLLAPSED_KEY = "clubhouse_season_glance_collapsed";
+  function applySeasonGlanceState(){
+    var body = $("seasonGlanceBody");
+    var toggle = $("seasonGlanceToggle");
+    if (!body || !toggle) return;
+    var collapsed = bmFlag(SEASON_GLANCE_COLLAPSED_KEY);
+    body.hidden = collapsed;
+    toggle.setAttribute("aria-expanded", collapsed ? "false" : "true");
   }
-  applyHouseRulesVisibility();
-  var hideRulesBtn = $("hideHouseRulesBtn");
-  if (hideRulesBtn) {
-    hideRulesBtn.addEventListener("click", function(){
-      bmSetFlag(HOUSE_RULES_HIDDEN_KEY);
-      applyHouseRulesVisibility();
+  applySeasonGlanceState();
+  var seasonGlanceToggle = $("seasonGlanceToggle");
+  if (seasonGlanceToggle) {
+    seasonGlanceToggle.addEventListener("click", function(){
+      if (bmFlag(SEASON_GLANCE_COLLAPSED_KEY)) bmClear(SEASON_GLANCE_COLLAPSED_KEY);
+      else bmSetFlag(SEASON_GLANCE_COLLAPSED_KEY);
+      applySeasonGlanceState();
     });
   }
 
