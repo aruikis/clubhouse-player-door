@@ -276,7 +276,18 @@
     display:grid;place-items:center;
     min-width:66px;height:20px;padding:0 10px;
     font-family:"Cinzel",serif;font-size:11.5px;font-weight:900;letter-spacing:.22em;line-height:1;
-    color:#241a05;background:linear-gradient(165deg,#f6e19a 0%,#e8c87e 38%,#c9a86a 68%,#a8843f 100%);
+    color:#241a05;
+    /* The reflective sheen Anthony locked from his master crop
+       (Nov 10): a bright diagonal band of light laid over the
+       brass gradient, like light reflecting off polished metal —
+       never a flat matte fill. The same layered background serves
+       every size of this plaque (the .ava.sm override below only
+       changes size and shadow), so the Room's cards, the podium,
+       the personal page and the profiles all carry the one master
+       badge. */
+    background:
+      linear-gradient(115deg, rgba(255,255,255,0) 30%, rgba(255,255,255,.55) 45%, rgba(255,255,255,.10) 55%, rgba(255,255,255,0) 68%),
+      linear-gradient(165deg,#f6e19a 0%,#e8c87e 38%,#c9a86a 68%,#a8843f 100%);
     border:1.5px solid #fbeec0;border-radius:4px;
     box-shadow:inset 0 1px 0 rgba(255,255,255,.85), inset 0 -1px 0 rgba(90,64,12,.45), inset 0 0 0 1px rgba(90,64,12,.30), 0 2px 5px rgba(0,0,0,.6), 0 0 0 1.5px rgba(36,26,5,.35);
     white-space:nowrap;
