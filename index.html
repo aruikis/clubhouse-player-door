@@ -3420,8 +3420,15 @@
     var ringColor = ring === "host" ? "var(--brass)" : ring === "cohost" ? "var(--silver)" : ring === "leader" ? "var(--gold)" : ring === "green" ? "var(--green)" : "var(--slate)";
     if (isHost(p)) {
       tags.push('<span class="tag gold"><span class="mini-host"><span>HOST</span></span>Runs the room</span>');
+      /* Host and co-host stand in the League standings as the
+         living example (Anthony, Nov 11) — label them plainly as
+         league players too, in the same small tag as everyone
+         else's ring label. Their HOST / CO-HOST plaques above
+         stay exactly as they are. */
+      tags.push('<span class="tag">League Player</span>');
     } else if (isCoHost(p)) {
       tags.push('<span class="tag"><span class="mini-cohost"><span>CO-HOST</span></span>Helps run the room</span>');
+      tags.push('<span class="tag">League Player</span>');
     } else {
       tags.push('<span class="tag"><span class="dot" style="background:' + ringColor + '"></span>' + esc(RING_LABEL[ring] || "League player") + "</span>");
       if (p.badge && BADGE_LABEL[p.badge]) tags.push('<span class="tag gold">' + esc(BADGE_LABEL[p.badge]) + "</span>");
@@ -3616,14 +3623,27 @@
 
   /* Standings eligibility (Anthony, Nov 11): the League standings
      list only players who have actually played at least one league
-     night (games_played >= 1, straight from the standings view — no
-     name-based exceptions). Signing up + host approval makes someone
-     a Club Member: they show under Club Members from day one, but
-     they do not take a standings row — or the leader card — until
-     their first league night is on the book. Season at a Glance
-     keeps reading the full rows, unchanged. */
+     night (games_played >= 1, straight from the standings view).
+     Signing up + host approval makes someone a Club Member: they
+     show under Club Members from day one, but they do not take a
+     standings row — or the leader card — until their first league
+     night is on the book. Season at a Glance keeps reading the
+     full rows, unchanged.
+     NAMED EXCEPTION (Anthony, later Nov 11): the host (Anthony
+     Ruikis) and the co-host (Liz Ruikis) are ALWAYS listed in the
+     standings, games or no games, as a living example so players
+     perusing the Portal can see what the standings look like in
+     play. They are identified by their standing role flags from
+     the book (isHost / isCoHost) — the same flags that drive
+     their plaques and rings — never by name matching, and their
+     rows show their real book values, zeros included. They carry
+     a small "League Player" tag in the standings (see leagueTags).
+     Nobody else is excepted: a 0-game Club Member still does not
+     appear here. */
   function standingsEligible(p){
-    return Number(p && p.games_played) > 0;
+    if (!p) return false;
+    if (isHost(p) || isCoHost(p)) return true;
+    return Number(p.games_played) > 0;
   }
 
   function renderLeague(){
