@@ -273,7 +273,15 @@
      nudged right by half the letter-tracking (letterspaced text
      otherwise reads left-of-center by exactly that half), and the
      plaque centers the span on both axes — no text-indent hack, no
-     asymmetric padding. */
+     asymmetric padding. Vertically the span also drops .054em:
+     with line-height:1, Cinzel's ascent/descent (976/372 on a
+     1000 upem) puts the caps' ink center ~0.62px above the
+     plaque's center at this size, so the word rode high; the
+     measured drop puts the ink's own center on the plaque's
+     center, matching the master crop, where HOST measures within
+     a hair of dead center. The same .054em drop applies to every
+     plaque size and to the CO-HOST plaque — it scales with the
+     font, so the correction is identical at every size. */
   .host-badge{
     position:absolute;left:50%;bottom:-7px;transform:translateX(-50%);z-index:4;
     display:grid;place-items:center;
@@ -295,7 +303,7 @@
     box-shadow:inset 0 1px 0 rgba(255,255,255,.85), inset 0 -1px 0 rgba(90,64,12,.45), inset 0 0 0 1px rgba(90,64,12,.30), 0 2px 5px rgba(0,0,0,.6), 0 0 0 1.5px rgba(36,26,5,.35);
     white-space:nowrap;
   }
-  .host-badge>span{transform:translateX(.11em)}
+  .host-badge>span{transform:translate(.11em,.054em)}
   /* GUEST badge — a plaque in steel: the same bottom-center
      avatar placement as the HOST plaque, but a cooler steel/pewter
      face with slate engraving — brass stays the host's alone. It
@@ -325,23 +333,23 @@
      host's plaque (the host's stays the biggest in the room):
      shorter, smaller type, same bottom-center placement
      straddling the photo's bottom edge. The face is silver; the
-     word CO-HOST is BRIGHT vivid gold with a fine dark edge —
-     Anthony rejected a dull gold here as unreadable at this
-     size, so the gold is deliberately hot (#ffe83d) and the
-     dark text-shadow keeps it crisp against the silver. */
+     word CO-HOST is set exactly like the host's word — the same
+     Cinzel and the same dark engraved lettering (#241a05), no
+     text-shadow — at Anthony's direction (Nov 10, superseding
+     the earlier bright-gold #ffe83d letters): the plaques are a
+     matched pair, brass face and silver face, one lettering. */
   .cohost-badge{
     position:absolute;left:50%;bottom:-5px;transform:translateX(-50%);z-index:4;
     display:grid;place-items:center;
     min-width:58px;height:16px;padding:0 8px;
     font-family:"Cinzel",serif;font-size:9px;font-weight:900;letter-spacing:.18em;line-height:1;
-    color:#ffe83d;
-    text-shadow:0 0 1px #201503, .5px 0 0 rgba(32,21,3,.85), -.5px 0 0 rgba(32,21,3,.85), 0 1px 1px rgba(20,12,0,.9);
+    color:#241a05;
     background:linear-gradient(165deg,#f2f4f6 0%,#ccd4dc 38%,#9aa7b1 68%,#75828d 100%);
     border:1.5px solid #f7fafc;border-radius:3px;
     box-shadow:inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(38,48,58,.45), inset 0 0 0 1px rgba(38,48,58,.30), 0 2px 5px rgba(0,0,0,.6), 0 0 0 1.5px rgba(20,26,32,.4);
     white-space:nowrap;
   }
-  .cohost-badge>span{transform:translateX(.09em)}
+  .cohost-badge>span{transform:translate(.09em,.054em)}
   .ava.sm{width:46px;height:46px;margin:0}
   .ava.sm .disc,.ava.sm img.face{inset:3px}
   .ava.sm .disc{font-size:14px}
@@ -407,7 +415,7 @@
     bottom:-4px;border-width:1px;border-radius:2px;
     box-shadow:inset 0 1px 0 rgba(255,255,255,.85), inset 0 0 0 1px rgba(90,64,12,.30), 0 2px 4px rgba(0,0,0,.6), 0 0 0 1px rgba(36,26,5,.35);
   }
-  .ava.sm .host-badge>span{transform:translateX(.1em)}
+  .ava.sm .host-badge>span{transform:translate(.1em,.054em)}
   .ava.sm .guest-badge{
     min-width:36px;height:9px;padding:0 4px;font-size:5.5px;letter-spacing:.18em;text-indent:.18em;
     bottom:-4px;border-width:1px;border-radius:1.5px;
@@ -418,7 +426,7 @@
     bottom:-3px;border-width:1px;border-radius:2px;
     box-shadow:inset 0 1px 0 rgba(255,255,255,.9), inset 0 0 0 1px rgba(38,48,58,.30), 0 2px 4px rgba(0,0,0,.6), 0 0 0 1px rgba(20,26,32,.4);
   }
-  .ava.sm .cohost-badge>span{transform:translateX(.07em)}
+  .ava.sm .cohost-badge>span{transform:translate(.07em,.054em)}
 
   /* ---------- personal page ---------- */
   .me-head{position:relative;text-align:center}
@@ -688,20 +696,20 @@
     border:1px solid #fbeec0;border-radius:2px;
     box-shadow:inset 0 1px 0 rgba(255,255,255,.85), inset 0 0 0 1px rgba(90,64,12,.30), 0 1px 3px rgba(0,0,0,.5), 0 0 0 1px rgba(36,26,5,.35);
   }
-  .mini-host>span{transform:translateX(.1em)}
+  .mini-host>span{transform:translate(.1em,.054em)}
   /* Legend-size CO-HOST plaque: the avatar plaque in miniature —
-     silver face with the same bright beveled rim, the same bright
-     gold word with its dark edge, centered the same way. */
+     silver face with the same bright beveled rim, the word in the
+     same dark engraved lettering as HOST (#241a05), centered the
+     same way (half-tracking right, .054em down). */
   .mini-cohost{
     display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;
     height:12px;padding:0 6px;font-family:"Cinzel",serif;font-size:6.5px;font-weight:900;
-    letter-spacing:.16em;line-height:1;color:#ffe83d;
-    text-shadow:0 0 1px #201503, 0 1px 1px rgba(20,12,0,.9);
+    letter-spacing:.16em;line-height:1;color:#241a05;
     background:linear-gradient(165deg,#f2f4f6,#9aa7b1 70%,#75828d);
     border:1px solid #f7fafc;border-radius:2px;
     box-shadow:inset 0 1px 0 rgba(255,255,255,.9), inset 0 0 0 1px rgba(38,48,58,.30), 0 1px 3px rgba(0,0,0,.5), 0 0 0 1px rgba(20,26,32,.4);
   }
-  .mini-cohost>span{transform:translateX(.08em)}
+  .mini-cohost>span{transform:translate(.08em,.054em)}
 
   /* ---------- open profile (The Card) ---------- */
   .stand-row{cursor:pointer;border-radius:10px}
