@@ -359,15 +359,24 @@
   /* Bounty medallion — EARNED, never decorative: shown only when the
      player's lifetime body count is 1+. It is Anthony's actual bounty
      chip (skull in a cowboy hat, "BOUNTY · PAID ON DELIVERY"), photo
-     circle-cropped to the chip face, sitting on the avatar's lower
-     edge — bottom-left, mirroring the honor chip at bottom-right so
-     the two never collide. EXCEPTION: the host's own medallion uses
-     the settled plaque anchor instead (see the .is-host rules below).
-     The body count rides in a small dark pill on the medallion's
-     top-right, clear of both the HOST plaque (bottom-center) and the
-     badge. */
+     circle-cropped to the chip face. PLACEMENT IS UNIVERSAL, at this
+     shared component level (avatarHTML is the one renderer behind
+     the personal page, the standings rows, the leader card, the
+     Room podium and grid cards, and the open profiles): the chip
+     anchors to the plaque's top-right corner on the RIGHT side of
+     the avatar — the settled anchor the host's medallion was moved
+     to — low on the rim, tucked behind the plaque (z-index 4),
+     never sprawled across the photo. This was previously a
+     host-only exception over a bottom-left default, so Liz's
+     co-host medallion (and any non-host bounty holder's, on every
+     surface) sat on the left over her face; the exception is now
+     the rule, and the host's own rendering is pixel-identical to
+     the approved anchor. The quadrant-center derivation and the
+     per-plaque / per-size deltas are spelled out with the rules
+     below. The body count rides in a small dark pill on the
+     medallion's top-right. */
   .bounty-medal{
-    position:absolute;left:-5px;bottom:-5px;width:40px;height:40px;border-radius:50%;
+    position:absolute;left:calc(50% + 23px);bottom:3px;width:40px;height:40px;border-radius:50%;
     border:2px solid var(--brass);background:#101010;z-index:3;
     box-shadow:0 3px 8px rgba(0,0,0,.55), inset 0 0 0 1px rgba(0,0,0,.4);
   }
@@ -378,31 +387,42 @@
     background:#10161e;color:var(--brass-bright);border:1.5px solid var(--brass);
     font-size:11px;font-weight:800;line-height:1;box-shadow:0 2px 6px rgba(0,0,0,.55);
   }
-  .ava.sm .bounty-medal{width:24px;height:24px;left:-4px;bottom:-4px;border-width:1.5px}
-  .ava.sm .bounty-count{top:-5px;right:-7px;min-width:15px;height:15px;padding:0 3px;font-size:9px;border-width:1px}
-  /* HOST placement — the settled, approved anchor, matching the host
-     app: on the host's own avatar the medallion leaves the bottom-left
-     corner (where it sat mirrored on the wrong side, sprawled across
-     his photo) and tucks against the HOST plaque instead — 38% of the
-     avatar, positioned so the center of the chip's lower-left quadrant
-     touches the plaque's top-right corner. The plaque (z-index 4)
-     stays on top where the two touch, and the count pill shrinks to
-     suit the smaller chip.
-     Large (104px avatar, 40px chip = 38%): the quadrant-center
-     anchor is kept against the reference-size HOST plaque (66px
-     wide × 20px high, bottom:-7px, so its top-right corner sits
-     at 50% + 33px / 13px above the avatar's bottom edge):
+  .ava.sm .bounty-medal{width:16px;height:16px;left:calc(50% + 8px);bottom:0;border-width:1.5px}
+  .ava.sm .bounty-count{top:-4px;right:-6px;min-width:12px;height:12px;padding:0 2px;font-size:8px;border-width:1px}
+  /* THE PLAQUE ANCHOR — the settled, approved placement, matching
+     the host app, now the shared rule for EVERY player (see the
+     .bounty-medal note above): the medallion tucks against the
+     plaque at bottom-center so the center of the chip's lower-left
+     quadrant touches the plaque's top-right corner. The plaque
+     (z-index 4) stays on top where the two touch.
+     Large (104px avatar, 40px chip = 38%): against the HOST plaque
+     (66px wide × 20px high, bottom:-7px, so its top-right corner
+     sits at 50% + 33px / 13px above the avatar's bottom edge),
      left:calc(50% + 23px), bottom:3px lands the quadrant center
-     exactly on that corner — the chip still sits behind the
-     badge, as Anthony approved.
-     Small standings avatar ONLY (46px): the medallion sat too far
-     right, nearly bleeding into the games-played column beside the
-     avatar, so it is nudged ~4px left (left:calc(50% + 8px), was
-     +12px) and shrunk slightly to 16px (was 18px), still tucked
-     behind the HOST plaque. */
-  .ava.is-host .bounty-medal{left:calc(50% + 23px);bottom:3px}
-  .ava.sm.is-host .bounty-medal{width:16px;height:16px;left:calc(50% + 8px);bottom:0;border-width:1.5px}
-  .ava.sm.is-host .bounty-count{top:-4px;right:-6px;min-width:12px;height:12px;padding:0 2px;font-size:8px;border-width:1px}
+     exactly on that corner — that is the base .bounty-medal rule
+     itself, so a player with no plaque anchors to the same point
+     the plaque's corner would occupy, low on the right rim.
+     CO-HOST plaque (58px × 16px, bottom:-5px; corner at 50% + 29px
+     / 11px) and GUEST plaque (58px × 13px, bottom:-5px; corner at
+     50% + 29px / 8px) take the same anchor shifted to their own
+     corners. Small (46px avatar, standings rows + Room grid cards):
+     the settled small geometry for everyone — a 16px chip at
+     left:calc(50% + 8px), bottom:0, tucked behind the plaque
+     without bleeding into the column beside the avatar; the small
+     CO-HOST / GUEST plaques are wider for their size (38px / 36px
+     min-width), so their corner sits further right (+12px).
+     HONOR CHIP STACK: a player carrying a crown / flame / veteran
+     chip (bottom-right) has no plaque, so the medallion instead
+     stacks directly above that chip on the right edge — the two
+     honors never cover each other, and the medallion still never
+     crosses to the left or over the face. (Browsers without :has
+     fall back to the plaque anchor; the two simply overlap.) */
+  .ava.is-cohost .bounty-medal{left:calc(50% + 19px);bottom:1px}
+  .ava.is-guest .bounty-medal{left:calc(50% + 19px);bottom:-2px}
+  .ava.sm.is-cohost .bounty-medal{left:calc(50% + 12px);bottom:1px}
+  .ava.sm.is-guest .bounty-medal{left:calc(50% + 12px);bottom:1px}
+  .ava:has(> .chip) .bounty-medal{bottom:34px}
+  .ava.sm:has(> .chip) .bounty-medal{bottom:19px}
   .bounty-line{
     display:flex;align-items:center;justify-content:center;gap:9px;flex-wrap:wrap;
     margin:14px 2px 0;font-size:14px;color:var(--cream-2);text-align:center;
@@ -1071,8 +1091,18 @@
   .pod.first .ava{width:86px;height:86px}
   .pod .ava .disc{font-size:21px}
   .pod.first .ava .disc{font-size:28px}
-  .pod .bounty-medal{width:30px;height:30px}
-  .pod.first .bounty-medal{width:36px;height:36px}
+  /* Podium medallions keep the same plaque anchor, recomputed for
+     the podium chip sizes (quadrant-center on the full-size
+     plaque's top-right corner): 30px chip on the 62px avatar,
+     36px on the 86px first-place avatar, with the CO-HOST plaque's
+     own corner for a co-host on the podium. A podium player with
+     an honor chip keeps the right-edge stack (re-asserted here,
+     as these size rules otherwise tie/win on source order). */
+  .pod .bounty-medal{width:30px;height:30px;left:calc(50% + 25px);bottom:5px}
+  .pod.first .bounty-medal{width:36px;height:36px;left:calc(50% + 24px);bottom:4px}
+  .pod .ava.is-cohost .bounty-medal{left:calc(50% + 21px);bottom:4px}
+  .pod.first .ava.is-cohost .bounty-medal{left:calc(50% + 20px);bottom:2px}
+  .pod .ava:has(> .chip) .bounty-medal{bottom:34px}
   .pod-name{font-weight:600;font-size:15px;letter-spacing:.02em;line-height:1.25;color:var(--cream);margin-top:13px;overflow-wrap:break-word}
   .pod.first .pod-name{font-size:17.5px}
   .pod-pts{font-family:"Archivo","Arial Narrow",sans-serif;font-weight:700;font-size:20px;line-height:1.15;color:var(--brass-bright);margin-top:2px}
@@ -1859,7 +1889,7 @@
         '<img src="assets/bounty-chip.jpg" alt="" loading="lazy" onerror="this.parentNode.style.display=\'none\'">' +
         '<span class="bounty-count">' + esc(fmtNum(bodyCount)) + "</span></div>";
     }
-    return '<div class="ava' + (small ? " sm" : "") + (isHost(p) ? " is-host" : "") + (isCoHost(p) ? " is-cohost" : "") + '"><div class="ring ' + cls + '"></div>' + face + chip + bounty + "</div>";
+    return '<div class="ava' + (small ? " sm" : "") + (isHost(p) ? " is-host" : "") + (isCoHost(p) ? " is-cohost" : "") + ((opts && opts.guest && isGuestTonight(p)) ? " is-guest" : "") + '"><div class="ring ' + cls + '"></div>' + face + chip + bounty + "</div>";
   }
 
   /* ================= photo capture & framing =================
