@@ -1255,7 +1255,10 @@
   <!-- Portal tabs: Club | Player | League. The bar lives directly
        under the emblem and stays on the three tabbed views (the
        Club Portal players page, the player's own profile, the League
-       page). The Portal always opens on the Player tab. -->
+       page) — and on the sign-up view when a visitor lands there by
+       tapping Player with no identity on this device, so the tabs
+       never vanish mid-navigation. The Portal always opens on the
+       Player tab. -->
   <nav class="portal-tabs" id="portalTabs" hidden aria-label="Portal sections">
     <button type="button" class="portal-tab" data-tab="club">Club</button>
     <button type="button" class="portal-tab" data-tab="player">Player</button>
@@ -2105,14 +2108,45 @@
      The Portal opens on the Player tab (see init). A public card
      keeps the tab of the view it was opened from lit. */
   var profileTab = "club"; // tab left lit while a public card is open
+  /* "My profile" id for THIS browser context. A recognized player
+     (device token) sets it from his own record. A cold arrival on a
+     #/player/<id> deep link — the host app's Settings → "Open my
+     profile" opens exactly that, in a fresh browser with no token
+     planted — persists the link's id here instead, so the Player
+     tab can always find its way back to that profile and never
+     dumps its owner into the sign-up sheet (Anthony's report,
+     Nov 11: the deep link lit Club, and Player opened sign-up and
+     hid the tabs). Only a cold deep-link arrival or the player's
+     own record writes this — tapping cards in Club/League never
+     does, so viewing someone else's card can't steal the tab. */
+  var MY_ID_KEY = "clubhouse_my_profile_id";
+  var myProfileId = null;
+  try { myProfileId = window.localStorage.getItem(MY_ID_KEY) || null; } catch (e) {}
+  var welcomeFromPlayerTab = false; // sign-up shown BECAUSE Player was tapped with no identity at all
+  function setMyProfileId(id){
+    if (!id) return;
+    myProfileId = String(id);
+    try { window.localStorage.setItem(MY_ID_KEY, myProfileId); } catch (e) {}
+  }
+  function isMyProfile(id){
+    if (!id) return false;
+    if (me && String(me.id) === String(id)) return true;
+    return !!myProfileId && String(myProfileId) === String(id);
+  }
+  function clearMyProfileId(){
+    myProfileId = null;
+    try { window.localStorage.removeItem(MY_ID_KEY); } catch (e) {}
+  }
   function syncTabs(panelId){
     var nav = $("portalTabs");
     if (!nav) return;
+    if (panelId !== "welcomePanel") welcomeFromPlayerTab = false;
     var tab = null;
     if (panelId === "mePanel") tab = "player";
     else if (panelId === "roomPanel") tab = "club";
     else if (panelId === "leaguePanel") tab = "league";
     else if (panelId === "profilePanel") tab = profileTab;
+    else if (panelId === "welcomePanel" && welcomeFromPlayerTab) tab = "player";
     nav.hidden = !tab;
     if (!tab) return;
     var tabs = nav.querySelectorAll(".portal-tab");
@@ -2136,12 +2170,39 @@
       return;
     }
     if (tab === "player") {
+      if (me) {
+        if (profileId !== null) { profileId = null; profileFromRoom = false; }
+        leagueOpen = false;
+        roomOpen = false;
+        try { history.pushState(null, "", window.location.pathname + window.location.search); } catch (e) {}
+        showOnly("mePanel"); window.scrollTo(0, 0); renderMe();
+        return;
+      }
+      /* No token on this device, but a profile is still "mine" here
+         when we arrived on its deep link (the host app's "Open my
+         profile") — Player returns to that very profile view, never
+         to the sign-up sheet. */
+      if (myProfileId) {
+        leagueOpen = false;
+        roomOpen = false;
+        if (profileId !== null && String(profileId) === String(myProfileId)) {
+          profileTab = "player";
+          showOnly("profilePanel"); window.scrollTo(0, 0);
+          return;
+        }
+        openProfile(myProfileId, false, "player");
+        return;
+      }
+      /* No identity available at all: the sign-up view is the honest
+         landing (a new phone needs a host reset by Anthony — the
+         wording already on that view says so), but the tab bar
+         stays up with Player lit instead of disappearing. */
       if (profileId !== null) { profileId = null; profileFromRoom = false; }
       leagueOpen = false;
       roomOpen = false;
       try { history.pushState(null, "", window.location.pathname + window.location.search); } catch (e) {}
-      if (me) { showOnly("mePanel"); window.scrollTo(0, 0); renderMe(); }
-      else { showOnly("welcomePanel"); window.scrollTo(0, 0); }
+      welcomeFromPlayerTab = true;
+      showOnly("welcomePanel"); window.scrollTo(0, 0);
       return;
     }
   }
@@ -2759,6 +2820,7 @@
         if (!r.ok) return "error";
         if (!r.data) return "unknown"; // token not in the book
         me = r.data;
+        setMyProfileId(me.id);
         return "ok";
       })
       .catch(function(){ return "offline"; });
@@ -2850,6 +2912,7 @@
     var photo = pendingRegPhoto;
     function finish(savedPhoto, playerId){
       setToken(token);
+      if (playerId) setMyProfileId(playerId);
       me = {
         id: playerId || null,
         name: name, status: "pending", photo_data: savedPhoto, ring: "slate", badge: null,
@@ -3129,7 +3192,7 @@
     $("forgetConfirm").hidden = true; $("notYouBtn").hidden = false;
   });
   $("forgetYes").addEventListener("click", function(){
-    clearToken(); me = null;
+    clearToken(); me = null; clearMyProfileId();
     $("forgetConfirm").hidden = true; $("notYouBtn").hidden = false;
     showOnly("welcomePanel");
   });
@@ -3649,6 +3712,10 @@
     id = String(id);
     if (profileId === null) profileFromRoom = roomOpen;
     if (sourceTab) profileTab = sourceTab;
+    /* No in-app source (a hash / deep-link arrival): if this card is
+       this browser's own profile, it belongs under the Player tab,
+       not Club — the deep link IS the player's own door in. */
+    else if (isMyProfile(id)) profileTab = "player";
     profileId = id;
     showOnly("profilePanel");
     $("profileBody").innerHTML = '<div class="state-box"><div class="spinner" aria-hidden="true"></div><p class="big">Dealing the card…</p><p>Pulling this player’s public stats.</p></div>';
@@ -3708,7 +3775,15 @@
     if (isRoomHash()) { if (!roomOpen) openRoom(true); return; }
     if (isLeagueHash()) { if (!leagueOpen) openLeague(true); return; }
     var id = profileHashId();
-    if (id && id !== profileId) openProfile(id, true);
+    if (id && id !== profileId) {
+      /* Cold arrival only (init): a #/player/<id> link opened cold
+         is how the host app's "Open my profile" arrives, so — when
+         no signed-in record already claims this browser — persist
+         the id as this context's "my profile" for the Player tab.
+         A recognized player's own record always wins over a link. */
+      if (!me) setMyProfileId(id);
+      openProfile(id, true);
+    }
   }
   window.addEventListener("hashchange", function(){
     var id = profileHashId();
