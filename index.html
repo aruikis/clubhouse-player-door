@@ -1219,11 +1219,18 @@
   .pod.first .pod-step{height:18px;background:linear-gradient(180deg, rgba(200,162,74,.5), rgba(200,162,74,.16));border-color:var(--brass-dim)}
   .room-cards{display:grid;grid-template-columns:1fr;gap:12px}
   @media (min-width:560px){ .room-cards{grid-template-columns:1fr 1fr} }
+  /* Regular-player card edge (Nov 11): Steel Blue, Anthony's pick
+     from the border study — the muted blue-grey #7e9dbd with its
+     1px outer ring at rgba(126,157,189,.30), so a regular member's
+     card separates from the page's outer frame instead of washing
+     into it. Only the base card changes: the is-first / is-me /
+     is-host / is-cohost border overrides below keep winning the
+     cascade exactly as before (brass host, silver co-host untouched). */
   .room-card{
     position:relative;border-radius:16px;padding:16px;cursor:pointer;
     background:linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.015));
-    border:1px solid rgba(200,162,74,.22);
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.05), inset 0 -16px 26px -22px rgba(200,162,74,.25), 0 6px 16px rgba(0,0,0,.28);
+    border:1px solid #7e9dbd;
+    box-shadow:0 0 0 1px rgba(126,157,189,.30), inset 0 1px 0 rgba(255,255,255,.05), inset 0 -16px 26px -22px rgba(200,162,74,.25), 0 6px 16px rgba(0,0,0,.35);
   }
   .room-card.is-first{border-color:rgba(231,189,85,.55);background:linear-gradient(180deg, rgba(200,162,74,.12), rgba(255,255,255,.015))}
   .room-card.is-me{border-color:rgba(200,162,74,.5)}
@@ -3599,16 +3606,31 @@
     });
   }
 
+  /* Standings eligibility (Anthony, Nov 11): the League standings
+     list only players who have actually played at least one league
+     night (games_played >= 1, straight from the standings view — no
+     name-based exceptions). Signing up + host approval makes someone
+     a Club Member: they show under Club Members from day one, but
+     they do not take a standings row — or the leader card — until
+     their first league night is on the book. Season at a Glance
+     keeps reading the full rows, unchanged. */
+  function standingsEligible(p){
+    return Number(p && p.games_played) > 0;
+  }
+
   function renderLeague(){
-    var rows = lastStandingsRows || [];
+    var allRows = lastStandingsRows || [];
+    var rows = allRows.filter(standingsEligible);
     renderLeagueTonight();
-    renderLeagueSeason(rows);
+    renderLeagueSeason(allRows);
     renderLeagueLeader(rows);
     var body = $("leagueBody");
     if (body) {
       body.innerHTML = rows.length
         ? rows.map(function(p, i){ return leagueRowHTML(p, i); }).join("")
-        : '<p class="empty-note">Standings are waiting on the first approved players — once Anthony confirms players at the door, the ladder fills in here. No names, no rows until then.</p>';
+        : (allRows.length
+          ? '<p class="empty-note">Standings begin once players have played their first league night — approved members show under Club Members until then.</p>'
+          : '<p class="empty-note">Standings are waiting on the first approved players — once Anthony confirms players at the door, the ladder fills in here. No names, no rows until then.</p>');
     }
     renderLeagueRecent();
     renderUpcoming();
