@@ -4059,11 +4059,12 @@
     var ring = p.ring || "slate";
     if (isCoHost(p) && ring !== "host") ring = "cohost";
     var ringColor = ring === "host" ? "var(--brass)" : ring === "cohost" ? "var(--silver)" : ring === "leader" ? "var(--gold)" : ring === "green" ? "var(--green)" : "var(--slate)";
-    if (isHost(p)) {
-      badges.push('<span class="p-badge gold"><span class="mini-host"><span>HOST</span></span>Runs the room</span>');
-    } else if (isCoHost(p)) {
-      badges.push('<span class="p-badge"><span class="mini-cohost"><span>CO-HOST</span></span>Helps run the room</span>');
-    } else {
+    /* Descriptor pill removed for host/co-host (Anthony, Nov 11):
+       the "HOST — Runs the room" / "CO-HOST — Helps run the room"
+       pill beside the photo was redundant with the HOST / CO-HOST
+       plaques on the photo itself. Other players keep their ring /
+       status pill below. Plaques and bounty chip are untouched. */
+    if (!isHost(p) && !isCoHost(p)) {
       badges.push('<span class="p-badge"><span class="dot" style="background:' + ringColor + '"></span>' + esc(RING_LABEL[ring] || "League player") + "</span>");
       if (p.badge && BADGE_LABEL[p.badge]) badges.push('<span class="p-badge gold">' + esc(BADGE_LABEL[p.badge]) + "</span>");
     }
