@@ -304,26 +304,37 @@
     white-space:nowrap;
   }
   .host-badge>span{transform:translate(.11em,.054em)}
-  /* SIT-IN badge — a plaque in steel: the same bottom-center
-     avatar placement as the HOST plaque, but a cooler steel/pewter
-     face with slate engraving — brass stays the host's alone. It
-     keeps its original compact form (it was not part of the
-     reference-plaque resize), widened a touch so SIT-IN sits
-     comfortably where GUEST sat before it. It marks ONE night
-     only: the host flags that night's check-in as a sit-in, and
-     the plaque shows only on the player's own page / tonight
-     surface — never in the standings and never on an open
-     profile. (The class keeps its original guest-badge name —
-     only the words a player reads changed.) */
+  /* SIT-IN badge — a plaque in warm COPPER (Pattern B from the
+     sit-in badge study, Anthony's pick Nov 11): the same
+     bottom-center avatar placement and family construction as
+     the HOST plaque — beveled near-white rim, engraved inner
+     rule, optically centered Cinzel lettering — cast in copper,
+     the third metal of the family, so a sit-in stands clearly
+     apart from the brass HOST and silver CO-HOST and reads as
+     a welcome on the board. It keeps its original compact form
+     (it was not part of the reference-plaque resize), widened a
+     touch so SIT-IN sits comfortably where GUEST sat before it.
+     It marks ONE night only: the host flags that night's
+     check-in as a sit-in, and the plaque shows only on the
+     player's own page / tonight surface — never in the standings
+     and never on an open profile. (The class keeps its original
+     guest-badge name — only the words a player reads changed.) */
   .guest-badge{
     position:absolute;left:50%;bottom:-5px;transform:translateX(-50%);z-index:4;
     display:inline-flex;align-items:center;justify-content:center;
     min-width:62px;height:13px;padding:1px 7px 0;
     font-family:"Cinzel",serif;font-size:7.5px;font-weight:900;letter-spacing:.22em;text-indent:.22em;line-height:1;
-    color:#1c232a;background:linear-gradient(165deg,#eef1f4 0%,#c3ccd4 38%,#98a4ae 68%,#6e7a85 100%);
-    border:1px solid #e6ebef;border-radius:2px;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(38,48,58,.45), inset 0 0 0 1px rgba(38,48,58,.30), 0 2px 5px rgba(0,0,0,.6), 0 0 0 1.5px rgba(20,26,32,.4);
+    color:#3a1e07;background:linear-gradient(180deg,#ffd9ae 0%,#eda763 32%,#c97a35 60%,#a55a22 82%,#dd9250 100%);
+    border:1px solid #f2f5f7;border-radius:2px;
+    box-shadow:inset 0 0 0 1px rgba(20,24,30,.38), inset 0 1px 1px rgba(255,255,255,.65), inset 0 -1px 1px rgba(0,0,0,.34), 0 2px 5px rgba(0,0,0,.55), 0 0 0 1px rgba(58,30,7,.35);
     white-space:nowrap;
+  }
+  .guest-badge::before{ /* engraved inner rule, as on the study plaque */
+    content:"";position:absolute;inset:1.5px;
+    border:1px solid rgba(24,28,34,.42);
+    border-radius:1px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.35);
+    pointer-events:none;
   }
   /* CO-HOST badge — the HOST plaque's exact construction in
      silver, at Anthony's direction (Nov 10: "Do the same thing
@@ -340,12 +351,17 @@
      Cinzel and the same dark engraved lettering (#241a05), no
      text-shadow — at Anthony's direction (Nov 10, superseding
      the earlier bright-gold #ffe83d letters): the plaques are a
-     matched pair, brass face and silver face, one lettering. */
+     matched pair, brass face and silver face, one lettering.
+     (Nov 11: the CO-HOST lettering steps down one size at
+     Anthony's direction — 9px to 8px, with the small-avatar
+     and legend sizes eased in proportion — so Liz's word sits
+     a touch softer beside the HOST word; the silver face, the
+     construction and the optical centering are unchanged.) */
   .cohost-badge{
     position:absolute;left:50%;bottom:-5px;transform:translateX(-50%);z-index:4;
     display:grid;place-items:center;
     min-width:58px;height:16px;padding:0 8px;
-    font-family:"Cinzel",serif;font-size:9px;font-weight:900;letter-spacing:.18em;line-height:1;
+    font-family:"Cinzel",serif;font-size:8px;font-weight:900;letter-spacing:.18em;line-height:1;
     color:#241a05;
     background:linear-gradient(165deg,#f2f4f6 0%,#ccd4dc 38%,#9aa7b1 68%,#75828d 100%);
     border:1.5px solid #f7fafc;border-radius:3px;
@@ -442,10 +458,11 @@
   .ava.sm .guest-badge{
     min-width:36px;height:9px;padding:0 4px;font-size:5.5px;letter-spacing:.18em;text-indent:.18em;
     bottom:-4px;border-width:1px;border-radius:1.5px;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.9), inset 0 0 0 1px rgba(38,48,58,.30), 0 2px 4px rgba(0,0,0,.6), 0 0 0 1px rgba(20,26,32,.4);
+    box-shadow:inset 0 0 0 1px rgba(20,24,30,.38), inset 0 1px 0 rgba(255,255,255,.65), 0 2px 4px rgba(0,0,0,.55), 0 0 0 1px rgba(58,30,7,.35);
   }
+  .ava.sm .guest-badge::before{inset:1px;border-radius:1px}
   .ava.sm .cohost-badge{
-    min-width:38px;height:8px;padding:0 4px;font-size:5px;letter-spacing:.14em;
+    min-width:38px;height:8px;padding:0 4px;font-size:4.5px;letter-spacing:.14em;
     bottom:-3px;border-width:1px;border-radius:2px;
     box-shadow:inset 0 1px 0 rgba(255,255,255,.9), inset 0 0 0 1px rgba(38,48,58,.30), 0 2px 4px rgba(0,0,0,.6), 0 0 0 1px rgba(20,26,32,.4);
   }
@@ -726,7 +743,7 @@
      same way (half-tracking right, .054em down). */
   .mini-cohost{
     display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;
-    height:12px;padding:0 6px;font-family:"Cinzel",serif;font-size:6.5px;font-weight:900;
+    height:12px;padding:0 6px;font-family:"Cinzel",serif;font-size:6px;font-weight:900;
     letter-spacing:.16em;line-height:1;color:#241a05;
     background:linear-gradient(165deg,#f2f4f6,#9aa7b1 70%,#75828d);
     border:1px solid #f7fafc;border-radius:2px;
@@ -2049,7 +2066,7 @@
     if (me.status !== "approved") { zone.innerHTML = ""; return; } // the header cluster carries the pending state
     if (me.checked_in_tonight) {
       if (isGuestTonight(me)) {
-        zone.innerHTML = '<div class="notice green"><strong>You\'re checked in as tonight\'s sit-in</strong> — the steel SIT-IN plaque is on your photo above. You\'re playing for tonight\'s cash; no league points tonight. Good luck.</div>';
+        zone.innerHTML = '<div class="notice green"><strong>You\'re checked in as tonight\'s sit-in</strong> — the copper SIT-IN plaque is on your photo above. You\'re playing for tonight\'s cash; no league points tonight. Good luck.</div>';
         return;
       }
       zone.innerHTML = '<div class="notice green"><strong>You\'re checked in</strong> — your ring is lit at the table. Good luck tonight.</div>';
@@ -2351,8 +2368,8 @@
       parts.push('<span style="color:#ffe83d;font-weight:800;letter-spacing:.04em">CO-HOST</span><span class="sep"> · </span>' + esc(BADGE_LABEL.cohost));
     } else if (isGuestTonight(me)) {
       // Standalone sit-in treatment, mirroring the host line:
-      // the steel SIT-IN word first, then what it means tonight.
-      parts.push('<span style="color:#c3ccd4;font-weight:800;letter-spacing:.04em">SIT-IN</span><span class="sep"> · </span>Sit-in tonight — no league points tonight');
+      // the copper SIT-IN word first, then what it means tonight.
+      parts.push('<span style="color:#eda763;font-weight:800;letter-spacing:.04em">SIT-IN</span><span class="sep"> · </span>Sit-in tonight — no league points tonight');
     } else {
       parts.push('<span style="color:' + ringColor + '">' + esc(RING_LABEL[ring] || "League player") + "</span>");
       if (me.badge && BADGE_LABEL[me.badge]) parts.push('<span class="sep">·</span> ' + esc(BADGE_LABEL[me.badge]));
