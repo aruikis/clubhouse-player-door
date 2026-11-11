@@ -89,7 +89,7 @@
   .monogram-mark{width:58px;height:auto;display:block;margin:0 auto 10px}
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
   .door-tag{margin:10px 0 0;font-size:11.5px;font-weight:600;letter-spacing:.3em;text-indent:.3em;text-transform:uppercase;color:var(--brass)}
-  /* ---------- portal tab bar (Club | Player | League) ----------
+  /* ---------- portal tab bar (Club Members | My Info | League | Club Info) ----------
      One persistent bar directly under the emblem, present on the
      three tabbed views. Slate-and-brass like everything else on the
      Door: thin brass frame, letterspaced Archivo labels, the active
@@ -101,10 +101,10 @@
   }
   .portal-tab{
     flex:1 1 0;appearance:none;cursor:pointer;font:inherit;
-    font-family:"Archivo","Arial Narrow",sans-serif;font-size:13px;font-weight:600;
-    letter-spacing:.18em;text-transform:uppercase;text-indent:.18em;
+    font-family:"Archivo","Arial Narrow",sans-serif;font-size:11px;font-weight:600;
+    letter-spacing:.1em;text-transform:uppercase;text-indent:.1em;
     color:var(--muted);background:transparent;border:0;border-radius:10px;
-    padding:11px 4px;box-shadow:inset 0 -2px 0 transparent;
+    padding:11px 2px;box-shadow:inset 0 -2px 0 transparent;white-space:nowrap;
   }
   .portal-tab:active{transform:scale(.99)}
   .portal-tab:focus-visible{outline:2px solid var(--brass-bright);outline-offset:2px}
@@ -431,9 +431,15 @@
      medallion's top-right. */
   .bounty-medal{
     position:absolute;left:calc(50% + 23px);bottom:3px;width:40px;height:40px;border-radius:50%;
-    border:2px solid var(--brass);background:#101010;z-index:3;
+    border:2px solid var(--brass);background:#101010;z-index:2;
     box-shadow:0 3px 8px rgba(0,0,0,.55), inset 0 0 0 1px rgba(0,0,0,.4);
   }
+  /* LAYERING, universal (Anthony, Nov 11): wherever the medallion
+     overlaps a plaque, the PLAQUE sits on top — the chip renders
+     BEHIND it for every player (HOST z-index 4, CO-HOST 4, SIT-IN
+     4, medallion 2). The count pill rides at the medallion's
+     top-right, clear of the bottom-center plaque, so it stays
+     fully readable under this layering. */
   .bounty-medal img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
   .bounty-count{
     position:absolute;top:-5px;right:-8px;min-width:19px;height:19px;padding:0 5px;
@@ -471,9 +477,12 @@
      honors never cover each other, and the medallion still never
      crosses to the left or over the face. (Browsers without :has
      fall back to the plaque anchor; the two simply overlap.) */
-  .ava.is-cohost .bounty-medal{left:calc(50% + 19px);bottom:1px}
+  /* CO-HOST medallion tucks in slightly toward the plaque
+     (Anthony, Nov 11: Liz's chip rode a little too far out) —
+     3px in at full size, 2px at small, podium sizes below. */
+  .ava.is-cohost .bounty-medal{left:calc(50% + 16px);bottom:1px}
   .ava.is-guest .bounty-medal{left:calc(50% + 21px);bottom:-2px}
-  .ava.sm.is-cohost .bounty-medal{left:calc(50% + 12px);bottom:1px}
+  .ava.sm.is-cohost .bounty-medal{left:calc(50% + 10px);bottom:1px}
   .ava.sm.is-guest .bounty-medal{left:calc(50% + 12px);bottom:1px}
   .ava:has(> .chip) .bounty-medal{bottom:34px}
   .ava.sm:has(> .chip) .bounty-medal{bottom:19px}
@@ -518,8 +527,19 @@
   .nc-label{font-size:9.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--brass);line-height:1.3}
   .nc-date{font-size:11.5px;font-weight:600;color:var(--cream-2);line-height:1.25}
   .nc-check{
+    position:relative;
     width:34px;height:34px;border-radius:50%;display:grid;place-items:center;margin-top:2px;
     border:2px solid var(--slate);color:#9a9da2;background:rgba(255,255,255,.04);
+  }
+  /* New-games badge on the cluster's calendar: the same count-pill
+     language as the bounty count (dark face, brass ring, brass
+     number), riding the calendar ring's top-right. Shown only
+     while this device has scheduled games it hasn't seen yet. */
+  .nc-badge{
+    position:absolute;top:-6px;right:-9px;min-width:19px;height:19px;padding:0 5px;
+    display:grid;place-items:center;border-radius:999px;
+    background:#10161e;color:var(--brass-bright);border:1.5px solid var(--brass);
+    font-size:11px;font-weight:800;line-height:1;box-shadow:0 2px 6px rgba(0,0,0,.55);
   }
   .nc-check svg{width:17px;height:17px}
   .night-cluster.is-in .nc-check{
@@ -542,11 +562,13 @@
   .night-cluster.is-tappable:focus-visible{outline:2px solid var(--brass-bright);outline-offset:3px}
   .night-cluster.is-checking{opacity:.7;cursor:default}
   @media (prefers-reduced-motion: reduce){ .night-cluster.is-tappable .nc-check{transition:none} }
-  /* Next-game state — display-only, for when no game is live
-     tonight but the book has a future game scheduled: the cluster
-     swaps its check for a small calendar glyph in brass, the date
-     sits where tonight's date sat, and the start time takes the
-     caption line. No tap target, no check-in affordance. */
+  /* Next-game state — for when no game is live tonight but the
+     book has a future game scheduled: the cluster swaps its check
+     for a small calendar glyph in brass, the date sits where
+     tonight's date sat, and the start time takes the caption
+     line. The calendar is a tap target (never a check-in
+     affordance): one tap jumps to the Upcoming games list lower
+     on the page and clears the new-game badge it may carry. */
   .night-cluster.is-next .nc-check{
     border-color:var(--brass);color:var(--brass-bright);background:rgba(200,162,74,.12);
   }
@@ -1155,8 +1177,8 @@
      as these size rules otherwise tie/win on source order). */
   .pod .bounty-medal{width:30px;height:30px;left:calc(50% + 25px);bottom:5px}
   .pod.first .bounty-medal{width:36px;height:36px;left:calc(50% + 24px);bottom:4px}
-  .pod .ava.is-cohost .bounty-medal{left:calc(50% + 21px);bottom:4px}
-  .pod.first .ava.is-cohost .bounty-medal{left:calc(50% + 20px);bottom:2px}
+  .pod .ava.is-cohost .bounty-medal{left:calc(50% + 18px);bottom:4px}
+  .pod.first .ava.is-cohost .bounty-medal{left:calc(50% + 17px);bottom:2px}
   .pod .ava:has(> .chip) .bounty-medal{bottom:34px}
   .pod-name{font-weight:600;font-size:15px;letter-spacing:.02em;line-height:1.25;color:var(--cream);margin-top:13px;overflow-wrap:break-word}
   .pod.first .pod-name{font-size:17.5px}
@@ -1252,17 +1274,18 @@
     <p class="door-tag">Player Portal</p>
   </header>
 
-  <!-- Portal tabs: Club | Player | League. The bar lives directly
-       under the emblem and stays on the three tabbed views (the
+  <!-- Portal tabs: Club Members | My Info | League | Club Info. The bar lives directly
+       under the emblem and stays on the four tabbed views (the
        Club Portal players page, the player's own profile, the League
-       page) — and on the sign-up view when a visitor lands there by
-       tapping Player with no identity on this device, so the tabs
-       never vanish mid-navigation. The Portal always opens on the
-       Player tab. -->
+       page, Club Info) — and on the sign-up view when a visitor
+       lands there by tapping My Info with no identity on this
+       device, so the tabs never vanish mid-navigation. The Portal
+       always opens on the My Info tab. -->
   <nav class="portal-tabs" id="portalTabs" hidden aria-label="Portal sections">
-    <button type="button" class="portal-tab" data-tab="club">Club</button>
-    <button type="button" class="portal-tab" data-tab="player">Player</button>
+    <button type="button" class="portal-tab" data-tab="club">Club Members</button>
+    <button type="button" class="portal-tab" data-tab="player">My Info</button>
     <button type="button" class="portal-tab" data-tab="league">League</button>
+    <button type="button" class="portal-tab" data-tab="info">Club Info</button>
   </nav>
 
   <!-- loading -->
@@ -1527,8 +1550,28 @@
       <h2 class="league-title">THE LEAGUE</h2>
       <p class="league-sub" id="leagueSeasonLine">Standings, the season, and tonight — the same board the room watches on the TV.</p>
     </div>
-    <!-- HOUSE RULES & FEES — the first thing a player sees on the
-         League page, above Tonight's game (host's direction). The
+    <div id="leagueTonight"></div>
+    <div class="block-label league-label">Upcoming games</div>
+    <div id="leagueUpcoming"><p class="empty-note">Checking the calendar…</p></div>
+    <div class="block-label league-label">Season at a glance</div>
+    <div class="league-grid" id="leagueSeasonGrid" style="margin-top:0"></div>
+    <div id="leagueLeader"></div>
+    <div class="block-label league-label">Standings — tap a player for their card</div>
+    <div id="leagueBody"><p class="empty-note">Loading the league…</p></div>
+    <div class="block-label league-label">Recent nights</div>
+    <div id="leagueRecent"><p class="empty-note">Loading recent results…</p></div>
+  </section>
+
+  <!-- club info (rules & explainers live here now, moved off the
+       League page at Anthony's direction, Nov 11: House Rules &
+       Fees first, What the rings mean second — both keep their
+       exact collapsible treatment, closed by default) -->
+  <section class="panel league-panel" id="infoPanel" hidden>
+    <div class="profile-toprow">
+      <span class="profile-kind">Club Info</span>
+    </div>
+    <!-- HOUSE RULES & FEES — moved here from the top of the League
+         page into Club Info (host's direction, Nov 11). The
          two notes stay expandable exactly as before: collapsed by
          default, one-line gist on each header, full wording
          unchanged. The "Hide this for good" button dismisses the
@@ -1568,16 +1611,7 @@
         </div>
       </div>
     </div>
-    <div id="leagueTonight"></div>
-    <div class="block-label league-label">Upcoming games</div>
-    <div id="leagueUpcoming"><p class="empty-note">Checking the calendar…</p></div>
-    <div class="block-label league-label">Season at a glance</div>
-    <div class="league-grid" id="leagueSeasonGrid" style="margin-top:0"></div>
-    <div id="leagueLeader"></div>
-    <div class="block-label league-label">Standings — tap a player for their card</div>
-    <div id="leagueBody"><p class="empty-note">Loading the league…</p></div>
-    <div class="block-label league-label">Recent nights</div>
-    <div id="leagueRecent"><p class="empty-note">Loading recent results…</p></div>
+    <div style="height:14px"></div>
     <!-- WHAT THE RINGS MEAN — collapsible, same treatment as the
          House Rules & Fees notes above (host's direction): closed
          by default behind a tappable header that keeps the gist on
@@ -1597,6 +1631,7 @@
         <div class="legend" id="leagueLegend"></div>
       </div>
     </div>
+
   </section>
 
   <!-- clubhouse room (public — Pattern B: podium for the top 3,
@@ -2094,14 +2129,15 @@
   var upcomingKnown = false; // true once that call has answered (success, empty, or error)
 
   function showOnly(id){
-    ["loadingPanel","setupPanel","offlinePanel","welcomePanel","mePanel","profilePanel","leaguePanel","roomPanel"].forEach(function(p){
+    ["loadingPanel","setupPanel","offlinePanel","welcomePanel","mePanel","profilePanel","leaguePanel","roomPanel","infoPanel"].forEach(function(p){
       $(p).hidden = (p !== id);
     });
     syncTabs(id);
   }
 
   /* ================= portal tab bar =================
-     Club | Player | League, directly under the emblem. The bar
+     Club Members | My Info | League | Club Info, directly under
+     the emblem. The bar
      shows only while a tabbed view is up (the Club Portal players
      page, the player's own profile, the League page, or a public
      card opened from one of them) and the lit tab follows the view.
@@ -2145,6 +2181,7 @@
     if (panelId === "mePanel") tab = "player";
     else if (panelId === "roomPanel") tab = "club";
     else if (panelId === "leaguePanel") tab = "league";
+    else if (panelId === "infoPanel") tab = "info";
     else if (panelId === "profilePanel") tab = profileTab;
     else if (panelId === "welcomePanel" && welcomeFromPlayerTab) tab = "player";
     nav.hidden = !tab;
@@ -2157,7 +2194,25 @@
       else tabs[i].removeAttribute("aria-current");
     }
   }
+  var infoOpen = false;
+  function isInfoHash(){ return String(window.location.hash || "") === "#/info"; }
+  function openInfo(fromHash){
+    if (setupMissing) return;
+    infoOpen = true;
+    showOnly("infoPanel");
+    if (typeof applyHouseRulesVisibility === "function") applyHouseRulesVisibility();
+    if (!fromHash) { try { history.pushState(null, "", "#/info"); } catch (e) {} }
+    window.scrollTo(0, 0);
+  }
   function goTab(tab){
+    if (tab === "info") {
+      if (profileId !== null) { profileId = null; profileFromRoom = false; }
+      leagueOpen = false;
+      roomOpen = false;
+      openInfo(false);
+      return;
+    }
+    infoOpen = false;
     if (tab === "club") {
       if (profileId !== null) { closeProfile(); return; } // Back from a card always lands in the Club
       if (!roomOpen) openRoom(false);
@@ -2377,6 +2432,7 @@
     function settle(list){
       upcomingGames = Array.isArray(list) ? list : [];
       upcomingKnown = true;
+      refreshUpcomingBadge();
       renderUpcoming();
       if (me && !$("mePanel").hidden) renderStatusCluster();
       return "ok";
@@ -2411,13 +2467,69 @@
      mark to check in"); there is no separate check-in button
      further down the page. Once checked in it is display-only
      again (green, "Checked in"), and with no game live tonight
-     it is display-only as before. One new display-only state
-     joins it: when NO game is live tonight but the book has a
-     future game scheduled (league_upcoming_games), the cluster
+     it is display-only as before. One more state joins it:
+     when NO game is live tonight but the book has a future
+     game scheduled (league_upcoming_games), the cluster
      instead shows that next game — "Next game", its date, and
      its start time — with a calendar glyph in place of the
-     check and no check-in affordance at all. When nothing is
+     check; the calendar is a tap target to the Upcoming games
+     list (and carries the new-game badge), never a check-in
+     affordance. When nothing is
      scheduled, the cluster keeps its current display exactly. */
+  /* ============ new-game badge (per device) ============
+     A phone-style count badge on the cluster's calendar: how many
+     currently-scheduled upcoming games this device has NOT seen
+     yet. Seen games ride the Door's per-device store (bmGet/bmSet —
+     localStorage + cookie fallback), keyed separately from the
+     token / bookmark / rules markers. A game's identity is its
+     scheduled id + start time (fallback: start time + title), so
+     a reschedule reads as new news and a cancelled game prunes
+     out of the seen set (a re-added game can badge again).
+     FIRST-LOAD BASELINE: the very first load with no seen set
+     stores the current list silently — no badge — and only games
+     scheduled after that baseline can badge. VIEWING the Upcoming
+     games list clears it (tapping the calendar IS the view; so is
+     scrolling the section into view on either page), like a phone
+     badge after you've opened the thing. */
+  var UPCOMING_SEEN_KEY = "clubhouse_upcoming_seen";
+  var upcomingNewCount = 0;
+  function upcomingGameKey(g){
+    var d = gameStart(g);
+    var when = d ? d.toISOString() : String((g && (g.starts_at || g.start_at)) || "");
+    var id = g && (g.id != null ? g.id : (g.game_id != null ? g.game_id : null));
+    return id != null ? ("id:" + id + "@" + when) : ("t:" + when + "|" + gameTitle(g));
+  }
+  function upcomingSeenKeys(){
+    var raw = bmGet(UPCOMING_SEEN_KEY);
+    if (raw == null) return null;
+    try { var arr = JSON.parse(raw); return Array.isArray(arr) ? arr.map(String) : []; }
+    catch (e) { return []; }
+  }
+  function refreshUpcomingBadge(){
+    if (!upcomingKnown) { upcomingNewCount = 0; return; }
+    var keys = upcomingGames.filter(function(g){ return !!gameStart(g); }).map(upcomingGameKey);
+    var seen = upcomingSeenKeys();
+    if (seen === null) { bmSet(UPCOMING_SEEN_KEY, JSON.stringify(keys)); upcomingNewCount = 0; return; }
+    var seenSet = {};
+    seen.forEach(function(k){ seenSet[k] = 1; });
+    upcomingNewCount = keys.filter(function(k){ return !seenSet[k]; }).length;
+    bmSet(UPCOMING_SEEN_KEY, JSON.stringify(keys.filter(function(k){ return !!seenSet[k]; })));
+  }
+  function markUpcomingSeen(){
+    if (!upcomingKnown) return;
+    var keys = upcomingGames.filter(function(g){ return !!gameStart(g); }).map(upcomingGameKey);
+    bmSet(UPCOMING_SEEN_KEY, JSON.stringify(keys));
+    if (upcomingNewCount !== 0) { upcomingNewCount = 0; renderStatusCluster(); }
+  }
+  function jumpToUpcoming(){
+    markUpcomingSeen();
+    var t = $("meUpcoming");
+    if (!t) return;
+    var target = t.previousElementSibling || t;
+    try { target.scrollIntoView({ behavior: "smooth", block: "start" }); }
+    catch (e) { try { target.scrollIntoView(); } catch (e2) {} }
+  }
+
   var CAL_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="16" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>';
   var CHECK_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6.5 9.2 17.3 4 12.1"/></svg>';
   function renderStatusCluster(){
@@ -2434,20 +2546,29 @@
       var nDate = nd.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
       var nTime = fmtStartTime(nd);
       var nTitle = gameTitle(upcoming);
-      el.className = "night-cluster is-next";
-      el.setAttribute("role", "img");
-      el.removeAttribute("tabindex");
+      el.className = "night-cluster is-next is-tappable";
+      el.setAttribute("role", "button");
+      el.setAttribute("tabindex", "0");
       el.setAttribute("aria-label", "Next game: " +
         nd.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }) +
-        " at " + nTime + (nTitle ? " — " + nTitle : ""));
+        " at " + nTime + (nTitle ? " — " + nTitle : "") +
+        ". Tap to see upcoming games." +
+        (upcomingNewCount > 0 ? " " + upcomingNewCount + (upcomingNewCount === 1 ? " new game" : " new games") + " scheduled." : ""));
       el.innerHTML =
         '<span class="nc-label">Next game</span>' +
         '<span class="nc-date">' + esc(nDate) + "</span>" +
-        '<span class="nc-check">' + CAL_ICON + "</span>" +
+        '<span class="nc-check">' + CAL_ICON +
+        (upcomingNewCount > 0 ? '<span class="nc-badge">' + esc(fmtNum(upcomingNewCount)) + "</span>" : "") + "</span>" +
         '<span class="nc-state">' + esc(nTime) + "</span>";
       el.hidden = false;
-      el.onclick = null;
-      el.onkeydown = null;
+      /* The calendar is the quick way down to the Upcoming games
+         list (Anthony, Nov 11) — one tap from the top of the
+         profile. Tapping it also marks the listed games seen,
+         which clears the new-game badge. */
+      el.onclick = function(){ jumpToUpcoming(); };
+      el.onkeydown = function(ev){
+        if (ev.key === "Enter" || ev.key === " " || ev.key === "Spacebar") { ev.preventDefault(); jumpToUpcoming(); }
+      };
       return;
     }
     var canCheckIn = !pending && !checked && liveGame && !checkinInFlight;
@@ -3770,11 +3891,24 @@
     window.scrollTo(0, 0);
     refreshRoomData();
   }
+  /* A recognized player whose deep link names HIS OWN record lands
+     on his personal page (My Info) — that page is where his
+     game-night cluster lives; the public card is what OTHER people
+     see. Only when this device has no recognized record does the
+     deep link fall through to the public card (with My Info lit). */
+  function landOnMyPage(){
+    profileId = null; profileFromRoom = false;
+    leagueOpen = false; roomOpen = false; infoOpen = false;
+    try { history.pushState(null, "", window.location.pathname + window.location.search); } catch (e) {}
+    showOnly("mePanel"); window.scrollTo(0, 0); renderMe();
+  }
   function maybeOpenProfileFromHash(){
     if (setupMissing) return;
     if (isRoomHash()) { if (!roomOpen) openRoom(true); return; }
     if (isLeagueHash()) { if (!leagueOpen) openLeague(true); return; }
+    if (isInfoHash()) { if (!infoOpen) openInfo(true); return; }
     var id = profileHashId();
+    if (id && me && String(me.id) === String(id)) { landOnMyPage(); return; }
     if (id && id !== profileId) {
       /* Cold arrival only (init): a #/player/<id> link opened cold
          is how the host app's "Open my profile" arrives, so — when
@@ -3787,7 +3921,13 @@
   }
   window.addEventListener("hashchange", function(){
     var id = profileHashId();
+    if (id && me && String(me.id) === String(id)) { landOnMyPage(); return; }
     if (id) { if (id !== profileId) openProfile(id, true); return; }
+    if (isInfoHash()) {
+      if (profileId !== null) { profileId = null; profileFromRoom = false; }
+      if (!infoOpen) openInfo(true);
+      return;
+    }
     if (isRoomHash()) {
       if (profileId !== null) { closeProfile(); if (!roomOpen) openRoom(true); }
       else if (!roomOpen) openRoom(true);
@@ -3813,6 +3953,18 @@
       tabs[i].addEventListener("click", function(){ goTab(this.getAttribute("data-tab")); });
     }
   })();
+  /* Viewing the Upcoming games list clears the new-game badge —
+     however the player gets there: the calendar tap (jumpToUpcoming
+     marks seen directly), scrolling the section into view on their
+     own page, or reaching the League page's list. */
+  if ("IntersectionObserver" in window) {
+    var upcomingObserver = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){ if (en.isIntersecting) markUpcomingSeen(); });
+    }, { threshold: 0.15 });
+    ["meUpcoming", "leagueUpcoming"].forEach(function(id){
+      var el = $(id); if (el) upcomingObserver.observe(el);
+    });
+  }
   function leagueTap(e, isKey){
     var t = e.target;
     while (t && t !== this && !(t.getAttribute && t.getAttribute("data-pid"))) t = t.parentNode;
@@ -4251,8 +4403,11 @@
     });
   });
 
-  /* House rules & fees — hide for good. The section now leads the
-     League page; a player who has read the notes can dismiss the
+  /* House rules & fees — hide for good. The section now lives in
+     Club Info (moved off the League page, Nov 11) under the SAME
+     dismissal key, so a player who already hid it on this device
+     doesn't get it re-imposed by the move. A player who has read
+     the notes can dismiss the
      whole section with "Hide this for good". The dismissal rides
      the same per-device store as the door token and the bookmark
      markers (localStorage + the bm cookie fallback), keyed
