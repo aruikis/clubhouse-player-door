@@ -2828,20 +2828,23 @@
 
   function renderLegend(){
     var legendHTML =
-      /* The brass (host) and silver (co-host) ring-color entries
-         were removed at Anthony's direction (Nov 11): the HOST and
-         CO-HOST plaques directly below already represent those
-         roles, so the color dots duplicated them. */
-      '<span class="item"><span class="dot" style="background:var(--gold)"></span>Gold ring — points leader</span>' +
-      '<span class="item"><span class="dot" style="background:var(--green)"></span>Green ring — checked in tonight</span>' +
-      '<span class="item"><span class="dot" style="background:var(--slate)"></span>Slate ring — away tonight</span>' +
+      /* Final order set by Anthony (Nov 11): badges and honors
+         first (HOST, CO-HOST, SIT-IN, Crown, Flame, Star, Bounty
+         chip), then the remaining ring colors (gold, green, slate).
+         The brass (host) and silver (co-host) ring entries are
+         deleted entirely — Anthony: redundant, already represented
+         by the HOST / CO-HOST badges at the top. All other wording,
+         chips and styling unchanged. */
       '<span class="item"><span class="mini-host"><span>HOST</span></span>Host — runs the room</span>' +
       '<span class="item"><span class="mini-cohost"><span>CO-HOST</span></span>Co-host — helps run the room</span>' +
       '<span class="item"><span class="mini-sitin"><span>SIT-IN</span></span>Sit-in — playing tonight only; no league points, not in the standings</span>' +
       '<span class="item"><span class="mini-chip champion"><svg viewBox="0 0 24 24">' + ICONS.crown + '</svg></span>Crown — season champion</span>' +
       '<span class="item"><span class="mini-chip flame"><svg viewBox="0 0 24 24">' + ICONS.flame + '</svg></span>Flame — won the last game</span>' +
       '<span class="item"><span class="mini-chip veteran"><svg viewBox="0 0 24 24">' + ICONS.star + '</svg></span>Star — veteran regular</span>' +
-      '<span class="item"><img class="mini-bounty" src="assets/bounty-chip.jpg" alt="">Bounty chip — earned by collecting a bounty; the number is the body count</span>';
+      '<span class="item"><img class="mini-bounty" src="assets/bounty-chip.jpg" alt="">Bounty chip — earned by collecting a bounty; the number is the body count</span>' +
+      '<span class="item"><span class="dot" style="background:var(--gold)"></span>Gold ring — points leader</span>' +
+      '<span class="item"><span class="dot" style="background:var(--green)"></span>Green ring — checked in tonight</span>' +
+      '<span class="item"><span class="dot" style="background:var(--slate)"></span>Slate ring — away tonight</span>';
     var rl = $("ringLegend");
     if (rl) rl.innerHTML = legendHTML;
     var ll = $("leagueLegend");
