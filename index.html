@@ -1219,8 +1219,8 @@
   .pod.first .pod-step{height:18px;background:linear-gradient(180deg, rgba(200,162,74,.5), rgba(200,162,74,.16));border-color:var(--brass-dim)}
   /* Club Members directory grid (Anthony, Nov 11): two cards
      across at every width, so the page stays short even with a
-     full room of players — the cards are compact directory tiles
-     (photo, name, headline numbers); the full profile opens on tap. */
+     full room of players — the cards are thin directory tiles
+     (photo, name, role only — no stats); the full profile opens on tap. */
   .room-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   /* Regular-player card edge (Nov 11): Steel Blue, Anthony's pick
      from the border study — the muted blue-grey #7e9dbd with its
@@ -1245,14 +1245,6 @@
   .room-card-top{display:flex;justify-content:center}
   .room-card-name{display:block;font-weight:700;font-size:14.5px;line-height:1.25;margin-top:8px;overflow-wrap:break-word}
   .room-card-role{display:block;font-size:11px;font-weight:300;color:var(--muted);margin-top:2px;line-height:1.4}
-  .room-card-pts{display:flex;align-items:baseline;justify-content:center;gap:6px;margin-top:9px}
-  .room-card-pts .n{font-family:"Archivo","Arial Narrow",sans-serif;font-weight:800;font-size:22px;line-height:1;color:var(--brass-bright)}
-  .room-card-pts .l{font-size:10px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
-  .room-ministats{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:10px;border-top:1px solid var(--line-soft);padding-top:9px}
-  .room-ministats .cell{min-width:0}
-  .room-ministats .k{display:block;font-size:8.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);line-height:1.3}
-  .room-ministats .v{display:block;font-family:"Archivo","Arial Narrow",sans-serif;font-weight:700;font-size:14.5px;line-height:1.2;margin-top:2px;white-space:nowrap}
-  .room-ministats .v img{width:13px;height:13px;border-radius:50%;object-fit:cover;vertical-align:-2px;margin-right:3px;border:1px solid var(--brass-dim)}
 </style>
 <link rel="manifest" href="manifest.webmanifest" />
 <link rel="apple-touch-icon" href="apple-touch-icon.png" />
@@ -3723,20 +3715,15 @@
     return "League player";
   }
 
-  /* Compact directory tile (Anthony, Nov 11): the Club Members
-     grid shows only the glance — photo (ring/plaque/bounty
-     untouched), name, role, league points, wins, body count,
-     nights. Earnings, ITM, nemesis/victim and everything else
-     live on the full profile, which the tap already opens. */
+  /* Compact directory tile (Anthony, Nov 11, thinned same day):
+     the Club Members grid shows only the glance — photo (ring/
+     plaque/bounty untouched), name, and the role/status line.
+     NO stats on the tile at all: the card's bottom edge comes up
+     to just below the name and role. Points, wins, body count,
+     nights, earnings and everything else live on the full
+     profile, which the tap already opens. */
   function roomCardHTML(p, i){
     var rank = i + 1;
-    var games = Number(p.games_played) || 0;
-    var wins = Number(p.games_won) || 0;
-    var seasonOn = !!(seasonInfo && seasonInfo.active);
-    var bc = Number(p.bounty_lifetime);
-    var bcHTML = isFinite(bc) && bc >= 1
-      ? '<img src="assets/bounty-chip.jpg" alt="">' + fmtNum(bc)
-      : (isFinite(bc) ? "0" : "—");
     var isMe = !!(me && String(me.id) === String(p.id));
     return '<div class="room-card' + (rank === 1 ? " is-first" : "") + (isMe ? " is-me" : "") +
       (isHost(p) ? " is-host" : "") + (isCoHost(p) ? " is-cohost" : "") +
@@ -3745,12 +3732,7 @@
       '<div class="room-card-top">' + avatarHTML(p, true) + "</div>" +
       '<span class="room-card-name">' + esc(displayName(p)) + "</span>" +
       '<span class="room-card-role">' + esc(roomRoleLine(p)) + "</span>" +
-      '<div class="room-card-pts"><span class="n">' + fmtNum(p.points) + '</span><span class="l">' + (seasonOn ? "Counting pts" : "League pts") + "</span></div>" +
-      '<div class="room-ministats">' +
-        '<span class="cell"><span class="k">Wins</span><span class="v">' + fmtNum(wins) + "</span></span>" +
-        '<span class="cell"><span class="k">Body Count</span><span class="v">' + bcHTML + "</span></span>" +
-        '<span class="cell"><span class="k">Nights</span><span class="v">' + fmtNum(games) + "</span></span>" +
-      "</div></div>";
+      "</div>";
   }
 
   function renderRoomPodium(rows){
