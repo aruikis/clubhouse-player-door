@@ -1613,16 +1613,19 @@
   <!-- club info (rules & explainers live here now, moved off the
        League page at Anthony's direction, Nov 11: House Rules &
        Fees first, What the rings mean second — both keep their
-       exact collapsible treatment, closed by default) -->
+       exact collapsible treatment; open by default since Nov 11,
+       per Anthony: every page load starts with all three Club
+       Info sections open) -->
   <section class="panel league-panel" id="infoPanel" hidden>
     <div class="profile-toprow">
       <span class="profile-kind">Club Info</span>
     </div>
     <!-- HOUSE RULES & FEES — moved here from the top of the League
          page into Club Info (host's direction, Nov 11). The
-         two notes stay expandable exactly as before: collapsed by
-         default, one-line gist on each header, full wording
-         unchanged. There is no hide/dismiss control anymore
+         two notes stay expandable exactly as before: open by
+         default on every page load (Anthony, Nov 11; still
+         tappable to collapse), one-line gist on each header, full
+         wording unchanged. There is no hide/dismiss control anymore
          (removed at the host's direction, Nov 11): Club Info is a
          reference section, so this section always shows — and any
          device that hid it under the old control gets it back
@@ -1633,47 +1636,47 @@
       </div>
       <p class="house-rules-intro">Read these once — tap either note to open it. They stay right here in Club Info whenever you want to check them again.</p>
       <div class="fund-rule-note" data-fund-note>
-        <button type="button" class="fund-toggle" aria-expanded="false" aria-controls="fundChampBody">
+        <button type="button" class="fund-toggle" aria-expanded="true" aria-controls="fundChampBody">
           <span class="fund-head">
             <span class="fund-rule-kicker">How the championship fund works</span>
             <span class="fund-gist"><strong>$20 of each $100 league buy-in</strong> builds the championship pot</span>
           </span>
           <span class="fund-chev" aria-hidden="true"></span>
         </button>
-        <div class="fund-body" id="fundChampBody" hidden>
+        <div class="fund-body" id="fundChampBody">
           <p class="fund-rule-copy">On a $100 league night, <strong class="brass">$20 of every league player's buy-in</strong> goes into the championship pot. That pot pays the points leader's <strong>free championship buy-in</strong> and boosts the championship prizes. The $20 is part of the price of a league night — and it is <strong>not refunded</strong> if a player doesn't reach the five nights needed to qualify. No surprises: that's the deal before the first hand is dealt.</p>
         </div>
       </div>
       <div class="fund-rule-note" data-fund-note>
-        <button type="button" class="fund-toggle" aria-expanded="false" aria-controls="fundFeeLeagueBody">
+        <button type="button" class="fund-toggle" aria-expanded="true" aria-controls="fundFeeLeagueBody">
           <span class="fund-head">
             <span class="fund-rule-kicker">Sit &amp; go house fee — full transparency</span>
             <span class="fund-gist"><strong>Flat $5 per sit &amp; go</strong> — covers the room's running costs</span>
           </span>
           <span class="fund-chev" aria-hidden="true"></span>
         </button>
-        <div class="fund-body" id="fundFeeLeagueBody" hidden>
+        <div class="fund-body" id="fundFeeLeagueBody">
           <p class="fund-rule-copy">Every sit &amp; go takes a flat <strong class="brass">$5 off the top of the purse</strong> — not per player, and never a percentage. So a 10-player, $20 game builds a $200 purse, the house takes its $5, and <strong>$195 goes straight into the prizes</strong>. That $5 is the Clubhouse's only rake, and it exists for one reason: it covers the real costs of running the room — <strong>texting and communication fees (Twilio)</strong> for invites, game-night updates, and check-in and recovery codes, <strong>server and hosting costs</strong> for the league book, this Player Portal, and the TV game display, and <strong>Jarvis</strong> — Anthony's assistant, who helps run the Clubhouse behind the scenes and is part of what it costs to keep the room going. It's a flat fee to keep the Clubhouse running — not a profit cut, and it never grows with the pot.</p>
         </div>
       </div>
     </div>
     <div style="height:14px"></div>
     <!-- WHAT THE RINGS MEAN — collapsible, same treatment as the
-         House Rules & Fees notes above (host's direction): closed
-         by default behind a tappable header that keeps the gist on
-         screen; tapping opens the full legend underneath. The
-         legend's content is unchanged — renderLegend still fills
-         #leagueLegend exactly as before, it just lives inside the
-         collapsible body now. -->
+         House Rules & Fees notes above (host's direction): open
+         by default on every page load (Anthony, Nov 11) behind a
+         tappable header that keeps the gist on screen; tapping
+         closes the full legend underneath. renderLegend still
+         fills #leagueLegend exactly as before, it just lives
+         inside the collapsible body now. -->
     <div class="fund-rule-note" data-rings-note>
-      <button type="button" class="fund-toggle" aria-expanded="false" aria-controls="leagueLegendWrap">
+      <button type="button" class="fund-toggle" aria-expanded="true" aria-controls="leagueLegendWrap">
         <span class="fund-head">
           <span class="fund-rule-kicker">What the rings mean</span>
           <span class="fund-gist">The <strong>rings, badges &amp; bounty chip</strong> on each player's photo</span>
         </span>
         <span class="fund-chev" aria-hidden="true"></span>
       </button>
-      <div class="fund-body" id="leagueLegendWrap" hidden>
+      <div class="fund-body" id="leagueLegendWrap">
         <div class="legend" id="leagueLegend"></div>
       </div>
     </div>
@@ -2825,8 +2828,10 @@
 
   function renderLegend(){
     var legendHTML =
-      '<span class="item"><span class="dot" style="background:var(--brass)"></span>Brass ring — host</span>' +
-      '<span class="item"><span class="dot" style="background:var(--silver)"></span>Silver ring — co-host</span>' +
+      /* The brass (host) and silver (co-host) ring-color entries
+         were removed at Anthony's direction (Nov 11): the HOST and
+         CO-HOST plaques directly below already represent those
+         roles, so the color dots duplicated them. */
       '<span class="item"><span class="dot" style="background:var(--gold)"></span>Gold ring — points leader</span>' +
       '<span class="item"><span class="dot" style="background:var(--green)"></span>Green ring — checked in tonight</span>' +
       '<span class="item"><span class="dot" style="background:var(--slate)"></span>Slate ring — away tonight</span>' +
@@ -4445,11 +4450,11 @@
   });
 
   /* Explainer notes (championship fund + house fee) and the
-     "What the rings mean" legend: collapsible, closed by default,
-     identical treatment on the League page. The header always
+     "What the rings mean" legend: collapsible, open by default
+     (Anthony, Nov 11), identical treatment in Club Info. The header always
      shows the title + one-line gist; tapping toggles the full
      body underneath. State is per-note and in-memory only — every
-     page load starts closed, and the per-minute refresh never
+     page load starts open, and the per-minute refresh never
      touches these nodes (renderLegend only rewrites the legend's
      inner chips, never its hidden/open state). */
   Array.prototype.forEach.call(document.querySelectorAll("[data-fund-note], [data-rings-note]"), function(note){
