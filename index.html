@@ -89,6 +89,29 @@
   .monogram-mark{width:58px;height:auto;display:block;margin:0 auto 10px}
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
   .door-tag{margin:10px 0 0;font-size:11.5px;font-weight:600;letter-spacing:.3em;text-indent:.3em;text-transform:uppercase;color:var(--brass)}
+  /* ---------- portal tab bar (Club | Player | League) ----------
+     One persistent bar directly under the emblem, present on the
+     three tabbed views. Slate-and-brass like everything else on the
+     Door: thin brass frame, letterspaced Archivo labels, the active
+     tab lit brass-bright with a brass underline over the warm glow. */
+  .portal-tabs{
+    display:flex;gap:4px;margin:16px 0 0;padding:4px;
+    border:1px solid var(--line);border-radius:14px;
+    background:linear-gradient(180deg, var(--panel-2), var(--panel));
+  }
+  .portal-tab{
+    flex:1 1 0;appearance:none;cursor:pointer;font:inherit;
+    font-family:"Archivo","Arial Narrow",sans-serif;font-size:13px;font-weight:600;
+    letter-spacing:.18em;text-transform:uppercase;text-indent:.18em;
+    color:var(--muted);background:transparent;border:0;border-radius:10px;
+    padding:11px 4px;box-shadow:inset 0 -2px 0 transparent;
+  }
+  .portal-tab:active{transform:scale(.99)}
+  .portal-tab:focus-visible{outline:2px solid var(--brass-bright);outline-offset:2px}
+  .portal-tab.active{
+    color:var(--brass-bright);background:rgba(200,162,74,.12);
+    box-shadow:inset 0 -2px 0 var(--brass-bright);
+  }
 
   /* ---------- panels ---------- */
   .panel{
@@ -1229,6 +1252,16 @@
     <p class="door-tag">Player Portal</p>
   </header>
 
+  <!-- Portal tabs: Club | Player | League. The bar lives directly
+       under the emblem and stays on the three tabbed views (the
+       Club Portal players page, the player's own profile, the League
+       page). The Portal always opens on the Player tab. -->
+  <nav class="portal-tabs" id="portalTabs" hidden aria-label="Portal sections">
+    <button type="button" class="portal-tab" data-tab="club">Club</button>
+    <button type="button" class="portal-tab" data-tab="player">Player</button>
+    <button type="button" class="portal-tab" data-tab="league">League</button>
+  </nav>
+
   <!-- loading -->
   <section class="panel" id="loadingPanel">
     <div class="state-box">
@@ -1314,7 +1347,7 @@
         </div>
       </form>
     </div>
-    <a class="profile-link" href="#/room">The Clubhouse Room — Season Standings ›</a>
+    <a class="profile-link" href="#/room">Club Portal — Season Standings ›</a>
     <a class="profile-link" href="#/league">League standings — the full League page ›</a>
   </section>
 
@@ -1421,10 +1454,6 @@
 
     <a class="profile-link" id="mePublicLink" href="#" hidden>View my public profile</a>
 
-    <a class="profile-link" id="meRoomLink" href="#/room">The Clubhouse Room — Season Standings ›</a>
-
-    <a class="profile-link" id="meLeagueLink" href="#/league">League standings — the full League page ›</a>
-
     <!-- bookmark prompt: keeps showing on return visits until the
          player actually answers it (taps the card) — merely seeing
          it never counts. Answered once per game; once the page is
@@ -1459,7 +1488,6 @@
   <!-- open profile (public — name + stats + glory only) -->
   <section class="panel" id="profilePanel" hidden>
     <div class="profile-toprow">
-      <button type="button" class="profile-back" id="profileBack">← Back to the Room</button>
       <span class="profile-kind">Public profile</span>
     </div>
     <div id="profileBody"><p class="empty-note">Loading the card…</p></div>
@@ -1468,7 +1496,6 @@
   <!-- league page (public — names + stats only; the TV-display look) -->
   <section class="panel league-panel" id="leaguePanel" hidden>
     <div class="profile-toprow">
-      <button type="button" class="profile-back" id="leagueBack">← Back</button>
       <span class="profile-kind">The League</span>
     </div>
     <div class="league-hero">
@@ -1538,7 +1565,6 @@
         </div>
       </div>
     </div>
-    <a class="profile-link" href="#/room" style="margin-top:14px">Enter the Clubhouse Room — Season Standings ›</a>
     <div id="leagueTonight"></div>
     <div class="block-label league-label">Upcoming games</div>
     <div id="leagueUpcoming"><p class="empty-note">Checking the calendar…</p></div>
@@ -1576,8 +1602,7 @@
        page — no phone, no email, no credit ever rides here) -->
   <section class="panel league-panel room-panel" id="roomPanel" hidden>
     <div class="profile-toprow">
-      <button type="button" class="profile-back" id="roomBack">← Back</button>
-      <span class="profile-kind">The Room</span>
+      <span class="profile-kind">Club Portal</span>
     </div>
     <div class="league-hero">
       <!-- The insignia exactly as the League page hero renders it —
@@ -1605,13 +1630,12 @@
         </g>
       </svg>
       <p class="league-kicker">Clubhouse Poker Room</p>
-      <h2 class="league-title room-title">THE CLUBHOUSE ROOM</h2>
+      <h2 class="league-title room-title">CLUB PORTAL</h2>
       <p class="league-sub">Season Standings</p>
     </div>
     <div id="roomPodium"></div>
     <div class="block-label league-label">All players — tap a card for the full profile</div>
-    <div id="roomCards"><p class="empty-note">Loading the room…</p></div>
-    <a class="profile-link" href="#/league">League standings — the full League page ›</a>
+    <div id="roomCards"><p class="empty-note">Loading the club…</p></div>
   </section>
 
   <!-- photo position editor (shared by sign-up and Change photo) -->
@@ -2070,6 +2094,56 @@
     ["loadingPanel","setupPanel","offlinePanel","welcomePanel","mePanel","profilePanel","leaguePanel","roomPanel"].forEach(function(p){
       $(p).hidden = (p !== id);
     });
+    syncTabs(id);
+  }
+
+  /* ================= portal tab bar =================
+     Club | Player | League, directly under the emblem. The bar
+     shows only while a tabbed view is up (the Club Portal players
+     page, the player's own profile, the League page, or a public
+     card opened from one of them) and the lit tab follows the view.
+     The Portal opens on the Player tab (see init). A public card
+     keeps the tab of the view it was opened from lit. */
+  var profileTab = "club"; // tab left lit while a public card is open
+  function syncTabs(panelId){
+    var nav = $("portalTabs");
+    if (!nav) return;
+    var tab = null;
+    if (panelId === "mePanel") tab = "player";
+    else if (panelId === "roomPanel") tab = "club";
+    else if (panelId === "leaguePanel") tab = "league";
+    else if (panelId === "profilePanel") tab = profileTab;
+    nav.hidden = !tab;
+    if (!tab) return;
+    var tabs = nav.querySelectorAll(".portal-tab");
+    for (var i = 0; i < tabs.length; i++) {
+      var on = tabs[i].getAttribute("data-tab") === tab;
+      tabs[i].classList.toggle("active", on);
+      if (on) tabs[i].setAttribute("aria-current", "page");
+      else tabs[i].removeAttribute("aria-current");
+    }
+  }
+  function goTab(tab){
+    if (tab === "club") {
+      if (profileId !== null) { closeProfile(); return; } // Back from a card always lands in the Club
+      if (!roomOpen) openRoom(false);
+      return;
+    }
+    if (tab === "league") {
+      if (profileId !== null) { profileId = null; profileFromRoom = false; }
+      if (!leagueOpen) openLeague(false);
+      else { showOnly("leaguePanel"); window.scrollTo(0, 0); renderLeague(); }
+      return;
+    }
+    if (tab === "player") {
+      if (profileId !== null) { profileId = null; profileFromRoom = false; }
+      leagueOpen = false;
+      roomOpen = false;
+      try { history.pushState(null, "", window.location.pathname + window.location.search); } catch (e) {}
+      if (me) { showOnly("mePanel"); window.scrollTo(0, 0); renderMe(); }
+      else { showOnly("welcomePanel"); window.scrollTo(0, 0); }
+      return;
+    }
   }
 
   function renderCheckin(){
@@ -3452,7 +3526,7 @@
     if (wrap) {
       wrap.innerHTML = rows.length
         ? '<div class="room-cards">' + rows.map(function(p, i){ return roomCardHTML(p, i); }).join("") + "</div>"
-        : '<p class="empty-note">The Room is waiting on the first approved players — once Anthony confirms players at the door, their cards fill in here. No names, no cards until then.</p>';
+        : '<p class="empty-note">Club Portal is waiting on the first approved players — once Anthony confirms players at the door, their cards fill in here. No names, no cards until then.</p>';
     }
     if (leagueProfilesState === "idle" && rows.length) enrichLeagueProfiles();
   }
@@ -3499,7 +3573,7 @@
     while (t && t !== document.body && !(t.getAttribute && t.getAttribute("data-pid"))) t = t.parentNode;
     if (t && t.getAttribute && t.getAttribute("data-pid")) {
       if (isKey) e.preventDefault();
-      openProfile(t.getAttribute("data-pid"), false);
+      openProfile(t.getAttribute("data-pid"), false, "club");
     }
   }
   ["roomCards", "roomPodium"].forEach(function(id){
@@ -3511,7 +3585,6 @@
       roomTap(e, true);
     });
   });
-  $("roomBack").addEventListener("click", function(){ closeRoom(); });
 
   /* ================= open profile (The Card) =================
      Tapping a name in the public standings opens that player's
@@ -3571,10 +3644,11 @@
     return null;
   }
 
-  function openProfile(id, fromHash){
+  function openProfile(id, fromHash, sourceTab){
     if (!id) return;
     id = String(id);
     if (profileId === null) profileFromRoom = roomOpen;
+    if (sourceTab) profileTab = sourceTab;
     profileId = id;
     showOnly("profilePanel");
     $("profileBody").innerHTML = '<div class="state-box"><div class="spinner" aria-hidden="true"></div><p class="big">Dealing the card…</p><p>Pulling this player’s public stats.</p></div>';
@@ -3656,14 +3730,20 @@
     else if (roomOpen) closeRoom();
     else if (leagueOpen) closeLeague();
   });
-  $("profileBack").addEventListener("click", function(){ closeProfile(); });
-  $("leagueBack").addEventListener("click", function(){ closeLeague(); });
+  (function(){
+    var nav = $("portalTabs");
+    if (!nav) return;
+    var tabs = nav.querySelectorAll(".portal-tab");
+    for (var i = 0; i < tabs.length; i++) {
+      tabs[i].addEventListener("click", function(){ goTab(this.getAttribute("data-tab")); });
+    }
+  })();
   function leagueTap(e, isKey){
     var t = e.target;
     while (t && t !== this && !(t.getAttribute && t.getAttribute("data-pid"))) t = t.parentNode;
     if (t && t.getAttribute && t.getAttribute("data-pid")) {
       if (isKey) e.preventDefault();
-      openProfile(t.getAttribute("data-pid"), false);
+      openProfile(t.getAttribute("data-pid"), false, "league");
     }
   }
   ["leagueBody", "leagueLeader", "leagueRecent"].forEach(function(id){
@@ -3676,7 +3756,7 @@
     });
   });
   $("mePublicLink").addEventListener("click", function(e){
-    if (me && me.id) { e.preventDefault(); openProfile(String(me.id), false); }
+    if (me && me.id) { e.preventDefault(); openProfile(String(me.id), false, "player"); }
   });
 
   /* Standings-only fallback card data: used until the host runs the
