@@ -243,12 +243,15 @@
   .ava.sm.is-host img.face,.ava.sm.is-cohost img.face{width:calc(100% - 4px);height:calc(100% - 4px)}
   /* Card / profile-surface edging — the same thin line around the
      player's own surface as around the study card: brass for the
-     host, silver for the co-host. Applied by the renderers to the
+     host, silver for the co-host, at the IDENTICAL strength (.72)
+     so Liz's silver line carries exactly the weight of Anthony's
+     brass — only the color differs (his direction, Nov 10).
+     Applied by the renderers to the
      personal-page panel, the open-profile panel, the League leader
      card, and League standings rows (the .league-row / .leader-card
      overrides sit with those rules below so they win the cascade). */
   .panel.is-host{border-color:rgba(201,164,92,.72)}
-  .panel.is-cohost{border-color:rgba(201,210,218,.62)}
+  .panel.is-cohost{border-color:rgba(201,210,218,.72)}
   .chip{
     position:absolute;right:-2px;bottom:-2px;width:34px;height:34px;border-radius:50%;
     display:grid;place-items:center;border:2px solid var(--felt-900);
@@ -953,7 +956,7 @@
      ring — brass for the host, silver for the co-host — outranking
      the leader / is-me brass tints when a player carries both. */
   .league-row.is-host,.leader-card.is-host{border-color:rgba(201,164,92,.72)}
-  .league-row.is-cohost,.leader-card.is-cohost{border-color:rgba(201,210,218,.62)}
+  .league-row.is-cohost,.leader-card.is-cohost{border-color:rgba(201,210,218,.72)}
   .league-row:active{transform:scale(.995)}
   .league-row:focus-visible{outline:2px solid var(--brass-bright);outline-offset:2px}
   .lr-top{display:flex;gap:11px;align-items:center}
@@ -1083,7 +1086,7 @@
   .room-card.is-first{border-color:rgba(231,189,85,.55);background:linear-gradient(180deg, rgba(200,162,74,.12), rgba(255,255,255,.015))}
   .room-card.is-me{border-color:rgba(200,162,74,.5)}
   .room-card.is-host{border-color:rgba(201,164,92,.72)}
-  .room-card.is-cohost{border-color:rgba(201,210,218,.62)}
+  .room-card.is-cohost{border-color:rgba(201,210,218,.72)}
   .room-card:active{transform:scale(.995)}
   .room-card:focus-visible{outline:2px solid var(--brass-bright);outline-offset:2px}
   .room-rankchip{position:absolute;top:13px;right:14px;font-family:"Archivo","Arial Narrow",sans-serif;font-weight:700;font-size:14px;color:var(--muted)}
@@ -1386,7 +1389,7 @@
   <!-- open profile (public — name + stats + glory only) -->
   <section class="panel" id="profilePanel" hidden>
     <div class="profile-toprow">
-      <button type="button" class="profile-back" id="profileBack">← Back</button>
+      <button type="button" class="profile-back" id="profileBack">← Back to the Room</button>
       <span class="profile-kind">Public profile</span>
     </div>
     <div id="profileBody"><p class="empty-note">Loading the card…</p></div>
@@ -3381,6 +3384,16 @@
     if (leagueProfilesState === "idle" && rows.length) enrichLeagueProfiles();
   }
 
+  /* The Room's render + data loads, shared by openRoom and by
+     closeProfile (whose Back lands here even on a cold arrival,
+     when the Room was never opened and its data never loaded). */
+  function refreshRoomData(){
+    renderRoom();
+    loadSeasonInfo().then(function(info){ applySeasonInfo(info); if (roomOpen) renderRoom(); });
+    loadUpcomingGames();
+    loadGameState().then(function(){ if (roomOpen) renderRoom(); });
+    loadStandings().then(function(){ if (roomOpen) renderRoom(); });
+  }
   function openRoom(fromHash){
     if (setupMissing) return;
     if (!roomOpen) roomReturn = leagueOpen ? "leaguePanel" : (!$("mePanel").hidden ? "mePanel" : "welcomePanel");
@@ -3389,11 +3402,7 @@
     showOnly("roomPanel");
     if (!fromHash) { try { history.pushState(null, "", "#/room"); } catch (e) {} }
     window.scrollTo(0, 0);
-    renderRoom();
-    loadSeasonInfo().then(function(info){ applySeasonInfo(info); if (roomOpen) renderRoom(); });
-    loadUpcomingGames();
-    loadGameState().then(function(){ if (roomOpen) renderRoom(); });
-    loadStandings().then(function(){ if (roomOpen) renderRoom(); });
+    refreshRoomData();
   }
   function closeRoom(){
     if (!roomOpen) return;
@@ -3444,7 +3453,7 @@
      card falls back to what the standings view alone can honestly
      show and dashes the rest — never an invented number. */
   var profileId = null;
-  var profileReturn = null;
+  var profileFromRoom = false; // the profile was opened over the Room
 
   function fmtMoney(n){ return "$" + fmtNum(n); }
   function fmtSignedMoney(n){
@@ -3492,9 +3501,7 @@
   function openProfile(id, fromHash){
     if (!id) return;
     id = String(id);
-    if (profileId === null) {
-      profileReturn = roomOpen ? "roomPanel" : (leagueOpen ? "leaguePanel" : (!$("mePanel").hidden ? "mePanel" : "welcomePanel"));
-    }
+    if (profileId === null) profileFromRoom = roomOpen;
     profileId = id;
     showOnly("profilePanel");
     $("profileBody").innerHTML = '<div class="state-box"><div class="spinner" aria-hidden="true"></div><p class="big">Dealing the card…</p><p>Pulling this player’s public stats.</p></div>';
@@ -3522,24 +3529,32 @@
     if (known) proceed(known);
     else loadStandings().then(function(){ proceed(standingsRowFor(id)); });
   }
+  /* Back from a public profile ALWAYS lands in the Clubhouse
+     Room — no matter how the profile was opened. A profile opened
+     cold (a shared/bookmarked #/player/<id> link, or the host
+     app's Settings → "Open my profile") has no in-app panel
+     underneath it; the old return-target derivation fell back to
+     the welcome / scan-to-join panel there, so a registered
+     player backing out of his own profile was treated like a
+     brand-new visitor (Anthony's report, Nov 10). The Room is
+     public — it reads only the standings board — so it is the
+     safe, correct landing for every arrival. The Room's own Back
+     keeps its target: untouched when the profile was opened over
+     the Room, otherwise the player's own page when he's set up
+     on this device, else the welcome panel. */
   function closeProfile(){
     if (profileId === null) return;
     profileId = null;
-    var back = profileReturn || "welcomePanel";
-    profileReturn = null;
-    try { history.pushState(null, "", back === "leaguePanel" ? "#/league" : (back === "roomPanel" ? "#/room" : window.location.pathname + window.location.search)); } catch (e) {}
-    showOnly(back);
-    if (back === "leaguePanel") {
-      window.scrollTo(0, 0);
-      renderLeague();
-      return;
-    }
-    if (back === "roomPanel") {
-      window.scrollTo(0, 0);
-      renderRoom();
-      return;
-    }
+    var wasFromRoom = profileFromRoom;
+    profileFromRoom = false;
+    if (setupMissing) { showOnly("setupPanel"); return; }
+    leagueOpen = false;
+    roomOpen = true;
+    if (!wasFromRoom) roomReturn = me ? "mePanel" : "welcomePanel";
+    try { history.pushState(null, "", "#/room"); } catch (e) {}
+    showOnly("roomPanel");
     window.scrollTo(0, 0);
+    refreshRoomData();
   }
   function maybeOpenProfileFromHash(){
     if (setupMissing) return;
@@ -3557,8 +3572,11 @@
       return;
     }
     if (isLeagueHash()) {
-      if (profileId !== null) closeProfile();
-      else if (!leagueOpen) openLeague(true);
+      /* Honor the League hash directly — clearing the profile
+         state here instead of routing through closeProfile,
+         whose Back now always lands in the Room. */
+      if (profileId !== null) { profileId = null; profileFromRoom = false; }
+      if (!leagueOpen) openLeague(true);
       return;
     }
     if (profileId !== null) closeProfile();
