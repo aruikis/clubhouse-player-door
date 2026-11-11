@@ -29,7 +29,7 @@
        the host's ring is the thin brass-gold ring of the Pattern B
        card Anthony approved (Nov 10), with its soft gold glow, and
        the co-host's is the identical thin ring in silver. The
-       HOST/GUEST plaques keep their settled engraved faces.) */
+       HOST/SIT-IN plaques keep their settled engraved faces.) */
     --felt-950:#0e1319;
     --felt-900:#111922;
     --felt-800:#171e27;
@@ -304,19 +304,22 @@
     white-space:nowrap;
   }
   .host-badge>span{transform:translate(.11em,.054em)}
-  /* GUEST badge — a plaque in steel: the same bottom-center
+  /* SIT-IN badge — a plaque in steel: the same bottom-center
      avatar placement as the HOST plaque, but a cooler steel/pewter
      face with slate engraving — brass stays the host's alone. It
      keeps its original compact form (it was not part of the
-     reference-plaque resize). It marks ONE night only: the host
-     flags that night's check-in as a guest, and the plaque shows
-     only on the player's own page / tonight surface — never in
-     the standings and never on an open profile. */
+     reference-plaque resize), widened a touch so SIT-IN sits
+     comfortably where GUEST sat before it. It marks ONE night
+     only: the host flags that night's check-in as a sit-in, and
+     the plaque shows only on the player's own page / tonight
+     surface — never in the standings and never on an open
+     profile. (The class keeps its original guest-badge name —
+     only the words a player reads changed.) */
   .guest-badge{
     position:absolute;left:50%;bottom:-5px;transform:translateX(-50%);z-index:4;
     display:inline-flex;align-items:center;justify-content:center;
-    min-width:58px;height:13px;padding:1px 7px 0;
-    font-family:"Cinzel",serif;font-size:7.5px;font-weight:900;letter-spacing:.24em;text-indent:.24em;line-height:1;
+    min-width:62px;height:13px;padding:1px 7px 0;
+    font-family:"Cinzel",serif;font-size:7.5px;font-weight:900;letter-spacing:.22em;text-indent:.22em;line-height:1;
     color:#1c232a;background:linear-gradient(165deg,#eef1f4 0%,#c3ccd4 38%,#98a4ae 68%,#6e7a85 100%);
     border:1px solid #e6ebef;border-radius:2px;
     box-shadow:inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(38,48,58,.45), inset 0 0 0 1px rgba(38,48,58,.30), 0 2px 5px rgba(0,0,0,.6), 0 0 0 1.5px rgba(20,26,32,.4);
@@ -403,13 +406,13 @@
      itself, so a player with no plaque anchors to the same point
      the plaque's corner would occupy, low on the right rim.
      CO-HOST plaque (58px × 16px, bottom:-5px; corner at 50% + 29px
-     / 11px) and GUEST plaque (58px × 13px, bottom:-5px; corner at
-     50% + 29px / 8px) take the same anchor shifted to their own
+     / 11px) and SIT-IN plaque (62px × 13px, bottom:-5px; corner at
+     50% + 31px / 8px) take the same anchor shifted to their own
      corners. Small (46px avatar, standings rows + Room grid cards):
      the settled small geometry for everyone — a 16px chip at
      left:calc(50% + 8px), bottom:0, tucked behind the plaque
      without bleeding into the column beside the avatar; the small
-     CO-HOST / GUEST plaques are wider for their size (38px / 36px
+     CO-HOST / SIT-IN plaques are wider for their size (38px / 36px
      min-width), so their corner sits further right (+12px).
      HONOR CHIP STACK: a player carrying a crown / flame / veteran
      chip (bottom-right) has no plaque, so the medallion instead
@@ -418,7 +421,7 @@
      crosses to the left or over the face. (Browsers without :has
      fall back to the plaque anchor; the two simply overlap.) */
   .ava.is-cohost .bounty-medal{left:calc(50% + 19px);bottom:1px}
-  .ava.is-guest .bounty-medal{left:calc(50% + 19px);bottom:-2px}
+  .ava.is-guest .bounty-medal{left:calc(50% + 21px);bottom:-2px}
   .ava.sm.is-cohost .bounty-medal{left:calc(50% + 12px);bottom:1px}
   .ava.sm.is-guest .bounty-medal{left:calc(50% + 12px);bottom:1px}
   .ava:has(> .chip) .bounty-medal{bottom:34px}
@@ -1640,7 +1643,7 @@
        league_game_state id=1: is_live, game_name, buy_in, status,
                         players_in, players_entered, prize_pool, updated_at
        league_checkins  id, player_id, created_at, processed_at,
-                        is_guest (the host's per-night guest mark on
+                        is_guest (the host's per-night sit-in mark on
                         that night's check-in — league_my_page returns
                         it as is_guest_tonight, personal page only;
                         the standings view and public profile never
@@ -1826,13 +1829,15 @@
     return p.ring === "cohost" || p.badge === "cohost" ||
       p.is_cohost === true || p.isCoHost === true;
   }
-  /* Guest is a PER-GAME mark, never a standing honor: the host flags
-     that night's check-in as a guest, and league_my_page hands it
-     back on the player's own record as is_guest_tonight. The reader
-     also accepts the equivalent shapes (guest_tonight / is_guest /
-     badge 'guest') so the plaque lights up whichever exact field
-     the host side lands on. A host is never a guest. When the book
-     carries no guest mark at all, every field is simply absent and
+  /* Sit-in is a PER-GAME mark, never a standing honor: the host
+     flags that night's check-in as a sit-in, and league_my_page
+     hands it back on the player's own record as is_guest_tonight.
+     The reader also accepts the equivalent shapes (guest_tonight /
+     is_guest / badge 'guest' — the book's field names keep their
+     original spelling) so the plaque lights up whichever exact
+     field the host side lands on. A host is never a sit-in. When
+     the book carries no sit-in mark at all, every field is
+     simply absent and
      this is false — no plaque is ever invented. */
   function isGuestTonight(p){
     if (!p || isHost(p)) return false;
@@ -1863,13 +1868,14 @@
          a crown/flame/star chip on top of it. */
       chip = '<div class="cohost-badge" title="Co-host" aria-label="Co-host"><span>CO-HOST</span></div>';
     } else if (opts && opts.guest && isGuestTonight(p)) {
-      /* The GUEST plaque takes the HOST plaque's slot and, like it,
-         stands alone over the honor chip — but ONLY where the caller
-         opts in: the player's own page and its tonight/check-in
+      /* The SIT-IN plaque takes the HOST plaque's slot and, like
+         it, stands alone over the honor chip — but ONLY where the
+         caller opts in: the player's own page and its tonight/check-in
          surface. The standings and the open profile call avatarHTML
          without the opt-in, so the plaque can never appear there
-         (guests earn no points and have no standing to mark). */
-      chip = '<div class="guest-badge" title="Guest tonight" aria-label="Guest tonight">GUEST</div>';
+         (sit-in players earn no points and have no standing to
+         mark). */
+      chip = '<div class="guest-badge" title="Sit-in tonight" aria-label="Sit-in tonight">SIT-IN</div>';
     } else if (p.badge && BADGE_ICON[p.badge]) {
       chip = '<div class="chip ' + esc(p.badge) + '"><svg viewBox="0 0 24 24" aria-hidden="true">' + ICONS[BADGE_ICON[p.badge]] + "</svg></div>";
     }
@@ -2043,7 +2049,7 @@
     if (me.status !== "approved") { zone.innerHTML = ""; return; } // the header cluster carries the pending state
     if (me.checked_in_tonight) {
       if (isGuestTonight(me)) {
-        zone.innerHTML = '<div class="notice green"><strong>You\'re checked in as tonight\'s guest</strong> — the steel GUEST plaque is on your photo above. You\'re playing for tonight\'s cash; no league points tonight. Good luck.</div>';
+        zone.innerHTML = '<div class="notice green"><strong>You\'re checked in as tonight\'s sit-in</strong> — the steel SIT-IN plaque is on your photo above. You\'re playing for tonight\'s cash; no league points tonight. Good luck.</div>';
         return;
       }
       zone.innerHTML = '<div class="notice green"><strong>You\'re checked in</strong> — your ring is lit at the table. Good luck tonight.</div>';
@@ -2328,7 +2334,7 @@
       mePanelEl.classList.toggle("is-host", isHost(me));
       mePanelEl.classList.toggle("is-cohost", isCoHost(me));
     }
-    /* The personal page is the one surface where tonight's GUEST
+    /* The personal page is the one surface where tonight's SIT-IN
        plaque may show — hence the guest opt-in here, and only here. */
     $("meAvatar").innerHTML = avatarHTML(me, false, { guest: true });
     $("meName").textContent = displayName(me);
@@ -2344,9 +2350,9 @@
       // silver CO-HOST word first, then what the role means.
       parts.push('<span style="color:#ffe83d;font-weight:800;letter-spacing:.04em">CO-HOST</span><span class="sep"> · </span>' + esc(BADGE_LABEL.cohost));
     } else if (isGuestTonight(me)) {
-      // Standalone guest treatment, mirroring the host line: the
-      // steel GUEST word first, then what it means for tonight.
-      parts.push('<span style="color:#c3ccd4;font-weight:800;letter-spacing:.04em">GUEST</span><span class="sep"> · </span>Guest tonight — no league points tonight');
+      // Standalone sit-in treatment, mirroring the host line:
+      // the steel SIT-IN word first, then what it means tonight.
+      parts.push('<span style="color:#c3ccd4;font-weight:800;letter-spacing:.04em">SIT-IN</span><span class="sep"> · </span>Sit-in tonight — no league points tonight');
     } else {
       parts.push('<span style="color:' + ringColor + '">' + esc(RING_LABEL[ring] || "League player") + "</span>");
       if (me.badge && BADGE_LABEL[me.badge]) parts.push('<span class="sep">·</span> ' + esc(BADGE_LABEL[me.badge]));
