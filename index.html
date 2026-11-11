@@ -1550,28 +1550,10 @@
       <span class="profile-kind">The League</span>
     </div>
     <div class="league-hero">
-      <svg class="monogram-mark" viewBox="0 0 240 200" aria-hidden="true">
-        <defs>
-          <linearGradient id="cpGradMark" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#f4d3a5"/>
-            <stop offset="0.55" stop-color="#eec493"/>
-            <stop offset="1" stop-color="#dfa968"/>
-          </linearGradient>
-        </defs>
-        <path d="M147 39 A70 70 0 1 0 147 149" fill="none" stroke="url(#cpGradMark)" stroke-width="11"/>
-        <path d="M93.5 34.4 A60.5 60.5 0 0 0 43.5 94 A60.5 60.5 0 0 0 83.3 150.9" fill="none" stroke="url(#cpGradMark)" stroke-width="2" opacity="0.85"/>
-        <polygon points="146,33.5 147,44.5 166,44" fill="url(#cpGradMark)"/>
-        <polygon points="146,143.5 147,154.5 166,144" fill="url(#cpGradMark)"/>
-        <path d="M112 58 H140 A28 28 0 0 1 140 114 H128" fill="none" stroke="url(#cpGradMark)" stroke-width="10.5"/>
-        <path d="M161 59 A34.5 34.5 0 0 1 161 113" fill="none" stroke="url(#cpGradMark)" stroke-width="2" opacity="0.85"/>
-        <path d="M112 54 V126 H126 V54" fill="none" stroke="url(#cpGradMark)" stroke-width="3"/>
-        <path d="M112 126 L106 137 M126 126 L132 137" stroke="url(#cpGradMark)" stroke-width="3" fill="none"/>
-        <g transform="translate(119 145) scale(0.6)" fill="url(#cpGradMark)">
-          <circle cx="0" cy="-7" r="8.5"/><circle cx="-8" cy="4" r="8.5"/><circle cx="8" cy="4" r="8.5"/>
-          <path d="M0 2 L-5.5 16 L5.5 16 Z"/>
-        </g>
-      </svg>
-      <h2 class="league-title">THE LEAGUE</h2>
+      <!-- Header cleanup (Anthony, Nov 11): no second CP insignia and
+           no repeated "THE LEAGUE" title in this panel — the page-top
+           emblem above the tabs carries the insignia, and "The
+           League" already sits upper-left in the toprow above. -->
       <p class="league-sub" id="leagueSeasonLine">Standings, the season, and tonight — the same board the room watches on the TV.</p>
     </div>
     <div id="leagueTonight"></div>
@@ -1683,32 +1665,12 @@
       <span class="profile-kind">Club Portal</span>
     </div>
     <div class="league-hero">
-      <!-- The insignia exactly as the League page hero renders it —
-           the same monogram-mark artwork the profile pages carry.
-           No redraw, no variation. -->
-      <svg class="monogram-mark" viewBox="0 0 240 200" aria-hidden="true">
-        <defs>
-          <linearGradient id="cpGradRoom" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#f4d3a5"/>
-            <stop offset="0.55" stop-color="#eec493"/>
-            <stop offset="1" stop-color="#dfa968"/>
-          </linearGradient>
-        </defs>
-        <path d="M147 39 A70 70 0 1 0 147 149" fill="none" stroke="url(#cpGradRoom)" stroke-width="11"/>
-        <path d="M93.5 34.4 A60.5 60.5 0 0 0 43.5 94 A60.5 60.5 0 0 0 83.3 150.9" fill="none" stroke="url(#cpGradRoom)" stroke-width="2" opacity="0.85"/>
-        <polygon points="146,33.5 147,44.5 166,44" fill="url(#cpGradRoom)"/>
-        <polygon points="146,143.5 147,154.5 166,144" fill="url(#cpGradRoom)"/>
-        <path d="M112 58 H140 A28 28 0 0 1 140 114 H128" fill="none" stroke="url(#cpGradRoom)" stroke-width="10.5"/>
-        <path d="M161 59 A34.5 34.5 0 0 1 161 113" fill="none" stroke="url(#cpGradRoom)" stroke-width="2" opacity="0.85"/>
-        <path d="M112 54 V126 H126 V54" fill="none" stroke="url(#cpGradRoom)" stroke-width="3"/>
-        <path d="M112 126 L106 137 M126 126 L132 137" stroke="url(#cpGradRoom)" stroke-width="3" fill="none"/>
-        <g transform="translate(119 145) scale(0.6)" fill="url(#cpGradRoom)">
-          <circle cx="0" cy="-7" r="8.5"/><circle cx="-8" cy="4" r="8.5"/><circle cx="8" cy="4" r="8.5"/>
-          <path d="M0 2 L-5.5 16 L5.5 16 Z"/>
-        </g>
-      </svg>
-      <h2 class="league-title room-title">CLUB PORTAL</h2>
-      <p class="league-sub">Season Standings</p>
+      <!-- Header cleanup (Anthony, Nov 11): no duplicate CP insignia
+           and no repeated big "Club Portal" title in this panel — the
+           page-top emblem above the tabs already carries both. The
+           small "Club Portal" label sits upper-left in the toprow
+           above; "Season Standings" is the panel's centered heading. -->
+      <h2 class="league-title room-title">Season Standings</h2>
     </div>
     <div id="roomPodium"></div>
     <div class="block-label league-label">All players — tap a card for the full profile</div>
