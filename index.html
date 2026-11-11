@@ -3408,15 +3408,15 @@
     if (isCoHost(p) && ring !== "host") ring = "cohost";
     var ringColor = ring === "host" ? "var(--brass)" : ring === "cohost" ? "var(--silver)" : ring === "leader" ? "var(--gold)" : ring === "green" ? "var(--green)" : "var(--slate)";
     if (isHost(p)) {
-      tags.push('<span class="tag gold"><span class="mini-host"><span>HOST</span></span>Runs the room</span>');
       /* Host and co-host stand in the League standings as the
          living example (Anthony, Nov 11) — label them plainly as
-         league players too, in the same small tag as everyone
-         else's ring label. Their HOST / CO-HOST plaques above
-         stay exactly as they are. */
+         league players. The HOST / CO-HOST pills that used to sit
+         beside this tag in the standings were removed at Anthony's
+         direction (Nov 11): they duplicated the HOST / CO-HOST
+         plaques already on their photos. Their plaques above stay
+         exactly as they are. */
       tags.push('<span class="tag">League Player</span>');
     } else if (isCoHost(p)) {
-      tags.push('<span class="tag"><span class="mini-cohost"><span>CO-HOST</span></span>Helps run the room</span>');
       tags.push('<span class="tag">League Player</span>');
     } else {
       tags.push('<span class="tag"><span class="dot" style="background:' + ringColor + '"></span>' + esc(RING_LABEL[ring] || "League player") + "</span>");
