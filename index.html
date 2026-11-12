@@ -848,6 +848,7 @@
   .pcard-who{flex:1;min-width:0}
   .pcard-name{font-family:"Archivo","Arial Narrow",sans-serif;font-size:clamp(22px,6vw,28px);font-weight:400;letter-spacing:.03em;margin:0;line-height:1.12;overflow-wrap:break-word}
   .pcard-rankline{color:var(--brass-bright);font-weight:600;font-size:14px;margin:4px 0 8px;line-height:1.4}
+  .pcard-ptsline{display:block}
   .p-badges{display:flex;flex-wrap:wrap;gap:6px}
   .p-badge{
     display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;
@@ -4071,7 +4072,11 @@
     if (p.qualified) badges.push('<span class="p-badge green">✓ Qualified</span>');
     html += '<div class="pcard-head">' + avatarHTML(p, false) +
       '<div class="pcard-who"><p class="pcard-name">' + esc(displayName(p)) + "</p>" +
-      '<p class="pcard-rankline">' + (rank ? "#" + rank + " in the standings · " : "") + fmtNum(counting) + (seasonOn ? " counting pts" : " league pts") + "</p>" +
+      /* Rank and points STACKED (Anthony, Nov 11): the points used to
+         sit on the same line as "#N in the standings", and the bounty
+         chip anchored to the photo's plaque overlapped that line.
+         Points now go UNDER the standings line. */
+      '<p class="pcard-rankline">' + (rank ? "#" + rank + " in the standings" : "") + '<span class="pcard-ptsline">' + fmtNum(counting) + (seasonOn ? " counting pts" : " league pts") + "</span></p>" +
       '<div class="p-badges">' + badges.join("") + "</div></div></div>";
 
     /* ---- hero band ---- */
