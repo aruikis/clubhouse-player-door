@@ -2688,7 +2688,14 @@
       // the copper SIT-IN word first, then what it means tonight.
       parts.push('<span style="color:#eda763;font-weight:800;letter-spacing:.04em">SIT-IN</span><span class="sep"> · </span>Sit-in tonight — no league points tonight');
     } else {
-      parts.push('<span style="color:' + ringColor + '">' + esc(RING_LABEL[ring] || "League player") + "</span>");
+      /* Slate ring label follows the earned-status rule (Anthony,
+         Nov 11): "League player" only with a league night on the
+         book, otherwise "Club Member" — same as roomRoleLine and
+         the public profile pill. */
+      var meStatusLbl = ring === "slate"
+        ? (Number(me.games_played) > 0 ? "League player" : "Club Member")
+        : (RING_LABEL[ring] || "League player");
+      parts.push('<span style="color:' + ringColor + '">' + esc(meStatusLbl) + "</span>");
       if (me.badge && BADGE_LABEL[me.badge]) parts.push('<span class="sep">·</span> ' + esc(BADGE_LABEL[me.badge]));
     }
     $("meStatus").innerHTML = parts.join(" ");
@@ -3724,7 +3731,13 @@
     if (ring === "leader") return "Points leader";
     if (p.badge && BADGE_LABEL[p.badge]) return BADGE_LABEL[p.badge];
     if (ring === "green") return "Checked in tonight";
-    return "League player";
+    /* "League player" is EARNED (Anthony, Nov 11): it takes at
+       least one league night on the book (games_played >= 1, the
+       same test standingsEligible uses). Signing up + approval
+       alone makes a Club Member — a 0-game member's card reads
+       "Club Member", never "League player". (Host / co-host are
+       the named exception and return above.) */
+    return Number(p.games_played) > 0 ? "League player" : "Club Member";
   }
 
   /* Compact directory tile (Anthony, Nov 11, thinned same day):
@@ -4114,7 +4127,16 @@
        plaques on the photo itself. Other players keep their ring /
        status pill below. Plaques and bounty chip are untouched. */
     if (!isHost(p) && !isCoHost(p)) {
-      badges.push('<span class="p-badge"><span class="dot" style="background:' + ringColor + '"></span>' + esc(RING_LABEL[ring] || "League player") + "</span>");
+      /* Slate ring label follows the earned-status rule (Anthony,
+         Nov 11): "League player" only once a league night is on
+         the book, otherwise "Club Member" — same test as the Club
+         Members card role line (roomRoleLine). Other rings keep
+         their RING_LABEL wording. */
+      var playedGames = games != null ? games : (p.games_played != null ? Number(p.games_played) : null);
+      var statusLbl = ring === "slate"
+        ? (playedGames != null && playedGames > 0 ? "League player" : "Club Member")
+        : (RING_LABEL[ring] || "League player");
+      badges.push('<span class="p-badge"><span class="dot" style="background:' + ringColor + '"></span>' + esc(statusLbl) + "</span>");
       if (p.badge && BADGE_LABEL[p.badge]) badges.push('<span class="p-badge gold">' + esc(BADGE_LABEL[p.badge]) + "</span>");
     }
     if (p.qualified) badges.push('<span class="p-badge green">✓ Qualified</span>');
