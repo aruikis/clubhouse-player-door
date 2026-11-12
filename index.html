@@ -844,12 +844,42 @@
     font-weight:700;font-size:15px;text-decoration:none;
     border:1px solid var(--line);border-radius:12px;padding:12px;background:rgba(0,0,0,.25);
   }
-  .pcard-head{display:flex;gap:14px;align-items:center}
-  .pcard-who{flex:1;min-width:0}
+  /* Profile head alignment (Anthony, Nov 11, follow-up to the
+     stacked rank/points fix): the head is TOP-aligned and the
+     name column shrink-wraps to the name, so (a) the standings
+     line sits at a fixed height beside the photo — its center is
+     ~42px below the avatar's top edge (≈62px above its bottom)
+     at phone widths — no matter what badges stack underneath
+     it, and (b) the rank
+     block is text-centered, so "#N in the standings" (and the
+     points line under it) centers exactly under the player's
+     name instead of starting at the column's left edge, where
+     the bounty medallion riding off the photo's right rim could
+     reach it. */
+  .pcard-head{display:flex;gap:14px;align-items:flex-start}
+  .pcard-who{flex:0 1 auto;min-width:0;text-align:center}
   .pcard-name{font-family:"Archivo","Arial Narrow",sans-serif;font-size:clamp(22px,6vw,28px);font-weight:400;letter-spacing:.03em;margin:0;line-height:1.12;overflow-wrap:break-word}
   .pcard-rankline{color:var(--brass-bright);font-weight:600;font-size:14px;margin:4px 0 8px;line-height:1.4}
   .pcard-ptsline{display:block}
-  .p-badges{display:flex;flex-wrap:wrap;gap:6px}
+  /* Bounty medallion, PROFILE HEAD ONLY (Anthony, Nov 11): in
+     this head the medallion is lifted so its vertical center
+     lands on the "#N in the standings" line (bottom:42px puts
+     the 40px chip's center ~62px above the avatar's bottom,
+     matching the top-aligned standings line) — it no longer
+     hangs down over the points line stacked beneath. ONLY the
+     vertical position changes, and only inside .pcard-head:
+     the chip keeps its 38% size, its right-side horizontal
+     anchor (the plaque's top-right corner), and its
+     behind-the-plaque layering, and every other surface
+     (standings rows, podium, grid cards, personal page) keeps
+     the settled plaque anchor untouched. The co-host / guest /
+     honor-chip variants are restated at higher specificity so
+     their bottom offsets don't override this lift here. */
+  .pcard-head .bounty-medal,
+  .pcard-head .ava.is-cohost .bounty-medal,
+  .pcard-head .ava.is-guest .bounty-medal,
+  .pcard-head .ava:has(> .chip) .bounty-medal{bottom:42px}
+  .p-badges{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
   .p-badge{
     display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;
     color:var(--cream-2);border:1px solid var(--line-soft);background:rgba(0,0,0,.25);
@@ -4075,7 +4105,11 @@
       /* Rank and points STACKED (Anthony, Nov 11): the points used to
          sit on the same line as "#N in the standings", and the bounty
          chip anchored to the photo's plaque overlapped that line.
-         Points now go UNDER the standings line. */
+         Points now go UNDER the standings line. Follow-up (same day):
+         the rank block is centered under the name and, in this head
+         only, the bounty chip is lifted so it centers on the
+         standings line and clears the points line — see the
+         .pcard-head CSS. */
       '<p class="pcard-rankline">' + (rank ? "#" + rank + " in the standings" : "") + '<span class="pcard-ptsline">' + fmtNum(counting) + (seasonOn ? " counting pts" : " league pts") + "</span></p>" +
       '<div class="p-badges">' + badges.join("") + "</div></div></div>";
 
