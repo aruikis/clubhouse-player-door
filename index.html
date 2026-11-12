@@ -708,6 +708,31 @@
   }
   .link-btn:active{color:var(--cream)}
 
+  /* ---------- CP Live teaser (bottom of My Info) ----------
+     One quiet card at the very bottom of the player's own page
+     (Anthony, Nov 11): the CP monogram — the header insignia's
+     exact paths, unchanged — with LIVE angled under it in red,
+     rising bottom-left to top-right, fun but not loud, and one
+     cryptic line. No link, no button, no explanation. */
+  .teaser-card{
+    margin-top:26px;display:flex;gap:18px;align-items:center;
+    border:1px solid rgba(200,162,74,.5);border-radius:14px;padding:20px 18px;
+    background:linear-gradient(180deg, var(--panel-2), var(--panel));
+  }
+  .teaser-badge{flex:0 0 auto;width:104px;text-align:center}
+  .teaser-mark{width:92px;height:auto;display:block;margin:0 auto}
+  .teaser-live{
+    font-family:"Archivo","Arial Narrow",sans-serif;font-weight:700;
+    letter-spacing:.42em;font-size:19px;color:#d43a2f;
+    transform:rotate(-13deg);margin-top:1px;
+    text-shadow:0 1px 6px rgba(212,58,47,.35);
+  }
+  .teaser-head{
+    font-family:"Archivo","Arial Narrow",sans-serif;font-weight:500;
+    font-size:19px;line-height:1.3;letter-spacing:.03em;color:var(--cream);margin:0;
+  }
+  .teaser-sub{font-size:13.5px;font-style:italic;color:var(--cream-2);margin:8px 0 0}
+
   /* ---------- one-time bookmark prompt ---------- */
   .bookmark-card{
     position:relative;margin-top:18px;border-radius:14px;padding:20px 18px 14px;text-align:center;
@@ -1564,6 +1589,45 @@
         <button type="button" class="link-btn" id="forgetYes" style="color:var(--danger)">Yes, forget it</button>
         <button type="button" class="link-btn" id="forgetNo">Keep me</button>
       </span>
+    </div>
+
+    <!-- CP LIVE TEASER — the very bottom of the player's own page
+         (Anthony approved the design and this placement, Nov 11).
+         The badge reuses the header monogram's exact path artwork
+         (own gradient id, same stops); LIVE sits under it in red,
+         angled up from bottom-left to top-right. One line, one
+         sub-line, nothing else — no link, no button. -->
+    <div class="teaser-card">
+      <div class="teaser-badge">
+        <svg class="teaser-mark" viewBox="40 58 140 144" aria-hidden="true">
+          <defs>
+            <linearGradient id="cpGradTeaser" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#f4d3a5"/>
+              <stop offset="0.55" stop-color="#eec493"/>
+              <stop offset="1" stop-color="#dfa968"/>
+            </linearGradient>
+          </defs>
+          <g transform="translate(14.4 48) scale(0.88)" aria-hidden="true">
+            <path d="M147 39 A70 70 0 1 0 147 149" fill="none" stroke="url(#cpGradTeaser)" stroke-width="11"/>
+            <path d="M93.5 34.4 A60.5 60.5 0 0 0 43.5 94 A60.5 60.5 0 0 0 83.3 150.9" fill="none" stroke="url(#cpGradTeaser)" stroke-width="2" opacity="0.85"/>
+            <polygon points="146,33.5 147,44.5 166,44" fill="url(#cpGradTeaser)"/>
+            <polygon points="146,143.5 147,154.5 166,144" fill="url(#cpGradTeaser)"/>
+            <path d="M112 58 H140 A28 28 0 0 1 140 114 H128" fill="none" stroke="url(#cpGradTeaser)" stroke-width="10.5"/>
+            <path d="M161 59 A34.5 34.5 0 0 1 161 113" fill="none" stroke="url(#cpGradTeaser)" stroke-width="2" opacity="0.85"/>
+            <path d="M112 54 V126 H126 V54" fill="none" stroke="url(#cpGradTeaser)" stroke-width="3"/>
+            <path d="M112 126 L106 137 M126 126 L132 137" stroke="url(#cpGradTeaser)" stroke-width="3" fill="none"/>
+            <g transform="translate(119 145) scale(0.6)" fill="url(#cpGradTeaser)">
+              <circle cx="0" cy="-7" r="8.5"/><circle cx="-8" cy="4" r="8.5"/><circle cx="8" cy="4" r="8.5"/>
+              <path d="M0 2 L-5.5 16 L5.5 16 Z"/>
+            </g>
+          </g>
+        </svg>
+        <div class="teaser-live">LIVE</div>
+      </div>
+      <div class="teaser-txt">
+        <p class="teaser-head">Something's being built in the basement.</p>
+        <p class="teaser-sub">Season Two. That's all the host is saying.</p>
+      </div>
     </div>
   </section>
 
